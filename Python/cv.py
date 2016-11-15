@@ -9,7 +9,7 @@ from json import JSONEncoder
 from json import JSONDecoder
 import time
 
-'''s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 host = ''
 port = 5811
 x = 1
@@ -19,7 +19,7 @@ s.listen(1)
 conn, addr = s.accept()
 print 'Connected by:', addr
 st = ""
-'''
+
 capture = cv2.VideoCapture(0)
 
 def distanceRelation(averageHeight):
@@ -238,14 +238,13 @@ def CV():
 		#break
 
 while (1):
-	'''returned = conn.recv(1024)
+	returned = conn.recv(1024)
 	results = eval(returned)
 	conn.send(JSONEncoder().encode({"Distance": results[0],
 	"Angle A": results[2],
 	"Bearing": results[1],
 	"Left or Right": results[3],
-	"Time Stamp": time.localtime()}))'''
-	CV()
+	"Time Stamp": time.localtime()}))
 
 cv2.destroyAllWindows()
 

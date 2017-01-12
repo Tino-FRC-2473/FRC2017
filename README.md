@@ -9,3 +9,6 @@ Setup:
     a. Open Eclipse.
 
     b. Click on Help -> Install New Software. At this point, a new window should open, that looks like this. ![Alt text](InstallNewSoftware.png?raw=true "Install New Software")
+    c. Click on Add...
+    d. You should be taken to this, other, window.
+    

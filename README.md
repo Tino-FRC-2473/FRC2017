@@ -6,6 +6,6 @@ Setup:
 
 2. Download and install wpilib software on Eclipse.
 
-a. Open Eclipse.
+    a. Open Eclipse.
 
-b. Click on Help -> Install New Software. At this point, a new window should open, that looks like this. ![Alt text](InstallNewSoftware.png?raw=true "Install New Software")
+    b. Click on Help -> Install New Software. At this point, a new window should open, that looks like this. ![Alt text](InstallNewSoftware.png?raw=true "Install New Software")

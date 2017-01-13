@@ -23,6 +23,7 @@ Setup:
     g. Click OK, and then install the software. Make sure to only install the software for Java Development, because the C/C++ Software is not neccessary for us. A warning will appear, warning you that the software is unsigned content. IMPORTANT: CLICK OK AND CONTINUE. WPILIB does not sign its software.
 
 2B. SKIP THIS STEP IF YOU COMPLETED 1 & 2. Open up Eclipse. Click on Help -> Check for Updates. A popup will appear with a progress bar. It will fetch updates from WPILIB and guide you through installation. When the warning appears that the content is unsigned, simply ignore and continue anyways.
+
 3. Download the CTRE 3rd Party Library.
 
     a. [Windows Users](http://www.ctr-electronics.com/downloads/installers/CTRE%20Toolsuite%20v4.4.1.8.zip) Click on the link to download the installer, and follow its instructions.

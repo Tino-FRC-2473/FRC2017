@@ -43,6 +43,6 @@ Setup:
                 open .
         6. Upon doing this, you should see two folders: One called cpp, and the other java. Replace the java folder here with the one you copied. It is now safe to delete the CTRE_FRCLibs_NON-WINDOWS file from your system.
         
-        #If you followed the first 3 steps, there is no need to go further, and your setup is complete.
+#If you followed the first 3 steps, there is no need to go further, and your setup is complete.
 4. Open up Eclipse. Click on Help -> Check for Updates. A popup will appear with a progress bar. It will fetch updates from WPILIB and guide you through installation. When the warning appears that the content is unsigned, simply ignore and continue anyways. Go back and complete Step 3.
     

@@ -1,6 +1,6 @@
 # FRC 2017 Setup Instructions
 
-##If you already have Eclipse and WPILIB, skip to [here](https://github.com/Tino-FRC-2473/FRC2017#if-you-followed-the-first-3-steps-there-is-no-need-to-go-further-and-your-setup-is-complete-continue-if-you-followed-the-link-and-skipped-the-first-3-steps)
+##If you already have Eclipse and WPILIB, skip to [here](#heading)
 
 Setup:
 
@@ -43,6 +43,6 @@ Setup:
                 open .
         6. Upon doing this, you should see two folders: One called cpp, and the other java. Replace the java folder here with the one you copied. It is now safe to delete the CTRE_FRCLibs_NON-WINDOWS file from your system.
         
-##If you followed the first 3 steps, there is no need to go further, and your setup is complete. Continue if you followed the link and skipped the first 3 steps.
+##<a name="heading"></a>If you followed the first 3 steps, there is no need to go further, and your setup is complete. Continue if you followed the link and skipped the first 3 steps.
 4. Open up Eclipse. Click on Help -> Check for Updates. A popup will appear with a progress bar. It will fetch updates from WPILIB and guide you through installation. When the warning appears that the content is unsigned, simply ignore and continue anyways. Go back and complete Step 3.
     

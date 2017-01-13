@@ -25,5 +25,19 @@ Setup:
 
     a. [Windows Users](http://www.ctr-electronics.com/downloads/installers/CTRE%20Toolsuite%20v4.4.1.8.zip) Click on the link to download the installer, and follow its instructions.
 
-    b. [Mac Users](http://www.ctr-electronics.com//downloads/lib/CTRE_FRCLibs_NON-WINDOWS.zip) Unzip the file, and go into it. Copy the folder called java. Navigate to your home, and go into the wpilib folder. Click on user, and replace the java folder there with the one you copied.
+    b. [Mac Users](http://www.ctr-electronics.com//downloads/lib/CTRE_FRCLibs_NON-WINDOWS.zip) Click on the link to download a zip file. If you are using Safari, it will automatically unzip to reveal a folder. If you are not using Safari, double click on the .zip file to open it.
+
+        1. After unzipping you should see a folder called CTRE_FRCLibs_NON-WINDOWS. Click on this folder.
+
+        2. You should now see several folders. One of them will be called "java".
+
+        3. Copy this folder.
+
+        4. Open up Terminal (or whatever you use in it's place (ex. iTerm)')
+
+        5. Type the following commands EXACTLY:
+                cd
+                cd wpilib
+                cd user
+                open .
     

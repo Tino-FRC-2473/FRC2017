@@ -1,6 +1,6 @@
 # FRC2017
 
-        If you already have Eclipse and WPILIB, skip to step 2B.
+        If you already have Eclipse and WPILIB, skip to step 4.
 
 Setup:
 
@@ -22,8 +22,6 @@ Setup:
 
     g. Click OK, and then install the software. Make sure to only install the software for Java Development, because the C/C++ Software is not neccessary for us. A warning will appear, warning you that the software is unsigned content. IMPORTANT: CLICK OK AND CONTINUE. WPILIB does not sign its software.
 
-2B. SKIP THIS STEP IF YOU COMPLETED 1 & 2. Open up Eclipse. Click on Help -> Check for Updates. A popup will appear with a progress bar. It will fetch updates from WPILIB and guide you through installation. When the warning appears that the content is unsigned, simply ignore and continue anyways.
-
 3. Download the CTRE 3rd Party Library.
 
     a. [Windows Users](http://www.ctr-electronics.com/downloads/installers/CTRE%20Toolsuite%20v4.4.1.8.zip) Click on the link to download the installer, and follow its instructions.
@@ -44,4 +42,8 @@ Setup:
                 cd user
                 open .
         6. Upon doing this, you should see two folders: One called cpp, and the other java. Replace the java folder here with the one you copied. It is now safe to delete the CTRE_FRCLibs_NON-WINDOWS file from your system.
+
+If you followed the first 3 steps, there is no need to go further, and your setup is complete. 
+
+4. Open up Eclipse. Click on Help -> Check for Updates. A popup will appear with a progress bar. It will fetch updates from WPILIB and guide you through installation. When the warning appears that the content is unsigned, simply ignore and continue anyways.
     

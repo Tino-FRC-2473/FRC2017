@@ -20,6 +20,8 @@ IF YOU ALREADY HAVE ECLIPSE AND WPILIB, MAKE SURE TO UPDATE IT THROUGH ECLIPSE.
 
     g. Click OK, and then install the software. Make sure to only install the software for Java Development, because the C/C++ Software is not neccessary for us.
 3. Download the CTRE 3rd Party Library.
+
     a. [Windows Users](http://www.ctr-electronics.com/downloads/installers/CTRE%20Toolsuite%20v4.4.1.8.zip) Click on the link to download the installer, and follow its instructions.
+
     b. [Mac Users](http://www.ctr-electronics.com//downloads/lib/CTRE_FRCLibs_NON-WINDOWS.zip) Unzip the file, and go into it. Copy the folder called java. Navigate to your home, and go into the wpilib folder. Click on user, and replace the java folder there with the one you copied.
     

@@ -1,6 +1,6 @@
 # FRC 2017 Setup Instructions
 
-##If you already have Eclipse and WPILIB, skip to [here](https://github.com/Tino-FRC-2473/FRC2017##if-you-followed-the-first-3-steps-there-is-no-need-to-go-further-and-your-setup-is-complete-continue-if-you-followed-the-link-and-skipped-the-first-3-steps)
+##If you already have Eclipse and WPILIB, skip to [here](https://github.com/Tino-FRC-2473/FRC2017#if-you-followed-the-first-3-steps-there-is-no-need-to-go-further-and-your-setup-is-complete-continue-if-you-followed-the-link-and-skipped-the-first-3-steps)
 
 Setup:
 

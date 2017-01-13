@@ -1,4 +1,6 @@
-"# FRC2017" 
+# FRC 2017 Setup Instructions
+
+##If you already have Eclipse and WPILIB, skip to [here](#heading)
 
 Setup:
 
@@ -18,5 +20,29 @@ Setup:
 
     f. For Location, paste in the following URL: [WPILIB Software](http://first.wpi.edu/FRC/roborio/release/eclipse/)
 
-    g. Click OK, and then install the software. Make sure to only install the software for Java Development, because the C/C++ Software is not neccessary for us.
+    g. Click OK, and then install the software. Make sure to only install the software for Java Development, because the C/C++ Software is not neccessary for us. A warning will appear, warning you that the software is unsigned content. IMPORTANT: CLICK OK AND CONTINUE. WPILIB does not sign its software.
+
 3. Download the CTRE 3rd Party Library.
+
+    a. [Windows Users](http://www.ctr-electronics.com/downloads/installers/CTRE%20Toolsuite%20v4.4.1.8.zip) Click on the link to download the installer, and follow its instructions.
+
+    b. [Mac Users](http://www.ctr-electronics.com//downloads/lib/CTRE_FRCLibs_NON-WINDOWS.zip) Click on the link to download a zip file. If you are using Safari, it will automatically unzip to reveal a folder. If you are not using Safari, double click on the .zip file to open it.
+
+        1. After unzipping you should see a folder called CTRE_FRCLibs_NON-WINDOWS. Click on this folder.
+
+        2. You should now see several folders. One of them will be called "java".
+
+        3. Copy this folder.
+
+        4. Open up Terminal (or whatever you use in it's place (ex. iTerm)')
+
+        5. Type the following commands EXACTLY:
+                cd
+                cd wpilib
+                cd user
+                open .
+        6. Upon doing this, you should see two folders: One called cpp, and the other java. Replace the java folder here with the one you copied. It is now safe to delete the CTRE_FRCLibs_NON-WINDOWS file from your system.
+        
+##<a name="heading"></a>If you followed the first 3 steps, there is no need to go further, and your setup is complete. Continue if you followed the link and skipped the first 3 steps.
+4. Open up Eclipse. Click on Help -> Check for Updates. A popup will appear with a progress bar. It will fetch updates from WPILIB and guide you through installation. When the warning appears that the content is unsigned, simply ignore and continue anyways. Go back and complete Step 3.
+    

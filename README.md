@@ -1,6 +1,6 @@
 # FRC 2017 Setup Instructions
 
-##If you already have Eclipse and WPILIB, skip to [here](#heading)
+##If you already have Eclipse and WPILIB, skip to [here](#heading). After reading this, go [here](GitTutorial.md) for git instructions.
 
 Setup:
 

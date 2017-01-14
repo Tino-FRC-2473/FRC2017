@@ -31,6 +31,9 @@ public class Robot extends IterativeRobot{
 	public static OI oi;
 	public static AnalogGyro gyro;
 	public static SensorThread sensorThread;
+	
+	public static ClimberSystem climbSystem;
+	
 	Timer robotControlLoop;
 
 	
@@ -44,6 +47,8 @@ public class Robot extends IterativeRobot{
 		driveTrain = new DriveTrain();
 		gyro = new AnalogGyro(RobotMap.gyro);
 		oi = new OI();
+		
+		climbSystem = new ClimberSystem();
 		
 		sensorThread = new SensorThread(5);
 		sensorThread.start();

@@ -21,6 +21,8 @@ public class RobotMap {
 	public static final int rightFrontMotor = 4;
 	public static final int rightBackMotor = 5;
 
+	public static final int ropeClimbMotor = 6;
+	
 	public static final int gyro = 0;
 
 

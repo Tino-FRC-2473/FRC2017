@@ -17,7 +17,7 @@
     j. Next, open Terminal, or your command line app, and type the following: <b>sudo xcodebuild -license</b> To view and accept the Xcode license. Add <b>accept</b> to the previous command to automatically accept it.
     k. Still within Bash, how I will reference Terminal from now on, hit the following command: <b>xcode-select --install</b>.
     l. Still within Bash, type the following command: <b>/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"</b> This should conclude the installation of HomeBrew.<b><strong>SKIP TO STEP 3</b></strong>
-3. Now, you must download git. Type command for [Scoop](), [MacPorts](), or [HomeBrew]().
+3. Now, you must download git. Type command for [Scoop](#sg), [MacPorts](#mpg), or [HomeBrew](#hbg).
     a. <a name="sg"></a> <b><strong>SKIP THIS STEP IF YOU RAN THE SCOOP COMMAND IN 2B</b></strong><b>scoop install git</b>.
     b. <a name="mpg"></a> Type this the following commands:
         sudo port selfupdate (Updates the ports)

@@ -69,6 +69,8 @@ $RECYCLE.BIN/
 *.xml
 /bin/
 
+!build.xml
+
 #Intellij Stuff and GradleRio
 gradle/
 *.gradle

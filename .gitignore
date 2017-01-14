@@ -70,6 +70,7 @@ $RECYCLE.BIN/
 /bin/
 
 !build.xml
+!build.properties
 
 #Intellij Stuff and GradleRio
 gradle/

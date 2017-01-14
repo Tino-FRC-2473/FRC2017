@@ -3,4 +3,4 @@
 2. If you are a Mac user, and have HomeBrew or MacPorts installed, skip this step. If you have Scoop, or a similar Package Manager for Windows installed, skip this step. If not, follow the instructions, because they will guide you in the installation of a Package Manager, which is useful software that allows you to install lots of software like git, OpenCV, Python, etc., with only a few commands.
     a. PC Users: Navigate to the Command Line app. Type the following phrase exactly, and hit enter. <b>$PSVersionTable.PSVersion</b> This will tell you if you have PowerShell installed.
        
-        If the version isn't 3.0, click this link: [PowerShell 3.0](https://www.microsoft.com/en-us/download/confirmation.aspx?id=34595)
+    ##If the version isn't 3.0, click this link: [PowerShell 3.0](https://www.microsoft.com/en-us/download/confirmation.aspx?id=34595)

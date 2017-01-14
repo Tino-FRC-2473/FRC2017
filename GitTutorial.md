@@ -4,4 +4,4 @@
 
     a. PC Users: Navigate to the Command Line app. Type the following phrase exactly, and hit enter. <b>$PSVersionTable.PSVersion</b> This will tell you if you have PowerShell installed.
        
-    ##If the version isn't 3.0, click this link: [PowerShell 3.0](https://www.microsoft.com/en-us/download/confirmation.aspx?id=34595)
+    ####If the version isn't 3.0, click this link: [PowerShell 3.0](https://www.microsoft.com/en-us/download/confirmation.aspx?id=34595)

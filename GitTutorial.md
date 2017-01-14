@@ -47,10 +47,9 @@
 
     c. <a name="hbg"></a> <b>brew install git</b>
 
-1. The first thing to do is to create your FRC2017 project. Go to Eclipse, then select File -> New -> Project... -> Robot Java Project. Fill out all the required information, such as Team Number. For Project Name, type in the name of the repo, in this case, <b>FRC2017</b>. The following popup should open: ![Alt text](Images/Project.png?raw=true "Project")
 5. Type the following command to initialize the file: <b>git init</b>.
 6. Next, type this: <b>git clone https://github.com/Tino-FRC-2473/FRC2017.git</b>. The way I got the link was by navigating to the GitHub page, clicking on the "Clone or download" green button, and copy-pasting the link.
-7. You now have all the files, and the GitHub repository. To access them or git, type <b>cd FRC2017</b> once more. Read on to find more about your daily workflow.
+1. The last thing to do is to create your FRC2017 project. Go to Eclipse, then select File -> New -> Project... -> Robot Java Project. Fill out all the required information, such as Team Number. For Project Name, type in the name of the repo, in this case, <b>FRC2017</b>. The following popup should open: ![Alt text](Images/Project.png?raw=true "Project"). Eclipse will automatically sync the files, and everything should be good to go.
 
 ##Daily Workflow (EVERYONE MUST READ THIS)
 1. Inside the <i>FRC2017</i> folder inside your <b>FRC2017</b> project, type git pull, which will pull all of the changes from GitHub onto your laptop/computer.

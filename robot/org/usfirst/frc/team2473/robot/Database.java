@@ -137,9 +137,9 @@ public class Database{
 	 */
 	public void log() {
 		SmartDashboard.putNumber("Left Distance",
-				Database.getInstance().getValue(Value.LEFT_ENCODER));
+				Database.getInstance().getValue((int)Value.LEFT_ENCODER));
 		SmartDashboard.putNumber("Right Distance",
-				Database.getInstance().getValue(Value.RIGHT_ENCODER));
+				Database.getInstance().getValue((int)Value.RIGHT_ENCODER));
 		SmartDashboard.putNumber("Gyro Angle",
 				Database.getInstance().getValue(Value.GYRO));
 		SmartDashboard.putNumber("Wheel Twist",

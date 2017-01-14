@@ -60,5 +60,6 @@
 3. Type <b>git add .</b> This will tell git to get all the files ready to commit.
 4. Type <b>git commit -m "MESSAGE GOES HERE"</b>, replacing MESSAGE GOES HERE with a meaningful message. This will save the changes on the local version of your branch.
 5. Type <b>git push</b>, which will push the changes to GitHub for all to see.
+
 ##Eclipse Users
 1. Eclipse also integrates with git. You can access, and follow, the above steps by right clicking on the Project, and selecting Team, which will allow you to push, pull, or commit. To add files, click Add to Index. To switch branches, or create a new one, click Switch to...

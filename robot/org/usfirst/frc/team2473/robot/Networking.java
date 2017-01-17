@@ -25,6 +25,16 @@ public class Networking extends Thread {
 	private JoystickButton b = new JoystickButton(o.getThrottle(), 1);
 	public static boolean autonomous = false;
 
+	public void start() {
+		try {
+			wait();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		super.start();
+	}
+
 	public void run() {
 		try {
 			s = new Socket(HOST, PORT);
@@ -43,8 +53,8 @@ public class Networking extends Thread {
 			while (true) {
 				update();
 			}
-		}else{
-			
+		} else {
+
 		}
 	}
 

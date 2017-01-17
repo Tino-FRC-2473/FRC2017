@@ -76,6 +76,7 @@ public class Robot extends IterativeRobot{
 		if (autonomousCommand != null){
 			autonomousCommand.start();
 			networking.autonomous = true; //Can, and probably should, be moved to autonomousCommand, once it is present.
+			networking.notify();
 		}
 	}
 
@@ -92,7 +93,7 @@ public class Robot extends IterativeRobot{
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-
+		networking.notify();
 	}
 
 	/**

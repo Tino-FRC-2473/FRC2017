@@ -32,7 +32,7 @@ public class Robot extends IterativeRobot{
 	public static AnalogGyro gyro;
 	public static SensorThread sensorThread;
 	Timer robotControlLoop;
-
+	public static Networking networking;
 	
 	double lastTime;
 
@@ -47,6 +47,7 @@ public class Robot extends IterativeRobot{
 		
 		sensorThread = new SensorThread(5);
 		sensorThread.start();
+		networking.start();
 		robotControlLoop = new Timer(false);
 		timerRunning = false;
 		}
@@ -72,8 +73,10 @@ public class Robot extends IterativeRobot{
 		 */
 
 		// schedule the autonomous command (example)
-		if (autonomousCommand != null)
+		if (autonomousCommand != null){
 			autonomousCommand.start();
+			networking.autonomous = true; //Can, and probably should, be moved to autonomousCommand, once it is present.
+		}
 	}
 
 	/**
@@ -81,6 +84,7 @@ public class Robot extends IterativeRobot{
 	 */
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
+		networking.notify(); //Should be called when CV is desired.
 	}
 
 	public void teleopInit() {

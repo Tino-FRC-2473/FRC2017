@@ -1,6 +1,6 @@
 # FRC 2017 Setup Instructions
 
-##If you already have Eclipse and WPILIB, skip to [here](#heading)
+##If you already have Eclipse and WPILIB, skip to [here](#heading). After reading this, go [here](GitTutorial.md) for git instructions.
 
 Setup:
 
@@ -10,11 +10,11 @@ Setup:
 
     a. Open Eclipse.
 
-    b. Click on Help -> Install New Software. At this point, a new window should open, that looks like this. ![Alt text](InstallNewSoftware.png?raw=true "Install New Software")
+    b. Click on Help -> Install New Software. At this point, a new window should open, that looks like this. ![Alt text](Images/InstallNewSoftware.png?raw=true "Install New Software")
     c. Click on Add... 
 
     d. You should be taken to this, other, window. 
-    ![Alt text](AddSoftware.png?raw=true "Add Software")
+    ![Alt text](Images/AddSoftware.png?raw=true "Add Software")
 
     e. For Name, type in something like FRC or WPILIB, so that you know that it is the software for robotics.
 

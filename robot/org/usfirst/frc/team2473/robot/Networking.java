@@ -5,11 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.usfirst.frc.team2473.robot.Database.Value;
-
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class Networking extends Thread {
 
@@ -21,17 +20,34 @@ public class Networking extends Thread {
 	private Socket s = null;
 	private BufferedReader stdIn = null;
 	private Database d = Database.getInstance();
-	private OI o = new OI();
-	private JoystickButton b = new JoystickButton(o.getThrottle(), 1);
-	public static boolean autonomous = false;
+	private static LinkedList<String> names = new LinkedList<>();// Happy
+																	// Pramukh?
+																	// Empty
+																	// Angled
+																	// Brackets.
+																	// Happy?
+	private HashMap<Value, String> values = new HashMap<>();
+	public boolean run = false;
+	static Networking instance;
+	static {
+		instance = new Networking();
+	}
+
+	public static Networking getInstance() {
+		return instance;
+	}
 
 	public void start() {
-		try {
-			wait();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		names.addLast("\"Distance\"");
+		names.addLast("\"Angle A\"");
+		names.addLast("\"Bearing\"");
+		names.addLast("\"Left or Right\"");
+		names.addLast("\"Time Stamp\"");
+		values.put(Value.CV_DISTANCE, "Distance");
+		values.put(Value.CV_ANGLE_A, "Angle A");
+		values.put(Value.CV_BEARING, "Bearing");
+		values.put(Value.CV_L_OR_R, "Left or Right");
+		values.put(Value.CV_TIME_STAMP, "Time Stamp");
 		super.start();
 	}
 
@@ -42,19 +58,13 @@ public class Networking extends Thread {
 		} catch (IOException e) {
 			System.out.println("Thread Failed.");
 		}
-		if (autonomous) {
+		while (true) {
 			try {
-				wait(); // In autonomous, to get this thread to start updating
-						// values, just say Networking.notify();
+				wait();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			while (true) {
-				update();
-			}
-		} else {
-
+			update();
 		}
 	}
 
@@ -63,22 +73,16 @@ public class Networking extends Thread {
 			s.getOutputStream().write(SEND.getBytes(Charset.defaultCharset()));
 			stdIn.read(cbuf);
 			String st = String.copyValueOf(cbuf);
-			double dist = Double.parseDouble(
-					st.substring(st.indexOf("\"Distance\"") + 12, (st.indexOf(',', st.indexOf("\"Distance\"")) >= 0)
-							? st.indexOf(',', st.indexOf("\"Distance\"")) : st.indexOf('}')));
-			double angle_a = Double.parseDouble(
-					st.substring(st.indexOf("\"Angle A\"") + 11, (st.indexOf(',', st.indexOf("\"Angle A\"")) >= 0)
-							? st.indexOf(',', st.indexOf("\"Angle A\"")) : st.indexOf('}')));
-			double angle_b = Double.parseDouble(
-					st.substring(st.indexOf("\"Angle B\"") + 11, (st.indexOf(',', st.indexOf("\"Angle B\"")) >= 0)
-							? st.indexOf(',', st.indexOf("\"Angle B\"")) : st.indexOf('}')));
-			double lr = Double.parseDouble(st.substring(st.indexOf("\"Left or Right\"") + 16,
-					(st.indexOf(',', st.indexOf("\"Left or Right\"")) >= 0)
-							? st.indexOf(',', st.indexOf("\"Left or Right\"")) : st.indexOf('}')));
-			d.setValue(Value.CV_DISTANCE, dist);
-			d.setValue(Value.CV_ANGLE_A, angle_a);
-			d.setValue(Value.CV_ANGLE_B, angle_b);
-			d.setValue(Value.CV_L_OR_R, lr);
+			HashMap<String, Double> h = new HashMap<>();
+			names.stream().forEach((s) -> {
+				double d = Double.parseDouble(
+						st.substring(st.indexOf(s) + s.length()+2, (st.indexOf(',', st.indexOf(s)) >= 0)
+								? st.indexOf(',', st.indexOf(s)) : st.indexOf('}')));
+				h.put(s.substring(1, s.lastIndexOf('\"')), d);
+			});
+			for (Value v : values.keySet()) {
+				d.setValue(v, h.get(values.get(v)));
+			}
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}

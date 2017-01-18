@@ -34,7 +34,7 @@ public class Database{
 	 * 
 	 */
 	public enum Value {
-		GYRO, LEFT_ENCODER, RIGHT_ENCODER, WHEEL_TWIST, THROTTLE_VALUE, CV_DISTANCE, CV_ANGLE_A, CV_ANGLE_B, CV_L_OR_R;// add
+		GYRO, LEFT_ENCODER, RIGHT_ENCODER, WHEEL_TWIST, THROTTLE_VALUE, CV_DISTANCE, CV_ANGLE_A, CV_BEARING, CV_L_OR_R, CV_TIME_STAMP;// add
 																																	// buttons
 
 	}

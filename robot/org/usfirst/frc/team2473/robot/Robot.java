@@ -47,6 +47,7 @@ public class Robot extends IterativeRobot{
 		
 		sensorThread = new SensorThread(5);
 		sensorThread.start();
+		networking = Networking.getInstance();
 		networking.start();
 		robotControlLoop = new Timer(false);
 		timerRunning = false;
@@ -75,7 +76,6 @@ public class Robot extends IterativeRobot{
 		// schedule the autonomous command (example)
 		if (autonomousCommand != null){
 			autonomousCommand.start();
-			networking.autonomous = true; //Can, and probably should, be moved to autonomousCommand, once it is present.
 			networking.notify();
 		}
 	}
@@ -93,7 +93,6 @@ public class Robot extends IterativeRobot{
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		networking.notify();
 	}
 
 	/**

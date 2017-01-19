@@ -1,18 +1,16 @@
 
 package org.usfirst.frc.team2473.robot;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.usfirst.frc.team2473.robot.Database.Value;
+import org.usfirst.frc.team2473.robot.subsystems.DriveTrain;
+
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-
-import java.util.Timer;
-import java.util.TimerTask;
-
-import org.usfirst.frc.team2473.robot.commands.*;
-import org.usfirst.frc.team2473.robot.subsystems.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -32,6 +30,7 @@ public class Robot extends IterativeRobot{
 	public static AnalogGyro gyro;
 	public static SensorThread sensorThread;
 	Timer robotControlLoop;
+	public Database d;
 	public static Networking networking;
 	
 	double lastTime;
@@ -49,6 +48,7 @@ public class Robot extends IterativeRobot{
 		sensorThread.start();
 		networking = Networking.getInstance();
 		networking.start();
+		d = Database.getInstance();
 		robotControlLoop = new Timer(false);
 		timerRunning = false;
 		}
@@ -66,6 +66,18 @@ public class Robot extends IterativeRobot{
 	 */
 	public void autonomousInit() {
 
+		System.out.println(Value.CV_ANGLE_A + ": " + d.getValue(Value.CV_ANGLE_A));
+		System.out.println(Value.CV_BEARING + ": " + d.getValue(Value.CV_BEARING));
+		System.out.println(Value.CV_DISTANCE + ": " + d.getValue(Value.CV_DISTANCE));
+		System.out.println(Value.CV_L_OR_R + ": " + d.getValue(Value.CV_L_OR_R));
+		System.out.println(Value.CV_TIME_STAMP + ": " + d.getValue(Value.CV_TIME_STAMP));
+		networking.notify(); 
+		System.out.println(Value.CV_ANGLE_A + ": " + d.getValue(Value.CV_ANGLE_A));
+		System.out.println(Value.CV_BEARING + ": " + d.getValue(Value.CV_BEARING));
+		System.out.println(Value.CV_DISTANCE + ": " + d.getValue(Value.CV_DISTANCE));
+		System.out.println(Value.CV_L_OR_R + ": " + d.getValue(Value.CV_L_OR_R));
+		System.out.println(Value.CV_TIME_STAMP + ": " + d.getValue(Value.CV_TIME_STAMP));
+
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
 		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -76,7 +88,6 @@ public class Robot extends IterativeRobot{
 		// schedule the autonomous command (example)
 		if (autonomousCommand != null){
 			autonomousCommand.start();
-			networking.notify();
 		}
 	}
 
@@ -85,7 +96,6 @@ public class Robot extends IterativeRobot{
 	 */
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
-		networking.notify(); //Should be called when CV is desired.
 	}
 
 	public void teleopInit() {

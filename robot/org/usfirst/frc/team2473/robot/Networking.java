@@ -12,8 +12,8 @@ import org.usfirst.frc.team2473.robot.Database.Value;
 
 public class Networking extends Thread {
 
-	private final String HOST = "localhost";
-	private final int PORT = 8080;
+	private final String HOST = "2473PI";
+	private final int PORT = 4444;
 	private final String FUNCTION = "detect()";
 	private final String SEND = "{\"run\":\'" + FUNCTION + "\"}";
 	private char[] cbuf = new char[4096];

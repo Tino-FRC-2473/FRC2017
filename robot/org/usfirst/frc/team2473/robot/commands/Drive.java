@@ -17,7 +17,7 @@ public class Drive extends Command {
 	public static final double MAX_TURN = 0.8;
 	public static final double KP = 0;//.075;
 	public static final double KI = 0;//.003;
-	public static final double KD = 0;//.00;
+	public static final double KD = 0;
 	
 	private boolean drivingStraight;//is the robot driving straight
 	private double startingGyroValue;//the gyro value when starting to drive straight
@@ -25,16 +25,18 @@ public class Drive extends Command {
 	private double lastProportion;
 	
     public Drive() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
     	requires(Robot.driveTrain);
     }
 
-    // Called just before this Command runs the first time
+    /**
+     * Called just before this Command runs the first time
+     */
     protected void initialize() {
     }
 
-    // Called repeatedly when this Command is scheduled to run
+    /**
+     * Called repeatedly when this Command is scheduled to run
+     */
     protected void execute() {
     	
     	double throttleZ = Database.getInstance().getValue(Value.THROTTLE_VALUE);
@@ -59,23 +61,31 @@ public class Drive extends Command {
     	
     }
 
-    // Make this return true when this Command no longer needs to run execute()
+    /**
+     * Make this return true when this Command no longer needs to run execute()
+     */
     protected boolean isFinished() {
         return false;
     }
 
-    // Called once after isFinished returns true
+    /**
+     * Called once after isFinished returns true
+     */
     protected void end() {
     	Robot.driveTrain.drive(0, 0);
     }
 
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
+    /**
+     * Called when another command which requires one or more of the same subsystems is scheduled to run.
+     */
     protected void interrupted() {
     	end();
     }
     
-    
+    /**
+     * Uses PID to make the robot drive straight.
+     * @param speed The thrust from the robot
+     */
     private void driveStraight(double speed)
     {
     	
@@ -92,6 +102,11 @@ public class Drive extends Command {
     	lastProportion = proportion;
     }
     
+    /**
+     * Takes the square root of a number, but preserves the sign.
+     * @param in A number to take the square root of.
+     * @return The square root of "in" with the sign preserved.
+     */
     private double sqrtWithSign(double in)
     {
     	return (in > 0)?Math.sqrt(in):-Math.sqrt(-in) ;

@@ -3,7 +3,7 @@ import numpy as np
 
 capture = cv2.VideoCapture(0)
 
-def oneRect(frame, recStorage):
+'''def oneRect(frame, recStorage):
 	recData = recStorage['1']
 	width, height = frame[:2]
 	if recData['xCoord'] < width/2:
@@ -13,7 +13,7 @@ def oneRect(frame, recStorage):
 	elif recData['xCoord'] == width/2:
 		print 'centered horizontally'
 	else:
-		print 'horizontal N/A'
+		print 'horizontal N/A'''
 
 while(1):
 	_, frame = capture.read()
@@ -45,8 +45,8 @@ while(1):
 	cv2.imshow('mask',mask)
 	if len(recStorage) > 0:
 		print recStorage
-	if len(recStorage) == 1:
-		oneRect(frame, recStorage)
+	#if len(recStorage) == 1:
+	#	oneRect(frame, recStorage)
 	#cv2.imshow('res',res)
 	k = cv2.waitKey(5) & 0xFF
 	if k == 27:

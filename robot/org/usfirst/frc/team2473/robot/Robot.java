@@ -71,7 +71,8 @@ public class Robot extends IterativeRobot{
 		System.out.println(Value.CV_DISTANCE + ": " + d.getValue(Value.CV_DISTANCE));
 		System.out.println(Value.CV_L_OR_R + ": " + d.getValue(Value.CV_L_OR_R));
 		System.out.println(Value.CV_TIME_STAMP + ": " + d.getValue(Value.CV_TIME_STAMP));
-		networking.notify(); 
+		synchronized(networking){
+		networking.notify(); }
 		System.out.println(Value.CV_ANGLE_A + ": " + d.getValue(Value.CV_ANGLE_A));
 		System.out.println(Value.CV_BEARING + ": " + d.getValue(Value.CV_BEARING));
 		System.out.println(Value.CV_DISTANCE + ": " + d.getValue(Value.CV_DISTANCE));

@@ -3,6 +3,7 @@ package org.usfirst.frc.team2473.robot;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -12,12 +13,13 @@ import org.usfirst.frc.team2473.robot.Database.Value;
 
 public class Networking extends Thread {
 
-	private final String HOST = "2473PI";
-	private final int PORT = 4444;
+	private final String HOST = "10.24.73.15";
+	private final int PORT = 8080;
 	private final String FUNCTION = "detect()";
 	private final String SEND = "{\"run\":\'" + FUNCTION + "\"}";
 	private char[] cbuf = new char[4096];
 	private Socket s = null;
+	private ServerSocket ss = null;
 	private BufferedReader stdIn = null;
 	private Database d = Database.getInstance();
 	private static LinkedList<String> names = new LinkedList<>();// Happy
@@ -53,14 +55,25 @@ public class Networking extends Thread {
 
 	public void run() {
 		try {
-			s = new Socket(HOST, PORT);
-			stdIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
+			ss = new ServerSocket(PORT);
+			s = ss.accept();
+			System.out.println("Connecting to host");
 		} catch (IOException e) {
-			System.out.println("Thread Failed.");
+			System.out.println("lolsies can't connect");
+		}
+		try{
+			System.out.println("Setting up STDin");
+			stdIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
+
+		}catch(IOException e){
+			System.out.println("lolsies can't STDIN");
 		}
 		while (true) {
 			try {
-				wait();
+				synchronized (this) {
+
+					wait();
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -83,6 +96,7 @@ public class Networking extends Thread {
 			for (Value v : values.keySet()) {
 				d.setValue(v, h.get(values.get(v)));
 			}
+			System.out.println(h);
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}

@@ -24,6 +24,8 @@ public class RobotMap {
 	public static final int ropeClimbMotor = 6;
 	
 	public static final int gyro = 0;
+	
+	public static final int climberLS = 1;
 
 
 	

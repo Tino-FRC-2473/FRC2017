@@ -23,12 +23,7 @@ public class ClimberSystem extends Subsystem{
 		setDefaultCommand(new Climber());
 	}
 	
-	/**
-	 * This method will run the rope climbing motor given a value.
-	 * Use positive values to climb up, 0 to stop, and negative values to climb down.
-	 * 
-	 * @param value Takes in doubles ranging from -1.0 to 1.0 (inclusive)
-	 */
+	
 	public void climb(double value){
 		ropeCAN.set(value);
 	}

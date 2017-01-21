@@ -9,6 +9,8 @@ import org.usfirst.frc.team2473.robot.Database.Value;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
+
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 
@@ -18,6 +20,7 @@ public class SensorThread extends Thread{
 	//add new sensors here
 	AnalogGyro gyro;
 	CANTalon leftEncoder, rightEncoder;
+	DigitalInput climberLS;
 	private volatile boolean alive = true;
 	long lastTime;
 	int delay;
@@ -35,6 +38,7 @@ public class SensorThread extends Thread{
 		this.gyro = Robot.gyro;
 		this.leftEncoder = new CANTalon(RobotMap.leftBackMotor);
 		this.rightEncoder = new CANTalon(RobotMap.rightFrontMotor);
+		this.climberLS = new DigitalInput(RobotMap.climberLS);
 
 		leftEncoder.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		rightEncoder.setFeedbackDevice(FeedbackDevice.QuadEncoder);
@@ -49,7 +53,7 @@ public class SensorThread extends Thread{
 		callMap.put(Value.GYRO, () -> gyro.getAngle());
 		callMap.put(Value.RIGHT_ENCODER, () -> rightEncoder.getEncPosition() * Database.RIGHT_ENC_CONSTANT);
 		callMap.put(Value.LEFT_ENCODER, () ->  -leftEncoder.getEncPosition() * Database.LEFT_ENC_CONSTANT);
-		
+		callMap.put(Value.CLIMBER_LS, () -> climberLS.get() ? 1.0 : 0.0);
 		
 		
 		callMap = Collections.unmodifiableMap(callMap);

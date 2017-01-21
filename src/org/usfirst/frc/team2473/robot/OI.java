@@ -68,6 +68,7 @@ public class OI {
 		buttonCallMap = new HashMap<>();
 
 		// add the button calls here
+		buttonCallMap.put(Database.ButtonName.CLIMBER_SPEED_TOGGLE, () -> getThrottle().getRawButton(3));		//3 is a placeholder value for the Climber Speed Toggle Button
 		
 		//EXAMPLE:
 		//buttonCallMap.put(ButtonName.SAMPLE, () -> getThrottle().getRawButton(0));

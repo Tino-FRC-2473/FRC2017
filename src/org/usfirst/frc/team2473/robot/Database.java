@@ -34,7 +34,7 @@ public class Database{
 	 * 
 	 */
 	public enum Value {
-		GYRO, LEFT_ENCODER, RIGHT_ENCODER, WHEEL_TWIST, THROTTLE_VALUE;// add
+		GYRO, LEFT_ENCODER, RIGHT_ENCODER, WHEEL_TWIST, THROTTLE_VALUE, CLIMBER_LS;// add
 																																	// buttons
 
 	}
@@ -47,7 +47,7 @@ public class Database{
 	 *
 	 */
 	public enum ButtonName {
-
+		CLIMBER_SPEED_TOGGLE;
 	}
 
 	/**

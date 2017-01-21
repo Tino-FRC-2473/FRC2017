@@ -42,8 +42,8 @@ public class AutoAlign extends CommandGroup {
     	
     	double centerToLiftDistance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
     	double centerA = Math.toDegrees(((robotOnLeft)?Math.atan(distanceY/distanceX):Math.atan(-distanceY/distanceX)));
-    	double centerB = ;
-    	
+    	double centerB = Math.toDegrees(Math.toRadians(centerA) - cameraA + cameraB);
+		
     	addSequential(new Turn());
     	addSequential(new DriveStraightForward());
     	addSequential(new Turn());

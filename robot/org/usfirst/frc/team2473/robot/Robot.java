@@ -6,7 +6,7 @@ import java.util.TimerTask;
 
 import org.usfirst.frc.team2473.robot.Database.Value;
 import org.usfirst.frc.team2473.robot.subsystems.DriveTrain;
-
+import org.usfirst.frc.team2473.robot.commands.Network;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -71,8 +71,8 @@ public class Robot extends IterativeRobot{
 		System.out.println(Value.CV_DISTANCE + ": " + d.getValue(Value.CV_DISTANCE));
 		System.out.println(Value.CV_L_OR_R + ": " + d.getValue(Value.CV_L_OR_R));
 		System.out.println(Value.CV_TIME_STAMP + ": " + d.getValue(Value.CV_TIME_STAMP));
-		synchronized(networking){
-		networking.notify(); }
+		Network r = new Network();
+		r.start();
 		System.out.println(Value.CV_ANGLE_A + ": " + d.getValue(Value.CV_ANGLE_A));
 		System.out.println(Value.CV_BEARING + ": " + d.getValue(Value.CV_BEARING));
 		System.out.println(Value.CV_DISTANCE + ": " + d.getValue(Value.CV_DISTANCE));

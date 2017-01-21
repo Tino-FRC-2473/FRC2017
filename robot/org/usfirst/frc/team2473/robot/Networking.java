@@ -13,13 +13,12 @@ import org.usfirst.frc.team2473.robot.Database.Value;
 
 public class Networking extends Thread {
 
-	private final String HOST = "10.24.73.15";
-	private final int PORT = 8080;
+	private final String HOST = "10.60.38.54";
+	private final int PORT = 4444;
 	private final String FUNCTION = "detect()";
 	private final String SEND = "{\"run\":\'" + FUNCTION + "\"}";
 	private char[] cbuf = new char[4096];
 	private Socket s = null;
-	private ServerSocket ss = null;
 	private BufferedReader stdIn = null;
 	private Database d = Database.getInstance();
 	private static LinkedList<String> names = new LinkedList<>();// Happy
@@ -50,13 +49,8 @@ public class Networking extends Thread {
 		values.put(Value.CV_BEARING, "Bearing");
 		values.put(Value.CV_L_OR_R, "Left or Right");
 		values.put(Value.CV_TIME_STAMP, "Time Stamp");
-		super.start();
-	}
-
-	public void run() {
 		try {
-			ss = new ServerSocket(PORT);
-			s = ss.accept();
+			s = new Socket(HOST, PORT);
 			System.out.println("Connecting to host");
 		} catch (IOException e) {
 			System.out.println("lolsies can't connect");
@@ -68,6 +62,10 @@ public class Networking extends Thread {
 		}catch(IOException e){
 			System.out.println("lolsies can't STDIN");
 		}
+		super.start();
+	}
+
+	public void run() {
 		while (true) {
 			try {
 				synchronized (this) {

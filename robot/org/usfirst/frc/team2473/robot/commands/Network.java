@@ -16,12 +16,14 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Network extends Command {
 	private Networking n = null;
 	private double times;
-	
+	public Network(){
+		n = Networking.getInstance();
+	}
 	@Override
 	protected void initialize(){
-		n = Networking.getInstance();
 		times = Database.getInstance().getValue(Value.CV_TIME_STAMP);
-		n.notify();
+		synchronized(n){
+		n.notify();}
 	}
 	@Override
 	protected void end() {
@@ -34,6 +36,7 @@ public class Network extends Command {
 
 	@Override
 	protected boolean isFinished() {
+		System.out.println(Database.getInstance().getValue(Value.CV_TIME_STAMP));
 		return times != Database.getInstance().getValue(Value.CV_TIME_STAMP);
 	}
 	

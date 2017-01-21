@@ -17,7 +17,8 @@ capture = cv2.VideoCapture(0)
 
 def distanceRelation(averageArea):
 	x = averageArea
-	return -.0009829417475*x + 33.0713297
+	return (19423*(x**(-0.735)))
+	#return -.0009829417475*x + 33.0713297
 	#return (2.937*(10**-11)*x**3 - 1.102 * (10**-6) * x**2 - 1.12 * (10 ** -2) * x - 4.223)
 	#return (5.92*10**-18*averageArea**5 - 3.45*10**-13*averageArea**4 + 7.55*10**-9*averageArea**3 - 7.70*10**-5*averageArea**2 + 0.3638*averageArea - 600.939)
 

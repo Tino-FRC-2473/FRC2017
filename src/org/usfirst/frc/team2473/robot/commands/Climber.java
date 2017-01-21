@@ -11,8 +11,8 @@ public class Climber extends Command{
 	private boolean LSPressed;
 	private double slowSpeed;
 	private double fastSpeed;
-	private long startTime;
-	private int duration;		//Time to keep running the motor after hitting the touch pad (ms)
+	private double startEncoderValue;
+	private int encoderTicks;		//Number of encoder ticks to keep running the motor after hitting the touch pad (ms)
 	
 	public Climber() {
 		requires(Robot.climbSystem);
@@ -25,8 +25,8 @@ public class Climber extends Command{
 		LSPressed = false;
 		slowSpeed = 0.3;
 		fastSpeed = 0.6;
-		startTime = 0;
-		duration = 500;
+		startEncoderValue = 0;
+		encoderTicks = 500;
 	}
 	
 	/**
@@ -34,7 +34,7 @@ public class Climber extends Command{
 	 * 
 	 * 1. Turn climber motor slowly to catch rope; when Driver manually hits button __,
 	 * speed up motor to climb up the rope
-	 * 2. When touch sensor is pressed, run motor for __ seconds to ensure button press.
+	 * 2. When touch sensor is pressed, run motor for __ encoder ticks to ensure button press.
 	 * 3. Stop motor.
 	 * 
 	 */
@@ -42,6 +42,11 @@ public class Climber extends Command{
 	protected void execute() {
 		super.execute();
 
+		//TODO Double check if get() returns if the button is pressed or not.
+		if(Database.getInstance().getButton(Database.ButtonName.CLIMBER_SPEED_TOGGLE).get()){
+			climbingRope = !climbingRope;
+		}
+		
 		if(!climbingRope){
 			Robot.climbSystem.climb(slowSpeed);
 		}else{
@@ -51,7 +56,7 @@ public class Climber extends Command{
 		//If the limit switch is pressed (1.0 is true, 0.0 is false, also in SensorThread)
 		if(Database.getInstance().getValue(Database.Value.CLIMBER_LS) == 1.0){
 			if(LSPressed == false){
-				startTime = System.currentTimeMillis();
+				startEncoderValue = Robot.climbSystem.getEncValue();
 			}
 			LSPressed = true;
 		}else{
@@ -62,7 +67,7 @@ public class Climber extends Command{
 
 	@Override
 	protected boolean isFinished() {
-		return (LSPressed && startTime + duration >= System.currentTimeMillis());
+		return (LSPressed && startEncoderValue + encoderTicks >= Robot.climbSystem.getEncValue());
 	}
 	
 	@Override

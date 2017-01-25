@@ -17,7 +17,7 @@ capture = cv2.VideoCapture(0)
 		print 'horizontal N/A'''
 
 def distanceRelation(averageHeight):
-	x = averageHeight
+	x = float(averageHeight)
 	return 5200/averageHeight
 	#return (19423*(x**(-0.735)))
 	#return -.0009829417475*x + 33.0713297
@@ -55,28 +55,28 @@ def distance(recSt, image):
 			centerY3 = thirdRecData['yCoord']
 			if centerY2 > centerY3:
 				heightSecondary = secondRecData['top'] - thirdRecData['bottom']
-				averageHeight = (height1+heightSecondary)/2
+				averageHeight = float(height1+heightSecondary)/2
 			else:
 				heightSecondary = thirdRecData['top'] - secondRecData['bottom']
-				averageHeight = (height1+heightSecondary)/2
+				averageHeight = float(height1+heightSecondary)/2
 		if maxHeight == 2:
 			centerY1 = firstRecData['yCoord']
 			centerY3 = thirdRecData['yCoord']
 			if centerY1 > centerY3:
 				heightSecondary = firstRecData['top'] - thirdRecData['bottom']
-				averageHeight = (height2+heightSecondary)/2
+				averageHeight = float(height2+heightSecondary)/2
 			else:
 				heightSecondary = thirdRecData['top'] - firstRecData['bottom']
-				averageHeight = (height2+heightSecondary)/2
+				averageHeight = float(height2+heightSecondary)/2
 		if maxHeight == 3:
 			centerY1 = firstRecData['yCoord']
 			centerY2 = secondRecData['yCoord']
 			if centerY1 > centerY2:
 				heightSecondary = firstRecData['top'] - secondRecData['bottom']
-				averageHeight = (height3+heightSecondary)/2
+				averageHeight = float(height3+heightSecondary)/2
 			else:
 				heightSecondary = secondRecData['top'] - firstRecData['bottom']
-				averageHeight = (height3+heightSecondary)/2
+				averageHeight = float(height3+heightSecondary)/2
 		#print(averageHeight)
 		#print ('lol')
 		#print(distanceRelation(averageHeight))
@@ -99,7 +99,7 @@ def distance(recSt, image):
 		calVal = 8/differenceCenter[0]
 		centerOffset = (len(image[0]))/2 - averageCenter[0]
 		distance = distanceRelation(averageHeight)
-		angle = math.atan((distance-13)/centerOffset)
+		angle = float(math.atan(float(distance-13)/float(centerOffset)))
 		angle = angle*180/math.pi
 		print(angle)
 		#print (averageHeight)

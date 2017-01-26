@@ -53,8 +53,8 @@ public class Climber extends Command{
 			Robot.climbSystem.climb(fastSpeed);
 		}
 		
-		//If the limit switch is pressed (1.0 is true, 0.0 is false, also in SensorThread)
-		if(Database.getInstance().getValue(Database.Value.CLIMBER_LS) == 1.0){
+		//If the limit switch is pressed
+		if(climbingRope && Robot.climbSystem.getLimitSwitch()){
 			if(LSPressed == false){
 				startEncoderValue = Robot.climbSystem.getEncValue();
 			}

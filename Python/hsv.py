@@ -24,13 +24,11 @@ def distanceRelation(averageHeight):
 	#return (2.937*(10**-11)*x**3 - 1.102 * (10**-6) * x**2 - 1.12 * (10 ** -2) * x - 4.223)
 	#return (5.92*10**-18*averageArea**5 - 3.45*10**-13*averageArea**4 + 7.55*10**-9*averageArea**3 - 7.70*10**-5*averageArea**2 + 0.3638*averageArea - 600.939)
 
-def reject_outliers(data, m=2):
-	return data[abs(data - np.mean(data)) < m * np.std(data)]
-
 areas = []
 
 def distance(recSt, image):
 	#for
+	instructions = []
 	if len(recSt) == 3:
 		maxHeight = 0
 		avgHeight = 0
@@ -79,7 +77,7 @@ def distance(recSt, image):
 				averageHeight = float(height3+heightSecondary)/2
 		#print(averageHeight)
 		#print ('lol')
-		#print(distanceRelation(averageHeight))
+		print(distanceRelation(averageHeight))
 		#print("_")
 	if len(recSt) == 2:
 		firstRecData = recSt[1]
@@ -96,15 +94,33 @@ def distance(recSt, image):
 		averageHeight = (firstHeight+secondHeight)/2
 		averageCenter = ((firstRecData['xCoord']+secondRecData['xCoord'])/2, (firstRecData['yCoord']+secondRecData['yCoord'])/2)
 		differenceCenter = ((firstRecData['xCoord']-secondRecData['xCoord']), (firstRecData['yCoord']-secondRecData['yCoord']))
-		calVal = 8/differenceCenter[0]
-		centerOffset = (len(image[0]))/2 - averageCenter[0]
+		calVal = float(float(8)/differenceCenter[0])
+		#print (averageCenter[0])
+		#print (len(image[0]))
+		centerOffset = float(len(image[0])/2 - averageCenter[0])
+		inOffCenter = calVal*centerOffset
+		#print(var)
 		distance = distanceRelation(averageHeight)
-		angle = float(math.atan(float(distance-13)/float(centerOffset)))
-		angle = angle*180/math.pi
-		print(angle)
+		if inOffCenter != 0:
+			angle = float(math.atan(float(distance)/float(inOffCenter)))
+			angle = angle*180/math.pi
+		else:
+			angle = 0
+		angleOfAttack = abs(angle)
+		instructions.append((float(180)-angleOfAttack)-float(6))
+		instructions.append(inOffCenter)
+		if inOffCenter > 0:
+			instructions.append(90)
+		else:
+			instructions.append(-90)
+		instructions.append(distance)
+		print(instructions)
+
 		#print (averageHeight)
 		#areas.append(averageArea)
+		#print(centerOffset)
 		#print(distance)
+		print("")
 	if len(recSt) == 1:
 		firstRecData = recSt[1]
 		firstArea = firstRecData['area']

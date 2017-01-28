@@ -46,7 +46,8 @@ public class DriveTrain extends Subsystem {
 		
 		
 	}
-
+	
+	@Override
     public void initDefaultCommand() {
          setDefaultCommand(new Drive());
     }

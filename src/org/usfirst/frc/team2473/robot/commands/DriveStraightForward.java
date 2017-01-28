@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class DriveStraightForward extends Command{
 	private double distance;
-	private static final double KP = .075;
+	private static final double KP = .1;
 	private static final double KI = .003;
 	private static final double KD = 0;
 	
@@ -43,7 +43,7 @@ public class DriveStraightForward extends Command{
     		rotate = Math.signum(rotate) * .7;
     	}
     	
-    	Robot.driveTrain.driveArcade(.7, rotate);
+    	Robot.driveTrain.driveArcade(.05 + .45 * Math.min(1,((distance - Database.getInstance().getValue(Value.RIGHT_ENCODER))) / ((distance < 8)?distance*7/8:Math.min(10, 6.5 + (distance-10)/5))), rotate);
     	
     	lastProportion = proportion;
     	
@@ -51,7 +51,7 @@ public class DriveStraightForward extends Command{
     }
 
 	protected boolean isFinished() {
-		return Math.abs(Database.getInstance().getValue(Value.LEFT_ENCODER)) > distance;
+		return Math.abs(Database.getInstance().getValue(Value.RIGHT_ENCODER)) > distance || Math.abs(Database.getInstance().getValue(Value.LEFT_ENCODER)) > distance;
 	}
 	
 	protected void end() {

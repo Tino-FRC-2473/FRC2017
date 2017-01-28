@@ -20,8 +20,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Database{
 
-	public static final double LEFT_ENC_CONSTANT = 1;
-	public static final double RIGHT_ENC_CONSTANT = 1;
+	public static final double LEFT_ENC_CONSTANT = 20.0/11240.0;
+	public static final double RIGHT_ENC_CONSTANT = 20.0/11240.0;
 
 
 
@@ -137,9 +137,9 @@ public class Database{
 	 */
 	public void log() {
 		SmartDashboard.putNumber("Left Distance",
-				(int)Database.getInstance().getValue(Value.LEFT_ENCODER));
+				Database.getInstance().getValue(Value.LEFT_ENCODER));
 		SmartDashboard.putNumber("Right Distance",
-				(int)Database.getInstance().getValue(Value.RIGHT_ENCODER));
+				Database.getInstance().getValue(Value.RIGHT_ENCODER));
 		SmartDashboard.putNumber("Gyro Angle",
 				Database.getInstance().getValue(Value.GYRO));
 		SmartDashboard.putNumber("Wheel Twist",

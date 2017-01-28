@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Turn extends Command{
 	private double bearing;
 	
-	private static final double KP = .05;
+	private static final double KP = .1;
 	private static final double KI = .003;
 	private static final double KD = 0;
 	
@@ -38,8 +38,8 @@ public class Turn extends Command{
     	double derivative = proportion - lastProportion;
     	double rotate = KP * proportion + KI*integral + KD*derivative;
     	
-    	if(Math.abs(rotate) > .90){
-    		rotate = Math.signum(rotate) * .9;
+    	if(Math.abs(rotate) > .70){
+    		rotate = Math.signum(rotate) * .7;
     	}
     	
     	Robot.driveTrain.driveArcade(0, rotate);

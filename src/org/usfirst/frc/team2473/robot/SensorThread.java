@@ -20,6 +20,7 @@ public class SensorThread extends Thread{
 	CANTalon leftEncoder, rightEncoder;
 	private volatile boolean alive = true;
 	long lastTime;
+	double leftEncoderZero, rightEncoderZero;
 	int delay;
 
 	private Map<Database.Value, Double> tempMap;
@@ -34,7 +35,7 @@ public class SensorThread extends Thread{
 		//add new sensors here
 		this.gyro = Robot.gyro;
 		this.leftEncoder = new CANTalon(RobotMap.leftBackMotor);
-		this.rightEncoder = new CANTalon(RobotMap.rightFrontMotor);
+		this.rightEncoder = new CANTalon(RobotMap.rightBackMotor);
 
 		leftEncoder.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		rightEncoder.setFeedbackDevice(FeedbackDevice.QuadEncoder);
@@ -47,8 +48,8 @@ public class SensorThread extends Thread{
 
 		//add the sensor name in the Values enum and the method of the sensor that returns the sensor value.
 		callMap.put(Value.GYRO, () -> gyro.getAngle());
-		callMap.put(Value.RIGHT_ENCODER, () -> rightEncoder.getEncPosition() * Database.RIGHT_ENC_CONSTANT);
-		callMap.put(Value.LEFT_ENCODER, () ->  -leftEncoder.getEncPosition() * Database.LEFT_ENC_CONSTANT);
+		callMap.put(Value.RIGHT_ENCODER, () -> (rightEncoder.getEncPosition() - rightEncoderZero )* Database.RIGHT_ENC_CONSTANT);
+		callMap.put(Value.LEFT_ENCODER, () -> -(leftEncoder.getEncPosition() - leftEncoderZero )* Database.LEFT_ENC_CONSTANT);
 		
 		
 		
@@ -108,8 +109,11 @@ public class SensorThread extends Thread{
 	}
 
 	public void resetEncoders() {
-		rightEncoder.setEncPosition(0);
-		leftEncoder.setEncPosition(0);
+		//rightEncoder.setEncPosition(0);
+		//leftEncoder.setEncPosition(0);
+		
+		leftEncoderZero = leftEncoder.getEncPosition();
+		rightEncoderZero = rightEncoder.getEncPosition();
 	}
 
 	public void resetGyro() {

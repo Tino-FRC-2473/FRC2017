@@ -49,6 +49,9 @@ public class Robot extends IterativeRobot{
 		sensorThread.start();
 		robotControlLoop = new Timer(false);
 		timerRunning = false;
+		
+		
+		SmartDashboard.putData(driveTrain);
 		}
 
 	/**
@@ -63,7 +66,10 @@ public class Robot extends IterativeRobot{
 	 * to the switch structure below with additional strings & commands.
 	 */
 	public void autonomousInit() {
-
+		
+		autonomousCommand = new DriveStraightForward(Double.parseDouble(SmartDashboard.getString("Auto Selector",
+				 "10")));
+		
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
 		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -72,15 +78,25 @@ public class Robot extends IterativeRobot{
 		 */
 
 		// schedule the autonomous command (example)
-		if (autonomousCommand != null)
-			autonomousCommand.start();
+		
+		autonomousCommand.start();
 	}
 
 	/**
 	 * This function is called periodically during autonomous
 	 */
 	public void autonomousPeriodic() {
-		Scheduler.getInstance().run();
+		if (!timerRunning) {
+			robotControlLoop.scheduleAtFixedRate(new TimerTask(){
+
+				@Override
+				public void run() {
+					Scheduler.getInstance().run();
+				}
+			}, 0, 20);
+			timerRunning = true;
+		}
+		log();
 	}
 
 	public void teleopInit() {
@@ -88,7 +104,7 @@ public class Robot extends IterativeRobot{
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-
+		
 	}
 
 	/**
@@ -124,7 +140,13 @@ public class Robot extends IterativeRobot{
 	 */
 	public void testPeriodic() {
 	}
-
+	
+	@Override
+	public void disabledInit(){
+		if (autonomousCommand != null)
+			autonomousCommand.cancel();
+	}
+	
 	@Override
 	public void disabledPeriodic() {
 

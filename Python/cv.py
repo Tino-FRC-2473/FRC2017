@@ -1,35 +1,26 @@
+from __future__ import division
 import cv2
 import numpy as np
 import math
 
 capture = cv2.VideoCapture(0)
 
-'''def oneRect(frame, recStorage):
-	recData = recStorage['1']
-	width, height = frame[:2]
-	if recData['xCoord'] < width/2:
-		print 'left by: ' + str(width/2-recData['xCoord'])
-	elif recData['xCoord'] > width/2:
-		print 'right by: ' + str(recData['xCoord']-width/2)
-	elif recData['xCoord'] == width/2:
-		print 'centered horizontally'
-	else:
-		print 'horizontal N/A'''
-
 def distanceRelation(averageHeight):
 	x = float(averageHeight)
-	return 5200/averageHeight
-	#return (19423*(x**(-0.735)))
-	#return -.0009829417475*x + 33.0713297
-	#return (2.937*(10**-11)*x**3 - 1.102 * (10**-6) * x**2 - 1.12 * (10 ** -2) * x - 4.223)
-	#return (5.92*10**-18*averageArea**5 - 3.45*10**-13*averageArea**4 + 7.55*10**-9*averageArea**3 - 7.70*10**-5*averageArea**2 + 0.3638*averageArea - 600.939)
+	return 5200.0 / averageHeight
 
-areas = []
+def angleOfAttack(averageHeight, averageCenter, distanceCenter):
+	d1 = distanceRelation(averageHeight)
+	#    calibration value          *  centerOffset
+	i = (8.0 / differenceCenter[0]) * (len(image[0]) / 2.0 - averageCenter[0])
+	d2 = math.sqrt( abs( math.pow(d1,2) - math.pow(i, 2) ) + math.pow( (abs(i) + 5.125), 2) )
+	return ( math.acos( (math.pow(d1, 2) - math.pow(d2, 2) - math.pow(5.125, 2)) / ( (-2) * (d1) * (d2) ) ) * (float(180)/math.pi)  )
 
-def distance(recSt, image):
-	#for
-	instructions = []
-	if len(recSt) == 3:
+
+
+def analyze(recSt, image):
+
+	if len(recSt) == 3: #three rectangle case
 		maxHeight = 0
 		avgHeight = 0
 		firstRecData = recSt[1]
@@ -38,10 +29,6 @@ def distance(recSt, image):
 		height1 = firstRecData['height']
 		height2 = secondRecData['height']
 		height3 = thirdRecData['height']
-		#print (height1)
-		#print (height2)
-		#print (height3)
-		#print ("")
 		if height1 >= height2 and height1 >= height3:
 			maxHeight = 1
 		if height2 >= height3 and height2 >= height1:
@@ -75,63 +62,30 @@ def distance(recSt, image):
 			else:
 				heightSecondary = secondRecData['top'] - firstRecData['bottom']
 				averageHeight = float(height3+heightSecondary)/2
-		#print(averageHeight)
-		#print ('lol')
-		#print(distanceRelation(averageHeight))
-		#print("_")
-	if len(recSt) == 2:
+		print(distanceRelation(averageHeight))
+
+	if len(recSt) == 2: #two rectange case
 		firstRecData = recSt[1]
 		secondRecData = recSt[2]
+
 		firstArea = firstRecData['area']
 		secondArea = secondRecData['area']
+
 		firstHeight = firstRecData['height']
 		secondHeight = secondRecData['height']
-		firstX = firstRecData['xCoord']
-		secondX = secondRecData['xCoord']
-		firstY = firstRecData['yCoord']
-		secondY = secondRecData['yCoord']
+
 		averageArea = (firstArea+secondArea)/2
 		averageHeight = (firstHeight+secondHeight)/2
+
 		averageCenter = ((firstRecData['xCoord']+secondRecData['xCoord'])/2, (firstRecData['yCoord']+secondRecData['yCoord'])/2)
 		differenceCenter = ((firstRecData['xCoord']-secondRecData['xCoord']), (firstRecData['yCoord']-secondRecData['yCoord']))
-		calVal = float(float(8)/differenceCenter[0])
-		#print (averageCenter[0])
-		#print (len(image[0]))
-		centerOffset = float(len(image[0])/2 - averageCenter[0])
-		inOffCenter = calVal*centerOffset
-		#print(var)
-		distance = distanceRelation(averageHeight)
-		print (inOffCenter)
-		if inOffCenter != 0:
-			angle = float(math.atan(float(distance)/float(inOffCenter)))
-			angle = angle*180/math.pi
-		else:
-			angle = 0
-		angleOfAttack = abs(angle)
-		instructions.append((float(180)-angleOfAttack)-float(6))
-		instructions.append(inOffCenter)
-		if inOffCenter > 0:
-			instructions.append(90)
-		else:
-			instructions.append(-90)
-		instructions.append(distance)
-		#print(instructions)
 
-		#print (averageHeight)
-		#areas.append(averageArea)
-		#print(centerOffset)
-		print(distance)
-		print("")
-	if len(recSt) == 1:
-		firstRecData = recSt[1]
-		firstArea = firstRecData['area']
-		firstHeight = firstRecData['height']
-		#print(distanceRelation(firstHeight))
-def height(topmost, bottommost):
-	height = abs(topmost[1] - bottommost[1])
-	return height
+		print(angleOfAttack(averageHeight, ))
+
+	if len(recSt) == 1: #one rectangle case aka cant do jack shit
 
 while(1):
+
 	_, frame = capture.read()
 	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 	lower_tape = np.array([0, 0, 249], dtype=np.uint8)
@@ -141,6 +95,7 @@ while(1):
 	(cnts, _) = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 	recNumber = 1
 	recStorage = dict()
+
 	for c in cnts:
 		approx = cv2.approxPolyDP(c,0.01*cv2.arcLength(c,True),True)
 		if len(approx)<6 and len(approx)>3 and cv2.contourArea(c)>40:
@@ -153,26 +108,21 @@ while(1):
 			leftmost = tuple(c[c[:,:,0].argmin()][0])
 			rightmost = tuple(c[c[:,:,0].argmax()][0])
 			yCoordinateHeight = c[1]
-			#heightNumber=1
-			'''for i in c[0]:
-				if i == cx:
-					HeightCoordinates[heightNumber-1] = tuple(i,yCoordinateHeight[i])
-					heightNumber += 1
-				if heightNumber >= 2:
-					break'''
 			rectHeight = height(topmost, bottommost)
 			quadNumber = "rect: " + str(recNumber)
 			cv2.drawContours(frame,[c],-1,(0,0,255),2)
 			recMiniData = {'xCoord':cx, 'yCoord':cy, 'area':cArea, 'height': rectHeight, 'top': topmost[1], 'bottom': bottommost[1]}
 			recStorage.update({recNumber: recMiniData})
 			recNumber += 1
+
 	cv2.imshow('frame',frame)
+
 	k = cv2.waitKey(5) & 0xFF
 	if len(recStorage) > 0:
-		distance(recStorage, frame)
+		analyze(recStorage, frame)
 	if k == ord("q"):
 		break
 
 cv2.destroyAllWindows()
 
-#print(np.average(reject_outliers(np.asarray(areas))))
+print(np.average(reject_outliers(np.asarray(areas))))

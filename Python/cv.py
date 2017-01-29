@@ -2,6 +2,8 @@ from __future__ import division
 import cv2
 import numpy as np
 import math
+import scipy.integrate as integrate
+import scipy.special as special
 
 capture = cv2.VideoCapture(0)
 
@@ -16,6 +18,29 @@ def angleOfAttack(averageHeight, averageCenter, distanceCenter):
 	d2 = math.sqrt( abs( math.pow(d1,2) - math.pow(i, 2) ) + math.pow( (abs(i) + 5.125), 2) )
 	return ( math.acos( (math.pow(d1, 2) - math.pow(d2, 2) - math.pow(5.125, 2)) / ( (-2) * (d1) * (d2) ) ) * (float(180)/math.pi)  )
 
+def intergrand(r, x):
+	func = math.sqrt(r**2 - x**2))
+	dydxSquared = (x**2) / (func**2)
+	return math.sqrt(1 + dydxSquared)
+
+def bearing(image, centerX):
+	chordWidth = len(image[0])
+	middle = len(image[0])/2
+	leftBearingCoord = 0 - middle
+	rightBearingCoord = middle
+	negativeCheck = centerX - middle
+	angle = 60
+	bisAngle = angle/2
+	r = chordWidth/2
+
+	imageSector = quad(integrand, leftBearingCoord, rightBearingCoord, args=(r))
+	turnSector = abs(quad(integrand, centerX, 0, args=(r)))
+
+	bearingAngle = angle * turnSector / imageSector
+	if negativeCheck < 0:
+		return -bearingAngle
+	else:
+		return bearingAngle
 
 
 def analyze(recSt, image):
@@ -29,15 +54,18 @@ def analyze(recSt, image):
 		height1 = firstRecData['height']
 		height2 = secondRecData['height']
 		height3 = thirdRecData['height']
+
 		if height1 >= height2 and height1 >= height3:
 			maxHeight = 1
 		if height2 >= height3 and height2 >= height1:
 			maxHeight = 2
 		if height3 >= height2 and height3 >= height1:
 			maxHeight = 3
+
 		if maxHeight == 1:
 			centerY2 = secondRecData['yCoord']
 			centerY3 = thirdRecData['yCoord']
+			centerX = (secondRecData['xCoord'] + firstRecData['xCoord'])/2
 			if centerY2 > centerY3:
 				heightSecondary = secondRecData['top'] - thirdRecData['bottom']
 				averageHeight = float(height1+heightSecondary)/2
@@ -47,6 +75,7 @@ def analyze(recSt, image):
 		if maxHeight == 2:
 			centerY1 = firstRecData['yCoord']
 			centerY3 = thirdRecData['yCoord']
+			centerX = (secondRecData['xCoord'] + firstRecData['xCoord'])/2
 			if centerY1 > centerY3:
 				heightSecondary = firstRecData['top'] - thirdRecData['bottom']
 				averageHeight = float(height2+heightSecondary)/2
@@ -56,13 +85,17 @@ def analyze(recSt, image):
 		if maxHeight == 3:
 			centerY1 = firstRecData['yCoord']
 			centerY2 = secondRecData['yCoord']
+			centerX = (secondRecData['xCoord'] + thirdRecData['xCoord'])/2
 			if centerY1 > centerY2:
 				heightSecondary = firstRecData['top'] - secondRecData['bottom']
 				averageHeight = float(height3+heightSecondary)/2
 			else:
 				heightSecondary = secondRecData['top'] - firstRecData['bottom']
 				averageHeight = float(height3+heightSecondary)/2
-		print(distanceRelation(averageHeight))
+
+		bearingAngle = bearing(image, centerX)
+		distance = (distanceRelation(averageHeight))
+		print(distance)
 
 	if len(recSt) == 2: #two rectange case
 		firstRecData = recSt[1]
@@ -80,6 +113,8 @@ def analyze(recSt, image):
 		averageCenter = ((firstRecData['xCoord']+secondRecData['xCoord'])/2, (firstRecData['yCoord']+secondRecData['yCoord'])/2)
 		differenceCenter = ((firstRecData['xCoord']-secondRecData['xCoord']), (firstRecData['yCoord']-secondRecData['yCoord']))
 
+		bearingAngle = bearing(image, averageCenter[0])
+		distance = (distanceRelation(averageHeight))
 		print(angleOfAttack(averageHeight, ))
 
 	if len(recSt) == 1: #one rectangle case aka cant do jack shit

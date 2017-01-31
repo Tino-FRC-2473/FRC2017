@@ -7,17 +7,20 @@ import org.usfirst.frc.team2473.robot.Database.Value;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * @author Deep Sethi
+ * @author Justine Qiu
+ * @author Kashyap Panda
  */
 public class Drive extends Command {
 
-	public static final double SPEED_TURNING_MULTIPLICATION_CONSTANT = 0.30;
-	public static final double SPEED_TURNING_ADDING_CONSTANT = 0.70;
+	public static final double SPEED_TURNING_MULTIPLICATION_CONSTANT = 0.35; //0.3
+	public static final double THRUST_CONSTANT = 1.1;
+	public static final double SPEED_TURNING_ADDING_CONSTANT = 0.70; //0.7
 	public static final double DEADZONE_AREA = 0.04;
 	public static final double MAX_TURN = 0.8;
 	public static final double KP = .075;//.075;
-	public static final double KI = .003;
-	public static final double KD = .00;
+	public static final double KI = .003;//.003
+	public static final double KD = .05;//.00
 	
 	private boolean drivingStraight;//is the robot driving straight
 	private double startingGyroValue;//the gyro value when starting to drive straight
@@ -54,8 +57,9 @@ public class Drive extends Command {
     	else
     	{
     		drivingStraight = false;
-    		Robot.driveTrain.driveArcade(thrust, shapeWheel(-wheelX,throttleZ));
+    		Robot.driveTrain.driveArcade(thrust*THRUST_CONSTANT, shapeWheel(-wheelX,throttleZ));
     	}
+    	System.out.println(Database.getInstance().getValue(Value.GYRO));
     	
     }
 

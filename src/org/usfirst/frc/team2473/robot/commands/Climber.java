@@ -42,6 +42,10 @@ public class Climber extends Command{
 	protected void execute() {
 		super.execute();
 
+		if(Database.getInstance().getButton(Database.ButtonName.STOP_CLIMBER).get()){
+			end();
+		}
+		
 		//TODO Double check if get() returns if the button is pressed or not.
 		if(Database.getInstance().getButton(Database.ButtonName.CLIMBER_SPEED_TOGGLE).get()){
 			climbingRope = !climbingRope;

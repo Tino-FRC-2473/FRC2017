@@ -113,7 +113,9 @@ public class Robot extends IterativeRobot{
 			}, 0, 20);
 			timerRunning = true;
 		}
-
+		
+		Database.getInstance().getButton(Database.ButtonName.START_CLIMBER).whenPressed(new Climber());
+		
 		oi.updateButtons();
 		oi.updateJoysticks();
 		

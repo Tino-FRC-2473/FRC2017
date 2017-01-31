@@ -11,32 +11,59 @@ def distanceRelation(averageHeight):
 	x = float(averageHeight)
 	return 5200.0 / averageHeight
 
-def angleOfAttack(averageHeight, averageCenter, distanceCenter):
-	d1 = distanceRelation(averageHeight)
-	#    calibration value          *  centerOffset
-	i = (8.0 / differenceCenter[0]) * (len(image[0]) / 2.0 - averageCenter[0])
-	d2 = math.sqrt( abs( math.pow(d1,2) - math.pow(i, 2) ) + math.pow( (abs(i) + 5.125), 2) )
-	return ( math.acos( (math.pow(d1, 2) - math.pow(d2, 2) - math.pow(5.125, 2)) / ( (-2) * (d1) * (d2) ) ) * (float(180)/math.pi)  )
+def angleOfAttack(firstHeight, secondHeight, rectX, image):
+		maxRectHeight = 0
+		minRectHeight = 0
 
-def intergrand(r, x):
-	func = math.sqrt(r**2 - x**2))
-	dydxSquared = (x**2) / (func**2)
-	return math.sqrt(1 + dydxSquared)
+		if firstHeight > secondHeight:
+			maxRectHeight = firstHeight
+			minRectHeight = secondHeight
+		elif secondHeight > firstHeight:
+			maxRectHeight = secondHeight
+			minRectHeight = firstHeight
+		else:
+			maxRectHeight = secondHeight
+			minRectHeight = firstHeight
+
+		y = 5300.0/minRectHeight
+		z = 5300.0/maxRectHeight
+
+		angleOpposite = math.acos((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))
+		closeAngle = math.asin((4.0 * math.sin(angleOpposite))/y) * (180/math.pi)
+		angleOpposite = angleOpposite * (180/math.pi)
+		angleOfAttack = 90.0 - angleOpposite - closeAngle
+		if rectX > len(image[0])/2:
+			angleOfAttack = angleOfAttack * -1.0
+		return angleOfAttack
+
+def height(topmost, bottommost):
+	height = abs(topmost[1] - bottommost[1])
+	return height
 
 def bearing(image, centerX):
-	chordWidth = len(image[0])
 	middle = len(image[0])/2
 	leftBearingCoord = 0 - middle
 	rightBearingCoord = middle
 	negativeCheck = centerX - middle
-	angle = 60
+	chordWidth = len(image[0])
+	middle = len(image[0])/2
+	angle = 60*math.pi/180
 	bisAngle = angle/2
-	r = chordWidth/2
 
-	imageSector = quad(integrand, leftBearingCoord, rightBearingCoord, args=(r))
-	turnSector = abs(quad(integrand, centerX, 0, args=(r)))
+	r = abs(middle/(math.sin(bisAngle)))
+	#print (r)
+	#print (x)
+	func = lambda x: math.sqrt(1+ x**2/(r**2 - x**2))
 
-	bearingAngle = angle * turnSector / imageSector
+	imageSector = integrate.quad(func, leftBearingCoord, rightBearingCoord)
+	#print(imageSector[0])
+	turnSector = integrate.quad(func, centerX, 0)
+	turnSectorLength = turnSector[0]
+	turnSectorLength = abs(turnSectorLength)
+	#print(turnSectorLength)
+
+	bearingAngle = abs(angle * 180 / math.pi * turnSectorLength / imageSector[0] - 30)
+	#print(bearingAngle)
 	if negativeCheck < 0:
 		return -bearingAngle
 	else:
@@ -54,14 +81,12 @@ def analyze(recSt, image):
 		height1 = firstRecData['height']
 		height2 = secondRecData['height']
 		height3 = thirdRecData['height']
-
 		if height1 >= height2 and height1 >= height3:
 			maxHeight = 1
 		if height2 >= height3 and height2 >= height1:
 			maxHeight = 2
 		if height3 >= height2 and height3 >= height1:
 			maxHeight = 3
-
 		if maxHeight == 1:
 			centerY2 = secondRecData['yCoord']
 			centerY3 = thirdRecData['yCoord']
@@ -93,19 +118,32 @@ def analyze(recSt, image):
 				heightSecondary = secondRecData['top'] - firstRecData['bottom']
 				averageHeight = float(height3+heightSecondary)/2
 
+		distance = distanceRelation(averageHeight)
 		bearingAngle = bearing(image, centerX)
-		distance = (distanceRelation(averageHeight))
+		angleAttack = angleOfAttack(maxHeight, heightSecondary, centerX, image)
 		print(distance)
+		print(bearingAngle)
+		print(angleAttack)
+		print("")
+
 
 	if len(recSt) == 2: #two rectange case
+
 		firstRecData = recSt[1]
 		secondRecData = recSt[2]
+
+		firstX = firstRecData['xCoord']
+		secondX = secondRecData['xCoord']
+		rectX = (firstX+secondX)/2
 
 		firstArea = firstRecData['area']
 		secondArea = secondRecData['area']
 
 		firstHeight = firstRecData['height']
 		secondHeight = secondRecData['height']
+
+
+		angleAttack = angleOfAttack(firstHeight, secondHeight, rectX, image)
 
 		averageArea = (firstArea+secondArea)/2
 		averageHeight = (firstHeight+secondHeight)/2
@@ -114,13 +152,17 @@ def analyze(recSt, image):
 		differenceCenter = ((firstRecData['xCoord']-secondRecData['xCoord']), (firstRecData['yCoord']-secondRecData['yCoord']))
 
 		bearingAngle = bearing(image, averageCenter[0])
-		distance = (distanceRelation(averageHeight))
-		print(angleOfAttack(averageHeight, ))
+		distance = distanceRelation(averageHeight)
+		print(distance)
+		print(bearingAngle)
+		print(angleAttack)
+		print("")
+
 
 	if len(recSt) == 1: #one rectangle case aka cant do jack shit
+		lmao = 1
 
 while(1):
-
 	_, frame = capture.read()
 	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 	lower_tape = np.array([0, 0, 249], dtype=np.uint8)

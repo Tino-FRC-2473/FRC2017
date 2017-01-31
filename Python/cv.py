@@ -4,6 +4,20 @@ import numpy as np
 import math
 import scipy.integrate as integrate
 import scipy.special as special
+import socket
+import json.JSONEncoder as JSONEncoder
+import json.JSONDecoder as JSONDecoder
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+host = ''
+port = 54321
+x = 1
+s.bind((host, port))
+print ('Listening')
+s.listen(1)
+conn, addr = s.accept()
+print 'Connected by:', addr
+st = ""
 
 capture = cv2.VideoCapture(0)
 
@@ -121,10 +135,11 @@ def analyze(recSt, image):
 		distance = distanceRelation(averageHeight)
 		bearingAngle = bearing(image, centerX)
 		angleAttack = angleOfAttack(maxHeight, heightSecondary, centerX, image)
-		print(distance)
-		print(bearingAngle)
-		print(angleAttack)
-		print("")
+		#print(distance)
+		#print(bearingAngle)
+		#print(angleAttack)
+		#print("")
+		return [distance, bearingAngle, angleAttack]
 
 
 	if len(recSt) == 2: #two rectange case
@@ -153,16 +168,17 @@ def analyze(recSt, image):
 
 		bearingAngle = bearing(image, averageCenter[0])
 		distance = distanceRelation(averageHeight)
-		print(distance)
-		print(bearingAngle)
-		print(angleAttack)
-		print("")
+		#print(distance)
+		#print(bearingAngle)
+		#print(angleAttack)
+		#print("")
+		return [distance, bearingAngle, angleAttack]
 
 
 	if len(recSt) == 1: #one rectangle case aka cant do jack shit
 		lmao = 1
 
-while(1):
+def contourIsolation():
 	_, frame = capture.read()
 	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 	lower_tape = np.array([0, 0, 249], dtype=np.uint8)
@@ -196,9 +212,17 @@ while(1):
 
 	k = cv2.waitKey(5) & 0xFF
 	if len(recStorage) > 0:
-		analyze(recStorage, frame)
-	if k == ord("q"):
-		break
+		results = analyze(recStorage, frame)
+		return results
+
+	#if k == ord("q"):
+		#break
+while (1) :
+    st = conn.recv(1024)
+    returned = st.decode()
+    eval(returned)
+	results = contourIsolation()
+	s.send(JSONEncoder().encode({"distance": results[0]}, {"bearing": results[1]}, {"angleOfAttack": results[2]}))
 
 cv2.destroyAllWindows()
 

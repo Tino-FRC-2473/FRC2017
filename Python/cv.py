@@ -9,7 +9,7 @@ from json import JSONEncoder
 from json import JSONDecoder
 import time
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+'''s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 host = ''
 port = 5811
 x = 1
@@ -19,7 +19,7 @@ s.listen(1)
 conn, addr = s.accept()
 print 'Connected by:', addr
 st = ""
-
+'''
 capture = cv2.VideoCapture(0)
 
 def distanceRelation(averageHeight):
@@ -42,18 +42,23 @@ def angleOfAttack(firstHeight, secondHeight, rectX, image):
 
 		y = 5300.0/minRectHeight
 		z = 5300.0/maxRectHeight
-
+		#print((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))
 		if(((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))>1):
-			print(y)
-			print(z)
-			print()
-		angleOpposite = math.acos((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))
-		closeAngle = math.asin((4.0 * math.sin(angleOpposite))/y) * (180/math.pi)
-		angleOpposite = angleOpposite * (180/math.pi)
-		angleOfAttack = 90.0 - angleOpposite - closeAngle
-		if rectX > len(image[0])/2:
-			angleOfAttack = angleOfAttack * -1.0
-		return angleOfAttack
+			#print(y)
+			#print(z)
+			#print()
+			return -1
+		else:
+			angleOpposite = math.acos((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))
+			closeAngle = math.asin((4.0 * math.sin(angleOpposite))/y) * (180/math.pi)
+			angleOpposite = angleOpposite * (180/math.pi)
+			angleOfAttack = 90.0 - angleOpposite - closeAngle
+			#print(angleOfAttack)
+			if rectX > len(image[0])/2:
+				angleOfAttack = angleOfAttack * -1.0
+				return angleOfAttack
+			else:
+				return angleOfAttack
 
 def height(topmost, bottommost):
 	height = abs(topmost[1] - bottommost[1])
@@ -140,11 +145,15 @@ def analyze(recSt, image):
 		distance = distanceRelation(averageHeight)
 		bearingAngle = bearing(image, centerX)
 		angleAttack = angleOfAttack(maxHeight, heightSecondary, centerX, image)
+		if angleAttack > bearingAngle:
+			leftOrRight = 1
+		else:
+			leftOrRight = 0
 		#print(distance)
 		#print(bearingAngle)
 		#print(angleAttack)
 		#print("")
-		return [distance, bearingAngle, angleAttack]
+		return [distance, bearingAngle, angleAttack, leftOrRight]
 
 
 	if len(recSt) == 2: #two rectange case
@@ -173,7 +182,7 @@ def analyze(recSt, image):
 
 		bearingAngle = bearing(image, averageCenter[0])
 		distance = distanceRelation(averageHeight)
-		if angleAttack > bearing:
+		if angleAttack > bearingAngle:
 			leftOrRight = 1
 		else:
 			leftOrRight = 0
@@ -184,8 +193,8 @@ def analyze(recSt, image):
 		return [distance, bearingAngle, angleAttack, leftOrRight]
 
 
-	if len(recSt) == 1: #one rectangle case aka cant do jack shit
-		lmao = 1
+	#if len(recSt) == 1: #one rectangle case aka cant do jack shit
+		#lmao = 1
 
 def CV():
 	_, frame = capture.read()
@@ -222,19 +231,21 @@ def CV():
 	k = cv2.waitKey(5) & 0xFF
 	if len(recStorage) > 0:
 		results = analyze(recStorage, frame)
+		print(results)
 		return results
 
 	#if k == ord("q"):
 		#break
 
 while (1):
-	returned = conn.recv(1024)
+	'''returned = conn.recv(1024)
 	results = eval(returned)
 	conn.send(JSONEncoder().encode({"Distance": results[0],
 	"Angle A": results[2],
 	"Bearing": results[1],
 	"Left or Right": results[3],
-	"Time Stamp": time.localtime()}))
+	"Time Stamp": time.localtime()}))'''
+	CV()
 
 cv2.destroyAllWindows()
 

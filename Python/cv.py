@@ -5,12 +5,13 @@ import math
 import scipy.integrate as integrate
 import scipy.special as special
 import socket
-import json.JSONEncoder as JSONEncoder
-import json.JSONDecoder as JSONDecoder
+from json import JSONEncoder
+from json import JSONDecoder
+import time
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 host = ''
-port = 54321
+port = 5811
 x = 1
 s.bind((host, port))
 print ('Listening')
@@ -42,6 +43,10 @@ def angleOfAttack(firstHeight, secondHeight, rectX, image):
 		y = 5300.0/minRectHeight
 		z = 5300.0/maxRectHeight
 
+		if(((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))>1):
+			print(y)
+			print(z)
+			print()
 		angleOpposite = math.acos((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))
 		closeAngle = math.asin((4.0 * math.sin(angleOpposite))/y) * (180/math.pi)
 		angleOpposite = angleOpposite * (180/math.pi)
@@ -178,7 +183,7 @@ def analyze(recSt, image):
 	if len(recSt) == 1: #one rectangle case aka cant do jack shit
 		lmao = 1
 
-def contourIsolation():
+def CV():
 	_, frame = capture.read()
 	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 	lower_tape = np.array([0, 0, 249], dtype=np.uint8)
@@ -217,12 +222,15 @@ def contourIsolation():
 
 	#if k == ord("q"):
 		#break
-while (1) :
-    st = conn.recv(1024)
-    returned = st.decode()
-    eval(returned)
-	results = contourIsolation()
-	s.send(JSONEncoder().encode({"distance": results[0]}, {"bearing": results[1]}, {"angleOfAttack": results[2]}))
+
+while (1):
+	returned = conn.recv(1024)
+	results = eval(returned)
+	conn.send(JSONEncoder().encode({"Distance": results[0],
+	"Angle A": results[2],
+	"Bearing": results[1],
+	"Left or Right": 0,
+	"Time Stamp": time.localtime()}))
 
 cv2.destroyAllWindows()
 

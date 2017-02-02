@@ -173,11 +173,15 @@ def analyze(recSt, image):
 
 		bearingAngle = bearing(image, averageCenter[0])
 		distance = distanceRelation(averageHeight)
+		if angleAttack > bearing:
+			leftOrRight = 1
+		else:
+			leftOrRight = 0
 		#print(distance)
 		#print(bearingAngle)
 		#print(angleAttack)
 		#print("")
-		return [distance, bearingAngle, angleAttack]
+		return [distance, bearingAngle, angleAttack, leftOrRight]
 
 
 	if len(recSt) == 1: #one rectangle case aka cant do jack shit
@@ -229,7 +233,7 @@ while (1):
 	conn.send(JSONEncoder().encode({"Distance": results[0],
 	"Angle A": results[2],
 	"Bearing": results[1],
-	"Left or Right": 0,
+	"Left or Right": results[3],
 	"Time Stamp": time.localtime()}))
 
 cv2.destroyAllWindows()

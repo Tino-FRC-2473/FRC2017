@@ -12,6 +12,10 @@ import java.util.TimerTask;
 
 import org.usfirst.frc.team2473.robot.commands.*;
 import org.usfirst.frc.team2473.robot.subsystems.*;
+
+import com.ctre.CANTalon;
+import com.ctre.CANTalon.TalonControlMode;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -99,6 +103,8 @@ public class Robot extends IterativeRobot{
 	/**
 	 * This function is called periodically during operator control
 	 */
+	//CANTalon c = new CANTalon(4);
+	
 	public void teleopPeriodic() {
 
 		//System.out.println(System.currentTimeMillis() - lastTime);
@@ -122,7 +128,9 @@ public class Robot extends IterativeRobot{
 		log();
 		lastTime = System.currentTimeMillis();
 
+		
 
+		//climbSystem.climb(0.5);
 
 	}
 

@@ -4,6 +4,7 @@ import org.usfirst.frc.team2473.robot.RobotMap;
 import org.usfirst.frc.team2473.robot.commands.Climber;
 
 import com.ctre.CANTalon;
+import com.ctre.CANTalon.TalonControlMode;
 
 import edu.wpi.first.wpilibj.CANSpeedController;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -11,7 +12,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class ClimberSystem extends Subsystem{
 
-	private CANSpeedController ropeCAN;
+	private CANTalon ropeCAN;
 	private DigitalInput climberLS;
 	
 	public ClimberSystem() {
@@ -20,16 +21,17 @@ public class ClimberSystem extends Subsystem{
 		ropeCAN = new CANTalon(RobotMap.ropeClimbMotor);
 		climberLS = new DigitalInput(RobotMap.climberLS);
 		//TODO Double check if this function actually resets encoder value, not written in API
-		ropeCAN.reset();
+		//ropeCAN.reset();
 	}
 	
 	@Override
 	protected void initDefaultCommand() {
-		setDefaultCommand(new Climber());
+		//setDefaultCommand(new Climber());
 	}
 	
 	
 	public void climb(double value){
+		ropeCAN.changeControlMode(TalonControlMode.PercentVbus);
 		ropeCAN.set(value);
 	}
 	

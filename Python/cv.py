@@ -203,7 +203,9 @@ def CV():
 	upper_tape = np.array([1, 10, 255], dtype=np.uint8)
 	mask = cv2.inRange(hsv, lower_tape, upper_tape)
 	res = cv2.bitwise_and(frame, frame, mask= mask)
-	(cnts, _) = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+	cv2.imshow("frame", frame)
+	cv2.waitKey(0)
+	(cnts, _, _) = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 	recNumber = 1
 	recStorage = dict()
 

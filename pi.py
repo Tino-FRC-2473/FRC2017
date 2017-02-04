@@ -112,8 +112,11 @@ def bearing(image, centerX):
 	r = abs(middle/(math.sin(bisAngle)))
 	print (r)
 	#print (x)
-	func = lambda x: math.sqrt(1+ x**2/(r**2 - x**2))
-
+	func = lambda x: math.pow(x,2) #Something random with X in case the square root operation fails, in which case bad data will be returned
+	try: 
+		func = lambda x: math.sqrt(1+ x**2/(r**2 - x**2))
+	except:
+		print("square root domain error")
 	imageSector = integrate.quad(func, leftBearingCoord, rightBearingCoord)
 	turnSector = integrate.quad(func, centerX, 0)
 	turnSectorLength = turnSector[0]

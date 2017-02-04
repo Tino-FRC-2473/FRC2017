@@ -61,16 +61,12 @@ def angleOfAttack(firstHeight, secondHeight, rectX, image, width1, width2, toggl
 		z = 2120.0/maxRectWidth
 	#print((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))
 	if(((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))>1):
-		#print(y)
-		#print(z)
-		#print()
 		return -1
 	else:
 		angleOpposite = math.acos((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))
 		closeAngle = math.asin((4.0 * math.sin(angleOpposite))/y) * (180/math.pi)
 		angleOpposite = angleOpposite * (180/math.pi)
 		angleOfAttack = 90.0 - angleOpposite - closeAngle
-		#print(angleOfAttack)
 		if rectX > len(image[0])/2:
 			angleOfAttack = angleOfAttack * -1.0
 			return angleOfAttack
@@ -101,14 +97,11 @@ def bearing(image, centerX):
 	func = lambda x: math.sqrt(1+ x**2/(r**2 - x**2))
 
 	imageSector = integrate.quad(func, leftBearingCoord, rightBearingCoord)
-	#print(imageSector[0])
 	turnSector = integrate.quad(func, centerX, 0)
 	turnSectorLength = turnSector[0]
 	turnSectorLength = abs(turnSectorLength)
-	#print(turnSectorLength)
 
 	bearingAngle = abs(angle * 180 / math.pi * turnSectorLength / imageSector[0] - 30)
-	#print(bearingAngle)
 	if negativeCheck < 0:
 		return -bearingAngle
 	else:
@@ -117,9 +110,7 @@ def bearing(image, centerX):
 
 def analyze(recSt, image):
 	calHWThreshold = 9/10
-	print(len(recSt))
 	if len(recSt) == 3:
-		print("sick")
 		toggleVar = 1
 		maxHeight = 0
 		avgHeight = 0
@@ -189,30 +180,20 @@ def analyze(recSt, image):
 			else:
 				heightSecondary = secondRecData['top'] - firstRecData['bottom']
 				averageHeight = float(height3+heightSecondary)/2
-		print("step")
 		if toggleVar == 0:
 			distance = distanceRelation(averageHeight)
 		else:
 			distance = widthDistRelation(averageWidth)
-		print(distance)
 		bearingAngle = bearing(image, centerX)
-		print(bearingAngle)
 		angleAttack = angleOfAttack(maxHeight, heightSecondary, centerX, image, width1, width2, toggleVar)
 		if angleAttack > bearingAngle:
 			leftOrRight = 1
 		else:
 			leftOrRight = 0
-		print(angleAttack)
-		#print(distance)
-		#print(bearingAngle)
-		#print(angleAttack)
-		#print("")
-		print("Has a")
 		return [distance, bearingAngle, angleAttack, leftOrRight]
 
 
 	if len(recSt) == 2: #two rectange case
-		print("step")
 		firstRecData = recSt[1]
 		secondRecData = recSt[2]
 
@@ -232,7 +213,6 @@ def analyze(recSt, image):
 			toggleVar = 0
 		else:
 			toggleVar = 1
-		print("step")
 
 		angleAttack = angleOfAttack(firstHeight, secondHeight, rectX, image, firstWidth, secondWidth, toggleVar)
 
@@ -244,23 +224,15 @@ def analyze(recSt, image):
 		differenceCenter = ((firstRecData['xCoord']-secondRecData['xCoord']), (firstRecData['yCoord']-secondRecData['yCoord']))
 
 		bearingAngle = bearing(image, averageCenter[0])
-		print(bearing)
 		if firstHeight/secondHeight > calHWThreshold and secondHeight/firstHeight > calHWThreshold:
 			distance = distanceRelation(averageHeight)
 		else:
 			distance = widthDistRelation(averageWidth)
-		print(distance)
 		if angleAttack > bearingAngle:
 			leftOrRight = 1
 		else:
 			leftOrRight = 0
-		print(angleAttack)
-		print("Has a")
 		return [distance, bearingAngle, angleAttack, leftOrRight]
-
-
-	#if len(recSt) == 1: #one rectangle case aka cant do jack shit
-		#lmao = 1
 
 def CV():
 	_, frame = capture.read()
@@ -298,7 +270,6 @@ def CV():
 	k = cv2.waitKey(5) & 0xFF
 	if len(recStorage) > 0:
 		results = analyze(recStorage, frame)
-		print(results)
 		return results
 
 	#if k == ord("q"):
@@ -312,6 +283,6 @@ while (1):
 	"Bearing": results[1],
 	"Left or Right": results[3],
 	"Time Stamp": time.localtime()}))'''
-	CV()
+	print(CV())
 
 cv2.destroyAllWindows()

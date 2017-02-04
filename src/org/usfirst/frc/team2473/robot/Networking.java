@@ -12,21 +12,16 @@ import java.util.LinkedList;
 import org.usfirst.frc.team2473.robot.Database.Value;
 
 public class Networking extends Thread {
-
-	private final String HOST = "10.60.38.54";
-	private final int PORT = 4444;
+	//MUST CHANGE ON COMPETITION DAY
+	private final String HOST = "10.60.38.97";
+	private final int PORT = 5811;
 	private final String FUNCTION = "detect()";
-	private final String SEND = "{\"run\":\'" + FUNCTION + "\"}";
+	private final String SEND = "{\"run\":\"" + FUNCTION + "\"}";
 	private char[] cbuf = new char[4096];
 	private Socket s = null;
 	private BufferedReader stdIn = null;
 	private Database d = Database.getInstance();
-	private static LinkedList<String> names = new LinkedList<>();// Happy
-																	// Pramukh?
-																	// Empty
-																	// Angled
-																	// Brackets.
-																	// Happy?
+	private static LinkedList<String> names = new LinkedList<>();
 	private HashMap<Value, String> values = new HashMap<>();
 	public boolean run = false;
 	static Networking instance;
@@ -53,15 +48,18 @@ public class Networking extends Thread {
 			s = new Socket(HOST, PORT);
 			System.out.println("Connecting to host");
 		} catch (IOException e) {
-			System.out.println("lolsies can't connect");
+			System.out.println("Can't connect");
 		}
 		try{
 			System.out.println("Setting up STDin");
 			stdIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
 
 		}catch(IOException e){
-			System.out.println("lolsies can't STDIN");
+			System.out.println("Can't STDIN");
 		}
+//		}catch(NullPointerException e){
+//			System.out.println("No Socket");
+//		}
 		super.start();
 	}
 

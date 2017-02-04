@@ -9,14 +9,15 @@ from json import JSONEncoder
 from json import JSONDecoder
 import time
 import os
-os.system("v4l2-ctl --set-ctrl=exposure_absolute=20")
 
+os.system("v4l2-ctl --set-ctrl=exposure_auto_priority=1")
+os.system("v4l2-ctl --set-ctrl=exposure_auto=1")
+os.system("v4l2-ctl --set-ctrl=exposure_auto_priority=0")
+os.system("v4l2-ctl --set-ctrl=exposure_absolute=8")
 
-
-
-'''s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 host = ''
-port = 5811
+port = 5812
 x = 1
 s.bind((host, port))
 print ('Listening')
@@ -24,7 +25,7 @@ s.listen(1)
 conn, addr = s.accept()
 print 'Connected by:', addr
 st = ""
-'''
+
 capture = cv2.VideoCapture(0)
 
 
@@ -33,12 +34,14 @@ capture = cv2.VideoCapture(0)
 def distanceRelation(averageHeight):
 	x = float(averageHeight)
 	print('distHeight: ', x)
-	return 3150.0 / averageHeight #calibrate through regression
+	if averageHeight != 0:
+		return 3150.0 / averageHeight #calibrate through regression
 
 def widthDistRelation(averageWidth):
 	x = float(averageWidth)
 	print('distWidth: ', x)
-	return 1260.0 / averageWidth  #calibrate through regression
+	if averageWidth != 0:
+		return 1260.0 / averageWidth  #calibrate through regression
 
 
 def angleOfAttack(firstHeight, secondHeight, rectX, image, width1, width2, toggleVar):
@@ -47,7 +50,7 @@ def angleOfAttack(firstHeight, secondHeight, rectX, image, width1, width2, toggl
 	if firstHeight > secondHeight:
 		maxRectHeight = firstHeight
 		minRectHeight = secondHeight
-		
+
 	elif secondHeight > firstHeight:
 		maxRectHeight = secondHeight
 		minRectHeight = firstHeight
@@ -78,8 +81,13 @@ def angleOfAttack(firstHeight, secondHeight, rectX, image, width1, width2, toggl
 	if(((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))>1):
 		return -1
 	else:
-		angleOpposite = math.acos((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))
-		closeAngle = math.asin((4.0 * math.sin(angleOpposite))/y) * (180/math.pi)
+		angleOpposite = 0
+		closeAngle = 0
+		try:
+			angleOpposite = math.acos((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))
+			closeAngle = math.asin((4.0 * math.sin(angleOpposite))/y) * (180/math.pi)
+		except:
+			print("arcsin or arccos error")
 		angleOpposite = angleOpposite * (180/math.pi)
 		angleOfAttack = 90.0 - angleOpposite - closeAngle
 		if rectX > len(image[0])/2:
@@ -110,7 +118,11 @@ def bearing(image, centerX):
 	r = abs(middle/(math.sin(bisAngle)))
 	print (r)
 	#print (x)
-	func = lambda x: math.sqrt(1+ x**2/(r**2 - x**2))
+	func = 0 
+	try:
+                func = lambda x: math.sqrt(1+ x**2/(r**2 - x**2))
+        except:
+                pass
 
 	imageSector = integrate.quad(func, leftBearingCoord, rightBearingCoord)
 	turnSector = integrate.quad(func, centerX, 0)
@@ -258,8 +270,8 @@ def analyze(recSt, image):
 def CV():
 	_, frame = capture.read()
 	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-	lower_tape = np.array([0, 0, 249], dtype=np.uint8)
-	upper_tape = np.array([1, 10, 255], dtype=np.uint8)
+	lower_tape = np.array([60, 150, 150], dtype=np.uint8)
+	upper_tape = np.array([100, 255, 255], dtype=np.uint8)
 	mask = cv2.inRange(hsv, lower_tape, upper_tape)
 	cv2.imshow('mask', mask)
 	res = cv2.bitwise_and(frame, frame, mask= mask)
@@ -269,7 +281,7 @@ def CV():
 	'''print(cnts)'''
 	for c in cnts:
 		approx = cv2.approxPolyDP(c,0.01*cv2.arcLength(c,True),True)
-		if len(approx)<6 and len(approx)>3 and cv2.contourArea(c)>40:
+		if len(approx)<6 and len(approx)>3 and cv2.contourArea(c)>100:
 			print('passed')
 			M = cv2.moments(c)
 			cx = int(M['m10']/M['m00'])
@@ -299,15 +311,21 @@ def CV():
 		#break
 
 while (1):
-	'''returned = conn.recv(1024)
+	returned = conn.recv(1024)
+	print(returned)
 	results = eval(returned)
-	conn.send(JSONEncoder().encode({"Distance": results[0],
-	"Angle A": results[2],
-	"Bearing": results[1],
-	"Left or Right": results[3],
-	"Time Stamp": time.localtime()}))'''
-	results = CV()
+	print(results)
 	if results != None:
-		print(results)
+		
+		conn.send(JSONEncoder().encode({"Distance": results[0],
+		"Angle A": results[2],
+		"Bearing": results[1],
+		"Left or Right": results[3],
+		"Time Stamp": float(time.time())}))
+	else:
+		conn.send(JSONEncoder().encode({"Distance": 0,"Angle A": 0,"Bearing": 0,
+		"Left or Right": 0,
+		"Time Stamp": 0}))
+	
 
 cv2.destroyAllWindows()

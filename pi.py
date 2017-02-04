@@ -8,11 +8,6 @@ import socket
 from json import JSONEncoder
 from json import JSONDecoder
 import time
-import os
-os.system("v4l2-ctl --set-ctrl=exposure_absolute=20")
-
-
-
 
 '''s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 host = ''
@@ -33,12 +28,14 @@ capture = cv2.VideoCapture(0)
 def distanceRelation(averageHeight):
 	x = float(averageHeight)
 	print('distHeight: ', x)
-	return 3150.0 / averageHeight #calibrate through regression
+	if averageHeight != 0:
+		return 3150.0 / averageHeight #calibrate through regression
 
 def widthDistRelation(averageWidth):
 	x = float(averageWidth)
 	print('distWidth: ', x)
-	return 1260.0 / averageWidth  #calibrate through regression
+	if averageWidth != 0:
+		return 1260.0 / averageWidth  #calibrate through regression
 
 
 def angleOfAttack(firstHeight, secondHeight, rectX, image, width1, width2, toggleVar):
@@ -47,7 +44,7 @@ def angleOfAttack(firstHeight, secondHeight, rectX, image, width1, width2, toggl
 	if firstHeight > secondHeight:
 		maxRectHeight = firstHeight
 		minRectHeight = secondHeight
-		
+
 	elif secondHeight > firstHeight:
 		maxRectHeight = secondHeight
 		minRectHeight = firstHeight
@@ -78,8 +75,13 @@ def angleOfAttack(firstHeight, secondHeight, rectX, image, width1, width2, toggl
 	if(((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))>1):
 		return -1
 	else:
-		angleOpposite = math.acos((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))
-		closeAngle = math.asin((4.0 * math.sin(angleOpposite))/y) * (180/math.pi)
+		angleOpposite = 0
+		closeAngle = 0
+		try:
+			angleOpposite = math.acos((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))
+			closeAngle = math.asin((4.0 * math.sin(angleOpposite))/y) * (180/math.pi)
+		except:
+			print("arcsin or arccos error")
 		angleOpposite = angleOpposite * (180/math.pi)
 		angleOfAttack = 90.0 - angleOpposite - closeAngle
 		if rectX > len(image[0])/2:
@@ -258,8 +260,8 @@ def analyze(recSt, image):
 def CV():
 	_, frame = capture.read()
 	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-	lower_tape = np.array([0, 0, 249], dtype=np.uint8)
-	upper_tape = np.array([1, 10, 255], dtype=np.uint8)
+	lower_tape = np.array([80, 200, 200], dtype=np.uint8)
+	upper_tape = np.array([100, 255, 255], dtype=np.uint8)
 	mask = cv2.inRange(hsv, lower_tape, upper_tape)
 	cv2.imshow('mask', mask)
 	res = cv2.bitwise_and(frame, frame, mask= mask)
@@ -306,7 +308,7 @@ while (1):
 	"Bearing": results[1],
 	"Left or Right": results[3],
 	"Time Stamp": time.localtime()}))'''
-	results = CV()
+	results = CV();
 	if results != None:
 		print(results)
 

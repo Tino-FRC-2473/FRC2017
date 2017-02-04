@@ -8,11 +8,6 @@ import socket
 from json import JSONEncoder
 from json import JSONDecoder
 import time
-import os
-os.system("v4l2-ctl --set-ctrl=exposure_absolute=20")
-
-
-
 
 '''s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 host = ''
@@ -258,8 +253,8 @@ def analyze(recSt, image):
 def CV():
 	_, frame = capture.read()
 	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-	lower_tape = np.array([0, 0, 249], dtype=np.uint8)
-	upper_tape = np.array([1, 10, 255], dtype=np.uint8)
+	lower_tape = np.array([80, 200, 200], dtype=np.uint8)
+	upper_tape = np.array([100, 255, 255], dtype=np.uint8)
 	mask = cv2.inRange(hsv, lower_tape, upper_tape)
 	cv2.imshow('mask', mask)
 	res = cv2.bitwise_and(frame, frame, mask= mask)
@@ -306,7 +301,7 @@ while (1):
 	"Bearing": results[1],
 	"Left or Right": results[3],
 	"Time Stamp": time.localtime()}))'''
-	results = CV()
+	results = CV();
 	if results != None:
 		print(results)
 

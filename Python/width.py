@@ -116,99 +116,99 @@ def bearing(image, centerX):
 
 
 def analyze(recSt, image):
-    calHWThreshold = 9/10
-    #print(len(recSt))
-    if len(recSt) == 3:
-        print("sick")
-        toggleVar = 1
-        maxHeight = 0
-        avgHeight = 0
-        firstRecData = recSt[1]
-        secondRecData = recSt[2]
-        thirdRecData = recSt[3]
-        height1 = firstRecData['height']
-        height2 = secondRecData['height']
-        height3 = thirdRecData['height']
-        width1 = firstRecData['width']
-        width2 = secondRecData['width']
-        width3 = thirdRecData['width']
-        if height1 >= height2 and height1 >= height3:
-            maxHeight = height1
-        if height2 >= height3 and height2 >= height1:
-            maxHeight = height2
-        if height3 >= height2 and height3 >= height1:
+	calHWThreshold = 9/10
+	print(len(recSt))
+	if len(recSt) == 3:
+		print("sick")
+		toggleVar = 1
+		maxHeight = 0
+		avgHeight = 0
+		firstRecData = recSt[1]
+		secondRecData = recSt[2]
+		thirdRecData = recSt[3]
+		height1 = firstRecData['height']
+		height2 = secondRecData['height']
+		height3 = thirdRecData['height']
+		width1 = firstRecData['width']
+		width2 = secondRecData['width']
+		width3 = thirdRecData['width']
+		if height1 >= height2 and height1 >= height3:
+			maxHeight = height1
+		if height2 >= height3 and height2 >= height1:
+			maxHeight = height2
+		if height3 >= height2 and height3 >= height1:
 			maxHeight = height3
-        if maxHeight == height1:
-            centerY2 = secondRecData['yCoord']
-            centerY3 = thirdRecData['yCoord']
-            centerX = (secondRecData['xCoord'] + firstRecData['xCoord'])/2
-            width1 = firstRecData['width']
-            width2 = secondRecData['width']
-            if height1/height2 > calHWThreshold and height2/height1 > calHWThreshold:
-                toggleVar = 0
-            else:
-                toggleVar = 1
-            averageWidth = float(secondRecData['width'] + firstRecData['width'])/2.0
-            if centerY2 > centerY3:
-                heightSecondary = secondRecData['top'] - thirdRecData['bottom']
-                averageHeight = float(height1+heightSecondary)/2
-            else:
+		if maxHeight == height1:
+			centerY2 = secondRecData['yCoord']
+			centerY3 = thirdRecData['yCoord']
+			centerX = (secondRecData['xCoord'] + firstRecData['xCoord'])/2
+			width1 = firstRecData['width']
+			width2 = secondRecData['width']
+			if height1/height2 > calHWThreshold and height2/height1 > calHWThreshold:
+				toggleVar = 0
+			else:
+				toggleVar = 1
+			averageWidth = float(secondRecData['width'] + firstRecData['width'])/2.0
+			if centerY2 > centerY3:
+				heightSecondary = secondRecData['top'] - thirdRecData['bottom']
+				averageHeight = float(height1+heightSecondary)/2
+			else:
 				heightSecondary = thirdRecData['top'] - secondRecData['bottom']
 				averageHeight = float(height1+heightSecondary)/2
-        if maxHeight == height2:
-            centerY1 = firstRecData['yCoord']
-            centerY3 = thirdRecData['yCoord']
-            centerX = (secondRecData['xCoord'] + firstRecData['xCoord'])/2
-            width1 = secondRecData['width']
-            width2 = firstRecData['width']
-            if height1/height2 > calHWThreshold and height2/height1 > calHWThreshold:
-                toggleVar = 0
-            else:
-                toggleVar = 1
-                averageWidth = float(secondRecData['width'] + firstRecData['width'])/2.0
-            if centerY1 > centerY3:
-                heightSecondary = firstRecData['top'] - thirdRecData['bottom']
-                averageHeight = float(height2+heightSecondary)/2
-            else:
-                heightSecondary = thirdRecData['top'] - firstRecData['bottom']
-                averageHeight = float(height2+heightSecondary)/2
-        if maxHeight == height3:
-            centerY1 = firstRecData['yCoord']
-            centerY2 = secondRecData['yCoord']
-            centerX = (secondRecData['xCoord'] + thirdRecData['xCoord'])/2
-            width1 = secondRecData['width']
-            width2 = thirdRecData['width']
-            if height2/height3 > calHWThreshold and height3/height2 > calHWThreshold:
-                toggleVar = 0
-            else:
-                toggleVar = 1
-            averageWidth = float(secondRecData['width'] + thirdRecData['width'])/2.0
-            if centerY1 > centerY2:
-                heightSecondary = firstRecData['top'] - secondRecData['bottom']
-                averageHeight = float(height3+heightSecondary)/2
-            else:
-                heightSecondary = secondRecData['top'] - firstRecData['bottom']
-                averageHeight = float(height3+heightSecondary)/2
-        print("step")
-        if toggleVar == 0:
-            distance = distanceRelation(averageHeight)
-        else:
-            distance = widthDistRelation(averageWidth)
-        print(distance)
-        bearingAngle = bearing(image, centerX)
-        print(bearingAngle)
-        angleAttack = angleOfAttack(maxHeight, heightSecondary, centerX, image, width1, width2, toggleVar)
-        if angleAttack > bearingAngle:
-            leftOrRight = 1
-        else:
-            leftOrRight = 0
-        print(angleAttack)
-        #print(distance)
-        #print(bearingAngle)
-        #print(angleAttack)
-        #print("")
-        print("Has a")
-        return [distance, bearingAngle, angleAttack, leftOrRight]
+		if maxHeight == height2:
+			centerY1 = firstRecData['yCoord']
+			centerY3 = thirdRecData['yCoord']
+			centerX = (secondRecData['xCoord'] + firstRecData['xCoord'])/2
+			width1 = secondRecData['width']
+			width2 = firstRecData['width']
+			if height1/height2 > calHWThreshold and height2/height1 > calHWThreshold:
+				toggleVar = 0
+			else:
+				toggleVar = 1
+				averageWidth = float(secondRecData['width'] + firstRecData['width'])/2.0
+			if centerY1 > centerY3:
+				heightSecondary = firstRecData['top'] - thirdRecData['bottom']
+				averageHeight = float(height2+heightSecondary)/2
+			else:
+				heightSecondary = thirdRecData['top'] - firstRecData['bottom']
+				averageHeight = float(height2+heightSecondary)/2
+		if maxHeight == height3:
+			centerY1 = firstRecData['yCoord']
+			centerY2 = secondRecData['yCoord']
+			centerX = (secondRecData['xCoord'] + thirdRecData['xCoord'])/2
+			width1 = secondRecData['width']
+			width2 = thirdRecData['width']
+			if height2/height3 > calHWThreshold and height3/height2 > calHWThreshold:
+				toggleVar = 0
+			else:
+				toggleVar = 1
+			averageWidth = float(secondRecData['width'] + thirdRecData['width'])/2.0
+			if centerY1 > centerY2:
+				heightSecondary = firstRecData['top'] - secondRecData['bottom']
+				averageHeight = float(height3+heightSecondary)/2
+			else:
+				heightSecondary = secondRecData['top'] - firstRecData['bottom']
+				averageHeight = float(height3+heightSecondary)/2
+		print("step")
+		if toggleVar == 0:
+			distance = distanceRelation(averageHeight)
+		else:
+			distance = widthDistRelation(averageWidth)
+		print(distance)
+		bearingAngle = bearing(image, centerX)
+		print(bearingAngle)
+		angleAttack = angleOfAttack(maxHeight, heightSecondary, centerX, image, width1, width2, toggleVar)
+		if angleAttack > bearingAngle:
+			leftOrRight = 1
+		else:
+			leftOrRight = 0
+		print(angleAttack)
+		#print(distance)
+		#print(bearingAngle)
+		#print(angleAttack)
+		#print("")
+		print("Has a")
+		return [distance, bearingAngle, angleAttack, leftOrRight]
 
 
 	if len(recSt) == 2: #two rectange case
@@ -315,5 +315,3 @@ while (1):
 	CV()
 
 cv2.destroyAllWindows()
-
-#print(np.average(reject_outliers(np.asarray(areas))))

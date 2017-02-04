@@ -16,7 +16,7 @@ public class Networking extends Thread {
 	private final String HOST = "10.60.38.97";
 	private final int PORT = 5811;
 	private final String FUNCTION = "detect()";
-	private final String SEND = "{\"run\":\'" + FUNCTION + "\"}";
+	private final String SEND = "{\"run\":\"" + FUNCTION + "\"}";
 	private char[] cbuf = new char[4096];
 	private Socket s = null;
 	private BufferedReader stdIn = null;
@@ -57,6 +57,9 @@ public class Networking extends Thread {
 		}catch(IOException e){
 			System.out.println("Can't STDIN");
 		}
+//		}catch(NullPointerException e){
+//			System.out.println("No Socket");
+//		}
 		super.start();
 	}
 

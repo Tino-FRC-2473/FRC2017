@@ -12,10 +12,10 @@ public class Climber extends Command {
 	private double slowSpeed;
 	private double fastSpeed;
 	private double encoderValue;
+	private double timeLimit;
 	private int encoderTicks; // Number of encoder ticks to keep running the
 								// motor after hitting the touch pad (ms)
 	private boolean finished;
-	private boolean updateEncoderValue;
 	private long prevTime;
 	private long time;
 
@@ -30,11 +30,12 @@ public class Climber extends Command {
 		LSPressed = false;
 		slowSpeed = 0.3;
 		fastSpeed = 0.6;
-		encoderValue = 0;
+		encoderValue = Double.MAX_VALUE;
+		timeLimit = 250;
 		encoderTicks = 30;
 		finished = false;
-		updateEncoderValue = true;
-		time = 0;
+		prevTime = Long.MAX_VALUE;
+		time = Long.MAX_VALUE;
 	}
 
 	/**
@@ -50,7 +51,7 @@ public class Climber extends Command {
 	@Override
 	protected void execute() {
 		super.execute();
-
+		
 		if (Database.getInstance().getButton(Database.ButtonName.CLIMBER_1_SEC).get()) {
 			time = System.currentTimeMillis();
 		}
@@ -70,18 +71,14 @@ public class Climber extends Command {
 		// If the limit switch is pressed
 		if (Robot.climbSystem.getLimitSwitch()) {
 			if (LSPressed == false) {
-				updateEncoderValue = false;
+				encoderValue = Robot.climbSystem.getEncValue();
+				prevTime = System.currentTimeMillis();
 			}
 			LSPressed = true;
 		} else {
 			LSPressed = false;
-			updateEncoderValue = true;
 		}
 
-		if (updateEncoderValue) {
-			encoderValue = Robot.climbSystem.getEncValue();
-			prevTime = System.currentTimeMillis();
-		}
 
 		// if(LSPressed){
 		// Robot.climbSystem.climb(0);
@@ -90,21 +87,46 @@ public class Climber extends Command {
 		if (System.currentTimeMillis() - time >= 1000) {
 			finished = true;
 		}
-		System.out.println("Enc: " + encoderValue);
+		//System.out.println("Enc: " + Robot.climbSystem.getEncValue());
 
 		if (Database.getInstance().getButton(Database.ButtonName.STOP_CLIMBER).get()) {
 			// System.out.println("Stopping");
 			finished = true;
 		}
+		
+		
+		/*
+		 	Code to test if the two motors run in same direction.
+		 
+		if(Database.getInstance().getButton(Database.ButtonName.START_CLIMBER).get()){
+			Robot.climbSystem.climb(0.3);
+			Robot.climbSystem.climb2(0);
+		}
+		
+		if(Database.getInstance().getButton(Database.ButtonName.CLIMBER_SPEED_TOGGLE).get()){
+			Robot.climbSystem.climb(0);
+			Robot.climbSystem.climb2(0);
+		}
+		
+		if(Database.getInstance().getButton(Database.ButtonName.STOP_CLIMBER).get()){
+			Robot.climbSystem.climb(0);
+			Robot.climbSystem.climb2(0.3);
+		}
+		*/
 	}
 
 	@Override
 	protected boolean isFinished() {
+		//TODO Fix condition checking, doesn't work.
 		boolean reachedEncoderCount = Robot.climbSystem.getEncValue() - encoderValue >= encoderTicks;
-		boolean reachedTimeLimit = System.currentTimeMillis() - prevTime >= 250;
+		boolean reachedTimeLimit = System.currentTimeMillis() - prevTime >= timeLimit;
+		//System.out.println("Time Limit: " + System.currentTimeMillis() + ", " + prevTime);
+		//System.out.println("Finished: " + finished);
+		System.out.println("Fin: " + finished + ", Enc: " + reachedEncoderCount + ", Time: " + reachedTimeLimit);
 		// System.out.println("is finished: " + (LSPressed &&
 		// (reachedEncoderCount || reachedTimeLimit)));
-		return (finished || (LSPressed && (reachedEncoderCount || reachedTimeLimit)));
+		//return (finished || (reachedEncoderCount || reachedTimeLimit));
+		return finished;
 		// return finished;
 	}
 

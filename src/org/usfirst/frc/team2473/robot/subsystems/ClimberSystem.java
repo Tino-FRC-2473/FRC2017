@@ -1,24 +1,24 @@
 package org.usfirst.frc.team2473.robot.subsystems;
 
 import org.usfirst.frc.team2473.robot.RobotMap;
-import org.usfirst.frc.team2473.robot.commands.Climber;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
 
-import edu.wpi.first.wpilibj.CANSpeedController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class ClimberSystem extends Subsystem{
 
-	private CANTalon ropeCAN;
+	private CANTalon ropeCAN_1;
+	private CANTalon ropeCAN_2;
 	private DigitalInput climberLS;
 	
 	public ClimberSystem() {
 		super();
 		
-		ropeCAN = new CANTalon(RobotMap.ropeClimbMotor);
+		ropeCAN_1 = new CANTalon(RobotMap.ropeClimbMotor_1);
+		ropeCAN_2 = new CANTalon(RobotMap.ropeClimbMotor_2);
 		climberLS = new DigitalInput(RobotMap.climberLS);
 		//TODO Double check if this function actually resets encoder value, not written in API
 		//ropeCAN.reset();
@@ -31,12 +31,17 @@ public class ClimberSystem extends Subsystem{
 	
 	
 	public void climb(double value){
-		ropeCAN.changeControlMode(TalonControlMode.PercentVbus);
-		ropeCAN.set(value);
+		ropeCAN_1.changeControlMode(TalonControlMode.PercentVbus);
+		ropeCAN_1.set(value);
+	}
+	
+	public void climb2(double value){
+		ropeCAN_2.changeControlMode(TalonControlMode.PercentVbus);
+		ropeCAN_2.set(value);
 	}
 	
 	public double getEncValue(){
-		return ropeCAN.getPosition();
+		return ropeCAN_1.getPosition();
 	}
 	
 	public boolean getLimitSwitch(){

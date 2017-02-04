@@ -67,7 +67,7 @@ public class Robot extends IterativeRobot{
 	 */
 	public void autonomousInit() {
 		
-		autonomousCommand = new DriveStraightForward(Double.parseDouble(SmartDashboard.getString("Auto Selector",
+		autonomousCommand = new Turn(Double.parseDouble(SmartDashboard.getString("Auto Selector",
 				 "10")));
 		
 		/*

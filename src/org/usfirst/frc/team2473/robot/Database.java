@@ -34,7 +34,7 @@ public class Database{
 	 * 
 	 */
 	public enum Value {
-		GYRO, LEFT_ENCODER, RIGHT_ENCODER, WHEEL_TWIST, THROTTLE_VALUE;// add
+		GYRO_POSITION, GYRO_VELOCITY, LEFT_ENCODER, RIGHT_ENCODER, WHEEL_TWIST, THROTTLE_VALUE;// add
 																																	// buttons
 
 	}
@@ -141,7 +141,9 @@ public class Database{
 		SmartDashboard.putNumber("Right Distance",
 				Database.getInstance().getValue(Value.RIGHT_ENCODER));
 		SmartDashboard.putNumber("Gyro Angle",
-				Database.getInstance().getValue(Value.GYRO));
+				Database.getInstance().getValue(Value.GYRO_POSITION));
+		SmartDashboard.putNumber("Gyro Velocity",
+				Database.getInstance().getValue(Value.GYRO_VELOCITY));
 		SmartDashboard.putNumber("Wheel Twist",
 				Database.getInstance().getValue(Value.WHEEL_TWIST));
 		SmartDashboard.putNumber("Throttle Value",

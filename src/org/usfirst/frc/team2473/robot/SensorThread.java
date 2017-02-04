@@ -47,7 +47,8 @@ public class SensorThread extends Thread{
 		callMap = new HashMap<>();
 
 		//add the sensor name in the Values enum and the method of the sensor that returns the sensor value.
-		callMap.put(Value.GYRO, () -> gyro.getAngle());
+		callMap.put(Value.GYRO_POSITION, () -> gyro.getAngle());
+		callMap.put(Value.GYRO_VELOCITY, () -> gyro.getRate());
 		callMap.put(Value.RIGHT_ENCODER, () -> (rightEncoder.getEncPosition() - rightEncoderZero )* Database.RIGHT_ENC_CONSTANT);
 		callMap.put(Value.LEFT_ENCODER, () -> -(leftEncoder.getEncPosition() - leftEncoderZero )* Database.LEFT_ENC_CONSTANT);
 		

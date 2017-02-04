@@ -49,7 +49,7 @@ public class Drive extends Command {
     		if(!drivingStraight)
     		{
     			drivingStraight = true;
-    			startingGyroValue = Database.getInstance().getValue(Value.GYRO);
+    			startingGyroValue = Database.getInstance().getValue(Value.GYRO_POSITION);
     			integral = 0;
     		}
     		driveStraight(thrust);
@@ -83,7 +83,7 @@ public class Drive extends Command {
     private void driveStraight(double speed)
     {
     	
-    	double proportion = Database.getInstance().getValue(Value.GYRO) - startingGyroValue;
+    	double proportion = Database.getInstance().getValue(Value.GYRO_POSITION) - startingGyroValue;
     	integral += proportion;
     	double derivative = proportion - lastProportion;
     	double rotate = KP * proportion + KI*integral + KD*derivative;

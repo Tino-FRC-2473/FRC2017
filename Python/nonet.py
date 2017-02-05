@@ -1,4 +1,5 @@
 from __future__ import division
+import os
 import cv2
 import numpy as np
 import math
@@ -9,6 +10,11 @@ from json import JSONEncoder
 from json import JSONDecoder
 import time
 
+os.system("v4l2-ctl --set-ctrl=exposure_auto_priority=1")
+os.system("v4l2-ctl --set-ctrl=exposure_auto=1")
+os.system("v4l2-ctl --set-ctrl=exposure_auto_priority=0")
+os.system("v4l2-ctl --set-ctrl=exposure_absolute=4")
+
 '''s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 host = ''
 port = 5811
@@ -18,8 +24,8 @@ print ('Listening')
 s.listen(1)
 conn, addr = s.accept()
 print 'Connected by:', addr
-st = ""
-'''
+st = ""'''
+
 capture = cv2.VideoCapture(0)
 
 
@@ -80,8 +86,9 @@ def angleOfAttack(firstHeight, secondHeight, rectX, image, width1, width2, toggl
 		try:
 			angleOpposite = math.acos((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))
 			closeAngle = math.asin((4.0 * math.sin(angleOpposite))/y) * (180/math.pi)
-		except:
+		except ValueError:
 			print("arcsin or arccos error")
+			return None
 		angleOpposite = angleOpposite * (180/math.pi)
 		angleOfAttack = 90.0 - angleOpposite - closeAngle
 		if rectX > len(image[0])/2:
@@ -112,11 +119,13 @@ def bearing(image, centerX):
 	r = abs(middle/(math.sin(bisAngle)))
 	print (r)
 	#print (x)
-	func = lambda x: math.pow(x,2) #Something random with X in case the square root operation fails, in which case bad data will be returned
-	try: 
-		func = lambda x: math.sqrt(1+ x**2/(r**2 - x**2))
-	except:
-		print("square root domain error")
+	func = 0
+	try:
+		func = lambda x: math.sqrt(abs(+ x**2/(r**2 - x**2)))
+	except ValueError:
+		print("DomainError integration")
+		return None
+
 	imageSector = integrate.quad(func, leftBearingCoord, rightBearingCoord)
 	turnSector = integrate.quad(func, centerX, 0)
 	turnSectorLength = turnSector[0]
@@ -263,8 +272,8 @@ def analyze(recSt, image):
 def CV():
 	_, frame = capture.read()
 	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-	lower_tape = np.array([80, 200, 200], dtype=np.uint8)
-	upper_tape = np.array([100, 255, 255], dtype=np.uint8)
+	lower_tape = np.array([60, 50, 50], dtype=np.uint8)
+	upper_tape = np.array([80, 255, 255], dtype=np.uint8)
 	mask = cv2.inRange(hsv, lower_tape, upper_tape)
 	cv2.imshow('mask', mask)
 	res = cv2.bitwise_and(frame, frame, mask= mask)
@@ -274,7 +283,7 @@ def CV():
 	'''print(cnts)'''
 	for c in cnts:
 		approx = cv2.approxPolyDP(c,0.01*cv2.arcLength(c,True),True)
-		if len(approx)<6 and len(approx)>3 and cv2.contourArea(c)>40:
+		if len(approx)<9 and len(approx)>3 and cv2.contourArea(c)>100:
 			print('passed')
 			M = cv2.moments(c)
 			cx = int(M['m10']/M['m00'])
@@ -304,15 +313,10 @@ def CV():
 		#break
 
 while (1):
-	'''returned = conn.recv(1024)
-	results = eval(returned)
-	conn.send(JSONEncoder().encode({"Distance": results[0],
-	"Angle A": results[2],
-	"Bearing": results[1],
-	"Left or Right": results[3],
-	"Time Stamp": time.localtime()}))'''
-	results = CV();
+	results = CV()
 	if results != None:
 		print(results)
+
+		
 
 cv2.destroyAllWindows()

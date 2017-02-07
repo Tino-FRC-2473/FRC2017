@@ -42,6 +42,7 @@ Setup:
                 cd user
                 open .
         6. Upon doing this, you should see two folders: One called cpp, and the other java. Replace the java folder here with the one you copied. It is now safe to delete the CTRE_FRCLibs_NON-WINDOWS file from your system.
+        
         7. Restart Eclipse.
         
 ##<a name="heading"></a>If you followed the first 3 steps, there is no need to go further, and your setup is complete. Continue if you followed the link and skipped the first 3 steps.

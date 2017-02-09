@@ -28,12 +28,14 @@ capture = cv2.VideoCapture(0)
 def distanceRelation(averageHeight):
 	x = float(averageHeight)
 	print('distHeight: ', x)
-	return 3150.0 / averageHeight #calibrate through regression
+	if averageHeight != 0:
+		return 3150.0 / averageHeight #calibrate through regression
 
 def widthDistRelation(averageWidth):
 	x = float(averageWidth)
 	print('distWidth: ', x)
-	return 1260.0 / averageWidth  #calibrate through regression
+	if averageWidth != 0:
+		return 1260.0 / averageWidth  #calibrate through regression
 
 
 def angleOfAttack(firstHeight, secondHeight, rectX, image, width1, width2, toggleVar):
@@ -42,7 +44,7 @@ def angleOfAttack(firstHeight, secondHeight, rectX, image, width1, width2, toggl
 	if firstHeight > secondHeight:
 		maxRectHeight = firstHeight
 		minRectHeight = secondHeight
-		
+
 	elif secondHeight > firstHeight:
 		maxRectHeight = secondHeight
 		minRectHeight = firstHeight
@@ -73,8 +75,13 @@ def angleOfAttack(firstHeight, secondHeight, rectX, image, width1, width2, toggl
 	if(((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))>1):
 		return -1
 	else:
-		angleOpposite = math.acos((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))
-		closeAngle = math.asin((4.0 * math.sin(angleOpposite))/y) * (180/math.pi)
+		angleOpposite = 0
+		closeAngle = 0
+		try:
+			angleOpposite = math.acos((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))
+			closeAngle = math.asin((4.0 * math.sin(angleOpposite))/y) * (180/math.pi)
+		except:
+			print("arcsin or arccos error")
 		angleOpposite = angleOpposite * (180/math.pi)
 		angleOfAttack = 90.0 - angleOpposite - closeAngle
 		if rectX > len(image[0])/2:

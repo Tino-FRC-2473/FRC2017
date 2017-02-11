@@ -1,5 +1,11 @@
 package org.usfirst.frc.team2473.robot.subsystems;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDateTime;
+
 import org.usfirst.frc.team2473.robot.RobotMap;
 
 import com.ctre.CANTalon;
@@ -14,14 +20,21 @@ public class ClimberSystem extends Subsystem{
 	private CANTalon ropeCAN_2;
 	private DigitalInput climberLS;
 	
+	private PrintWriter writer;
+	
 	public ClimberSystem() {
 		super();
 		
 		ropeCAN_1 = new CANTalon(RobotMap.ropeClimbMotor_1);
 		ropeCAN_2 = new CANTalon(RobotMap.ropeClimbMotor_2);
 		climberLS = new DigitalInput(RobotMap.climberLS);
-		//TODO Double check if this function actually resets encoder value, not written in API
-		//ropeCAN.reset();
+		try{
+		    writer = new PrintWriter(new FileWriter(new File("Value_Log.txt"), true));
+		    writer.println(LocalDateTime.now());
+		    writer.println();
+		} catch (IOException e) {
+		   // do something
+		}
 	}
 	
 	@Override
@@ -33,9 +46,7 @@ public class ClimberSystem extends Subsystem{
 	public void climb(double value){
 		ropeCAN_1.changeControlMode(TalonControlMode.PercentVbus);
 		ropeCAN_1.set(value);
-	}
-	
-	public void climb2(double value){
+		
 		ropeCAN_2.changeControlMode(TalonControlMode.PercentVbus);
 		ropeCAN_2.set(value);
 	}
@@ -44,7 +55,20 @@ public class ClimberSystem extends Subsystem{
 		return ropeCAN_1.getPosition();
 	}
 	
+	public double getCurrent(){
+		return ropeCAN_1.getOutputCurrent();
+	}
+	
 	public boolean getLimitSwitch(){
 		return climberLS.get();
+	}
+	
+	public void log(String message){
+		writer.println(message);
+	}
+	
+	public void close(){
+		writer.println();
+		writer.close();
 	}
 }

@@ -98,8 +98,8 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class DriveStraightForward extends Command{
 	private double distance;
-	private static final double KPRotate = .2;
-	private static final double KIRotate = .005;
+	private static final double KPRotate = 0.1;
+	private static final double KIRotate = 0.05;
 	private static final double KDRotate = 0;
 	
 	private static final double KPForward = .05;
@@ -128,7 +128,9 @@ public class DriveStraightForward extends Command{
     protected void initialize() {
     	Robot.sensorThread.resetEncoders();
     	
+    	Robot.gyro.reset();
     	startingGyroValue = Database.getInstance().getValue(Value.GYRO_POSITION);
+    	System.out.println("START GYRO: " + startingGyroValue);
     	integralRotate = 0;
     	lastProportionRotate = 0;
     	
@@ -142,6 +144,7 @@ public class DriveStraightForward extends Command{
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	double proportionRotate = Database.getInstance().getValue(Value.GYRO_POSITION) - startingGyroValue;
+    	proportionRotate*=-1;
     	integralRotate += proportionRotate;
     	double derivativeRotate = proportionRotate - lastProportionRotate;
     	double rotate = KPRotate * proportionRotate + KIRotate*integralRotate + KDRotate*derivativeRotate;
@@ -158,8 +161,8 @@ public class DriveStraightForward extends Command{
     		rotate = Math.signum(rotate) * .7;
     	}
     	
-    	if(Math.abs(speed) > .51){
-    		speed = Math.signum(speed) * .51;
+    	if(Math.abs(speed) > .45){
+    		speed = Math.signum(speed) * .45;
     	}
     	
     	//Robot.driveTrain.driveArcade(.05 + .45 * Math.min(1,((distance - Database.getInstance().getValue(Value.RIGHT_ENCODER))) / ((distance < 8)?distance*7/8:Math.min(10, 6.5 + (distance-10)/5))), rotate);
@@ -168,7 +171,7 @@ public class DriveStraightForward extends Command{
     	lastProportionRotate = proportionRotate;
     	lastProportionForward = proportionForward;
     	
-	
+    	System.out.println("Gyro Value: " + Database.getInstance().getValue(Value.GYRO_POSITION));
     }
 
 	protected boolean isFinished() {

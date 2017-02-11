@@ -45,13 +45,13 @@ public class Turn extends Command{
     		rotate = Math.signum(rotate) * .9;
     	}
     	
-    	Robot.driveTrain.driveArcade(0, rotate);
+    	Robot.driveTrain.driveArcade(0, rotate * 0.8);
     	
     	lastProportion = proportion;
     }
 
 	protected boolean isFinished() {
-		return Math.abs(Database.getInstance().getValue(Value.GYRO_POSITION) - startingGyroValue - bearing) < 3 ;
+		return Math.abs(Database.getInstance().getValue(Value.GYRO_POSITION) - startingGyroValue - bearing) < 10 ;
 	}
 	
 	protected void end() {

@@ -25,6 +25,7 @@ public class Robot extends IterativeRobot{
 
 	Command autonomousCommand;
 	boolean timerRunning;
+	String commandToRun;
 
 	public static DriveTrain driveTrain;
 	public static Command auto;
@@ -33,7 +34,7 @@ public class Robot extends IterativeRobot{
 	public static SensorThread sensorThread;
 	Timer robotControlLoop;
 
-	
+
 	double lastTime;
 
 	/**
@@ -44,15 +45,16 @@ public class Robot extends IterativeRobot{
 		driveTrain = new DriveTrain();
 		gyro = new AnalogGyro(RobotMap.gyro);
 		oi = new OI();
-		
+
 		sensorThread = new SensorThread(5);
 		sensorThread.start();
 		robotControlLoop = new Timer(false);
 		timerRunning = false;
-		
-		
+
+
 		SmartDashboard.putData(driveTrain);
-		}
+		commandToRun = "forward";
+	}
 
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select
@@ -66,10 +68,20 @@ public class Robot extends IterativeRobot{
 	 * to the switch structure below with additional strings & commands.
 	 */
 	public void autonomousInit() {
-		
-		autonomousCommand = new Turn(Double.parseDouble(SmartDashboard.getString("Auto Selector",
-				 "10")));
-		
+		gyro.reset();
+		switch (commandToRun) {
+			case "turn":
+				autonomousCommand = new Turn(Double.parseDouble(
+						SmartDashboard.getString("Auto Selector", "10")));
+				break;
+			case "forward":
+				autonomousCommand = new DriveStraightForward(12);
+				break;
+			case "test":
+				autonomousCommand = new EncoderTest();
+				break;
+		}
+
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
 		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -78,8 +90,10 @@ public class Robot extends IterativeRobot{
 		 */
 
 		// schedule the autonomous command (example)
-		
-		autonomousCommand.start();
+
+		if(autonomousCommand != null) {
+			autonomousCommand.start();			
+		}
 	}
 
 	/**
@@ -104,7 +118,7 @@ public class Robot extends IterativeRobot{
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		
+
 	}
 
 	/**
@@ -112,7 +126,7 @@ public class Robot extends IterativeRobot{
 	 */
 	public void teleopPeriodic() {
 
-		//System.out.println(System.currentTimeMillis() - lastTime);
+		// System.out.println(System.currentTimeMillis() - lastTime);
 
 		if (!timerRunning) {
 			robotControlLoop.scheduleAtFixedRate(new TimerTask(){
@@ -127,7 +141,7 @@ public class Robot extends IterativeRobot{
 
 		oi.updateButtons();
 		oi.updateJoysticks();
-		
+
 		log();
 		lastTime = System.currentTimeMillis();
 
@@ -140,13 +154,13 @@ public class Robot extends IterativeRobot{
 	 */
 	public void testPeriodic() {
 	}
-	
+
 	@Override
-	public void disabledInit(){
+	public void disabledInit() {
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
 	}
-	
+
 	@Override
 	public void disabledPeriodic() {
 

@@ -59,7 +59,7 @@ public class Drive extends Command {
     		drivingStraight = false;
     		Robot.driveTrain.driveArcade(thrust*THRUST_CONSTANT, shapeWheel(-wheelX,throttleZ));
     	}
-    	System.out.println(Database.getInstance().getValue(Value.GYRO_VELOCITY));
+    	System.out.println(Database.getInstance().getValue(Value.GYRO_POSITION));
     	
     }
 

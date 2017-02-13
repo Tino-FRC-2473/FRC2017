@@ -317,15 +317,9 @@ while (1):
 	print(results)
 	if results != None:
 		
-		conn.send(JSONEncoder().encode({"Distance": results[0],
-		"Angle A": results[2],
-		"Bearing": results[1],
-		"Left or Right": results[3],
-		"Time Stamp": float(time.time())}))
+		conn.send(results[0] + ' ' + results[2] + ' ' + results[1] + ' ' + results[3] + ' ' + float(time.time()))
 	else:
-		conn.send(JSONEncoder().encode({"Distance": 0,"Angle A": 0,"Bearing": 0,
-		"Left or Right": 0,
-		"Time Stamp": 0}))
+		conn.send('0.0 0.0 0.0 0.0 0.0')
 	
 
 cv2.destroyAllWindows()

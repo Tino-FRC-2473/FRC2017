@@ -14,9 +14,8 @@ import org.usfirst.frc.team2473.robot.Database.Value;
 public class Networking extends Thread {
 	//MUST CHANGE ON COMPETITION DAY
 	private final String HOST = "10.60.38.97";
-	private final int PORT = 5811;
-	private final String FUNCTION = "detect()";
-	private final String SEND = "{\"run\":\"" + FUNCTION + "\"}";
+	private final int PORT = 5812;
+	private final String SEND = "CV()";
 	private char[] cbuf = new char[4096];
 	private Socket s = null;
 	private BufferedReader stdIn = null;
@@ -46,7 +45,6 @@ public class Networking extends Thread {
 		values.put(Value.CV_TIME_STAMP, "Time Stamp");
 		try {
 			s = new Socket(HOST, PORT);
-			System.out.println("Connecting to host");
 		} catch (IOException e) {
 			System.out.println("Can't connect");
 		}
@@ -57,9 +55,6 @@ public class Networking extends Thread {
 		}catch(IOException e){
 			System.out.println("Can't STDIN");
 		}
-//		}catch(NullPointerException e){
-//			System.out.println("No Socket");
-//		}
 		super.start();
 	}
 

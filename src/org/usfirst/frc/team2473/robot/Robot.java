@@ -1,16 +1,16 @@
 package org.usfirst.frc.team2473.robot;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.usfirst.frc.team2473.robot.Database.Value;
+import org.usfirst.frc.team2473.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team2473.robot.commands.AutoAlign;
+import org.usfirst.frc.team2473.robot.commands.Network;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-
-import java.util.Timer;
-import java.util.TimerTask;
-
-import org.usfirst.frc.team2473.robot.commands.*;
-import org.usfirst.frc.team2473.robot.subsystems.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -31,7 +31,8 @@ public class Robot extends IterativeRobot{
 	public static AnalogGyro gyro;
 	public static SensorThread sensorThread;
 	Timer robotControlLoop;
-
+	public Database d;
+	public static Networking networking;
 	
 	double lastTime;
 
@@ -46,6 +47,9 @@ public class Robot extends IterativeRobot{
 		
 		sensorThread = new SensorThread(5);
 		sensorThread.start();
+		networking = Networking.getInstance();
+		networking.start();
+		d = Database.getInstance();
 		robotControlLoop = new Timer(false);
 		timerRunning = false;
 		
@@ -79,8 +83,9 @@ public class Robot extends IterativeRobot{
 		 */
 
 		// schedule the autonomous command (example)
-		
-		autonomousCommand.start();
+		if (autonomousCommand != null){
+			autonomousCommand.start();
+		}
 	}
 
 	/**
@@ -105,7 +110,6 @@ public class Robot extends IterativeRobot{
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		
 	}
 
 	/**

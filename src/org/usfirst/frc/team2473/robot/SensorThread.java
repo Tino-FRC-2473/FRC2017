@@ -9,6 +9,8 @@ import org.usfirst.frc.team2473.robot.Database.Value;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
+
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 
@@ -18,6 +20,7 @@ public class SensorThread extends Thread{
 	//add new sensors here
 	AnalogGyro gyro;
 	CANTalon leftEncoder, rightEncoder;
+	DigitalInput breakBeam;
 	private volatile boolean alive = true;
 	long lastTime;
 	double leftEncoderZero, rightEncoderZero;
@@ -34,8 +37,9 @@ public class SensorThread extends Thread{
 		
 		//add new sensors here
 		this.gyro = Robot.gyro;
-		this.leftEncoder = new CANTalon(RobotMap.leftBackMotor);
-		this.rightEncoder = new CANTalon(RobotMap.rightBackMotor);
+		this.leftEncoder = new CANTalon(RobotMap.leftFrontMotor);
+		this.rightEncoder = new CANTalon(RobotMap.rightFrontMotor);
+		this.breakBeam = new DigitalInput(RobotMap.breakBeam);
 
 		leftEncoder.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		rightEncoder.setFeedbackDevice(FeedbackDevice.QuadEncoder);
@@ -51,7 +55,7 @@ public class SensorThread extends Thread{
 		callMap.put(Value.GYRO_VELOCITY, () -> gyro.getRate());
 		callMap.put(Value.RIGHT_ENCODER, () -> (rightEncoder.getEncPosition() - rightEncoderZero )* Database.RIGHT_ENC_CONSTANT);
 		callMap.put(Value.LEFT_ENCODER, () -> -(leftEncoder.getEncPosition() - leftEncoderZero )* Database.LEFT_ENC_CONSTANT);
-		
+		callMap.put(Value.BREAK_BEAM, () -> breakBeam.get()?1:0);
 		
 		
 		callMap = Collections.unmodifiableMap(callMap);

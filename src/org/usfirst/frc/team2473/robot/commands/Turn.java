@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Turn extends Command{
 	private double bearing;
 	
-	private static final double KP = .35;
+	private static final double KP = .30;
 	private static final double KI = 0;//.002;
 	private static final double KD = 0;
 	
@@ -41,7 +41,7 @@ public class Turn extends Command{
     	double rotate = KP * proportion + KI*integral + KD*derivative;
     	
     	
-    	rotate = Math.signum(rotate)*(Math.abs(rotate) + .55);
+    	rotate = Math.signum(rotate)*(Math.abs(rotate) + .58);
     	
     	if(Math.abs(rotate) > .90){
     		rotate = Math.signum(rotate) * .9;
@@ -53,7 +53,7 @@ public class Turn extends Command{
     }
 
 	protected boolean isFinished() {
-		return Math.abs(Database.getInstance().getValue(Value.GYRO_POSITION) - startingGyroValue - bearing) < 3 ;
+		return Math.abs(Database.getInstance().getValue(Value.GYRO_POSITION) - startingGyroValue - bearing) < 3 && Math.abs(Database.getInstance().getValue(Value.GYRO_VELOCITY)) < 40;
 	}
 	
 	protected void end() {

@@ -34,7 +34,7 @@ public class Database{
 	 * 
 	 */
 	public enum Value {
-		GYRO_POSITION, GYRO_VELOCITY, LEFT_ENCODER, RIGHT_ENCODER, WHEEL_TWIST, THROTTLE_VALUE;// add
+		GYRO_POSITION, GYRO_VELOCITY, LEFT_ENCODER, RIGHT_ENCODER, BREAK_BEAM, WHEEL_TWIST, THROTTLE_VALUE;// add
 																																	// buttons
 
 	}
@@ -148,6 +148,8 @@ public class Database{
 				Database.getInstance().getValue(Value.WHEEL_TWIST));
 		SmartDashboard.putNumber("Throttle Value",
 				Database.getInstance().getValue(Value.THROTTLE_VALUE));
+		SmartDashboard.putNumber("Break beam",
+				Database.getInstance().getValue(Value.BREAK_BEAM));
 
 	}
 

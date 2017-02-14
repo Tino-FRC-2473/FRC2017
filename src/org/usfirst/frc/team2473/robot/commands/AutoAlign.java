@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2473.robot.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.TimedCommand;
 
 /**
  *
@@ -44,9 +45,14 @@ public class AutoAlign extends CommandGroup {
     	double centerA = Math.toDegrees(((robotOnLeft)?Math.atan(distanceY/distanceX):Math.atan(-distanceY/distanceX)));
     	double centerB = Math.toDegrees(Math.toRadians(centerA) - cameraA + cameraB);
 		
+    	System.out.println((robotOnLeft)?90+centerA-centerB:centerB-90-centerA);
+    	System.out.println(centerToLiftDistance*Math.cos(Math.toRadians(centerA)));
+    	System.out.println((robotOnLeft)?-90:90);
+    	System.out.println(centerToLiftDistance*Math.sin(Math.toRadians(centerA)));
+    	
     	addSequential(new Turn((robotOnLeft)?90+centerA-centerB:centerB-90-centerA));
-    	addSequential(new DriveStraightForward(centerToLiftDistance*Math.acos(Math.toRadians(centerA))));
+    	addSequential(new DriveStraightForward(centerToLiftDistance*Math.cos(Math.toRadians(centerA))));
     	addSequential(new Turn((robotOnLeft)?-90:90));
-    	addSequential(new DriveStraightForward(centerToLiftDistance*Math.asin(Math.toRadians(centerA))));
+    	addSequential(new DriveStraightForward(centerToLiftDistance*Math.sin(Math.toRadians(centerA))));
     }
 }

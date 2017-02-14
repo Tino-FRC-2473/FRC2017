@@ -317,9 +317,9 @@ while (1):
 	print(results)
 	if results != None:
 		
-		conn.send(results[0] + ' ' + results[2] + ' ' + results[1] + ' ' + results[3] + ' ' + float(time.time()))
+		conn.send(results[0] + ' ' + results[2] + ' ' + results[1] + ' ' + results[3] + ' ' + float(time.time()) + '\n')
 	else:
-		conn.send('0.0 0.0 0.0 0.0 0.0')
+		conn.send('0.0 0.0 0.0 0.0 0.0 \n')
 	
 
 cv2.destroyAllWindows()

@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2473.robot;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
@@ -19,10 +20,10 @@ public class Networking extends Thread {
 	private char[] cbuf = new char[4096];
 	private Socket s = null;
 	private BufferedReader stdIn = null;
+	private BufferedWriter stdOut = null;
 	private Database d = Database.getInstance();
-	private static LinkedList<String> names = new LinkedList<>();
-	private HashMap<Value, String> values = new HashMap<>();
-	public boolean run = false;
+	Value[] values = {Value.CV_DISTANCE, Value.CV_ANGLE_A, Value.CV_BEARING, Value.CV_L_OR_R, Value.CV_TIME_STAMP};
+	
 	static Networking instance;
 	static {
 		instance = new Networking();
@@ -33,27 +34,12 @@ public class Networking extends Thread {
 	}
 
 	public void start() {
-		names.addLast("\"Distance\"");
-		names.addLast("\"Angle A\"");
-		names.addLast("\"Bearing\"");
-		names.addLast("\"Left or Right\"");
-		names.addLast("\"Time Stamp\"");
-		values.put(Value.CV_DISTANCE, "Distance");
-		values.put(Value.CV_ANGLE_A, "Angle A");
-		values.put(Value.CV_BEARING, "Bearing");
-		values.put(Value.CV_L_OR_R, "Left or Right");
-		values.put(Value.CV_TIME_STAMP, "Time Stamp");
 		try {
 			s = new Socket(HOST, PORT);
-		} catch (IOException e) {
-			System.out.println("Can't connect");
-		}
-		try{
-			System.out.println("Setting up STDin");
 			stdIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
-
+			stdOut = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
 		}catch(IOException e){
-			System.out.println("Can't STDIN");
+			System.exit(0);
 		}
 		super.start();
 	}
@@ -62,7 +48,6 @@ public class Networking extends Thread {
 		while (true) {
 			try {
 				synchronized (this) {
-
 					wait();
 				}
 			} catch (InterruptedException e) {
@@ -74,9 +59,8 @@ public class Networking extends Thread {
 
 	public void update() {
 		try {
-			s.getOutputStream().write(SEND.getBytes(Charset.defaultCharset()));
-			stdIn.read(cbuf);
-			String st = String.copyValueOf(cbuf);
+			stdOut.write(SEND);
+			String st = stdIn.readLine();
 			HashMap<String, Double> h = new HashMap<>();
 			names.stream().forEach((s) -> {
 				double d = Double.parseDouble(

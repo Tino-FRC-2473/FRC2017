@@ -38,18 +38,12 @@ public class Networking extends Thread {
         int i = 0;
         System.out.println("Good morning!");
         try {
-            System.out.println("About to make socket");
             s.connect(new InetSocketAddress(HOST, PORT), 100);
-            System.out.println("Made socket");
             s.setKeepAlive(true);
-            System.out.println("Keep alive");
             d.setValue(Database.Value.CV_PI_CONNECTED, 0);
-            System.out.println("My connection has succeeded!");
         } catch (Exception e1) {
             d.setValue(Database.Value.CV_PI_CONNECTED, 1);
-            System.out.println("My connection has failed but I will go on.");
         }
-        System.out.println("Before Loop!");
         boolean b = false;
         try{
             b  = s.getLocalAddress().isReachable(100);
@@ -61,14 +55,11 @@ public class Networking extends Thread {
                 s.setKeepAlive(true);
                 d.setValue(Database.Value.CV_PI_CONNECTED, 0);
                 sleep(1000);
-                System.out.println("My connection has succeeded!");
             } catch (Exception e) {
                 d.setValue(Database.Value.CV_PI_CONNECTED, 1);
-                System.out.println("My connection has failed but I will go on.");
             }
             i++;
         }
-        System.out.println("Completed loop");
         try {
             stdIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
             stdOut = s.getOutputStream();
@@ -80,7 +71,6 @@ public class Networking extends Thread {
 
     public void run() {
         while (true) {
-            System.out.println("Hello running run");
             try {
                 synchronized (this) {
                     wait();
@@ -88,7 +78,6 @@ public class Networking extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("Done waiting!");
             int i = 0;
             boolean b = false;
             try{
@@ -100,23 +89,19 @@ public class Networking extends Thread {
                     s.connect(new InetSocketAddress(HOST, PORT), 100);
                     s.setKeepAlive(true);
                     d.setValue(Database.Value.CV_PI_CONNECTED, 0);
-                    System.out.println("My connection has succeeded!");
                     wait(1000);
                 } catch (Exception e) {
                     d.setValue(Database.Value.CV_PI_CONNECTED, 1);
-                    System.out.println("My connection has failed but I will go on.");
                 } finally {
                     i++;
                 }
             }
-            System.out.println("Hello exited loop");
             update();
         }
     }
 
     public void update() {
         try {
-            System.out.println("Hello update");
             stdOut.write(SEND);
             stdIn.read(cbuf);
             String st = String.copyValueOf(cbuf);
@@ -126,7 +111,6 @@ public class Networking extends Thread {
                 d.setValue(v, Double.parseDouble(matcher.group()));
             }
         } catch (Exception e) {
-            System.out.println("I am not doing so hot rn.");
             d.setValue(Database.Value.CV_PI_CONNECTED, 1);
         }
     }

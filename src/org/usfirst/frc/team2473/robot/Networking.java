@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,6 +15,7 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.usfirst.frc.team2473.robot.Database.Value;
 
@@ -21,12 +24,12 @@ public class Networking extends Thread {
 	private final String HOST = "10.60.38.97";
 	private final int PORT = 5812;
 	private final String SEND = "CV()";
-	private SocketChannel socketChannel = new SocketChannel(SelectorProvider.provider());;
+	private SocketChannel socketChannel = null;
 	private Socket s = null;
 	private BufferedReader stdIn = null;
 	private BufferedWriter stdOut = null;
 	private Database d = Database.getInstance();
-	private final static TIME_OUT = 500;
+	private final static int TIME_OUT = 500;
 	Value[] values = { Value.CV_DISTANCE, Value.CV_ANGLE_A, Value.CV_BEARING, Value.CV_L_OR_R, Value.CV_TIME_STAMP };
 
 	static Networking instance;
@@ -40,11 +43,17 @@ public class Networking extends Thread {
 
 	public void start() {
 		int i = 0;
+		try {
+			socketChannel = SocketChannel.open(new InetSocketAddress(HOST, PORT));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		while (!socketChannel.isConnected() && i < TIME_OUT) {
 			try {
 				socketChannel.connect(new InetSocketAddress(HOST, PORT));
 				d.setValue(Value.CV_PI_CONNECTED, 0);
-			} catch (Exception e) {s
+			} catch (Exception e) {
 				d.setValue(Value.CV_PI_CONNECTED, 1);
 			}
 			i++;

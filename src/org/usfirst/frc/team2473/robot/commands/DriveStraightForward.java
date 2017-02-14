@@ -1,5 +1,7 @@
 package org.usfirst.frc.team2473.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import org.usfirst.frc.team2473.robot.Database;
 import org.usfirst.frc.team2473.robot.Database.Value;
 import org.usfirst.frc.team2473.robot.Robot;
@@ -188,6 +190,7 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class DriveStraightForward extends Command{
 	private double distance;
+	private DoubleSupplier distanceSupplier;
 	private static final double KPRotate = .2;
 	private static final double KIRotate = .005;
 	private static final double KDRotate = 0;
@@ -211,10 +214,20 @@ public class DriveStraightForward extends Command{
 		
 		this.distance = distance;
     }
+	
+	public DriveStraightForward(DoubleSupplier distanceSupplier){
+		requires(Robot.driveTrain);
+		
+		this.distanceSupplier = distanceSupplier;
+    }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.sensorThread.resetEncoders();
+    	
+    	if(distanceSupplier != null){
+    		this.distance = distanceSupplier.getAsDouble();
+    	}
     	
     	startingGyroValue = Database.getInstance().getValue(Value.GYRO_POSITION);
     	integralRotate = 0;

@@ -1,5 +1,7 @@
 package org.usfirst.frc.team2473.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import org.usfirst.frc.team2473.robot.Database;
 import org.usfirst.frc.team2473.robot.Robot;
 import org.usfirst.frc.team2473.robot.Database.Value;
@@ -8,6 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class Turn extends Command{
 	private double bearing;
+	private DoubleSupplier bearingSupplier;
 	
 	private static final double KP = .30;
 	private static final double KI = 0;//.002;
@@ -23,9 +26,19 @@ public class Turn extends Command{
 		this.bearing = bearing;
 	}
 	
+	public Turn(DoubleSupplier bearingSupplier){
+		requires(Robot.driveTrain);
+		
+		this.bearingSupplier = bearingSupplier;
+	}
+	
 	protected void initialize() {
     	Robot.sensorThread.resetEncoders();
     	//Robot.sensorThread.resetGyro();
+    	if(bearingSupplier != null){
+    		this.bearing = bearingSupplier.getAsDouble();
+    	}
+    	
     	startingGyroValue = Database.getInstance().getValue(Value.GYRO_POSITION);
     	
     	integral = 0;

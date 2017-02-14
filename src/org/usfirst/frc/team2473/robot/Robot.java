@@ -69,7 +69,7 @@ public class Robot extends IterativeRobot{
 		//autonomousCommand = new DriveStraightForward(Double.parseDouble(SmartDashboard.getString("Auto Selector",
 		//		 "10")));
 		
-		autonomousCommand = new AutoAlign(63.43,0,53.66,0,0,true);
+		autonomousCommand = new AutoAlign();
 		
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",

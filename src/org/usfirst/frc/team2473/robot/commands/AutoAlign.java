@@ -2,57 +2,25 @@ package org.usfirst.frc.team2473.robot.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.TimedCommand;
+import java.util.function.DoubleSupplier;
+
+import org.usfirst.frc.team2473.robot.MathUtil;
 
 /**
  *
  */
 public class AutoAlign extends CommandGroup {
 
-    public AutoAlign(double cameraA, double cameraBearing, double cameraToLiftDistance, double cameraToCenterDistance, double cameraToCenterAngle, boolean robotOnLeft) {
-        // Add Commands here:
-        // e.g. addSequential(new Command1());
-        //      addSequential(new Command2());
-        // these will run in order.
-
-        // To run multiple commands at the same time,
-        // use addParallel()
-        // e.g. addParallel(new Command1());
-        //      addSequential(new Command2());
-        // Command1 and Command2 will run in parallel.
-
-        // A command group will require all of the subsystems that each member
-        // would require.
-        // e.g. if Command1 requires chassis, and Command2 requires arm,
-        // a CommandGroup containing them would require both the chassis and the
-        // arm.
-    	double cameraB = (robotOnLeft)?90 - cameraBearing: 90 + cameraBearing;
-    	cameraA = Math.toRadians(cameraA);
-    	cameraB = Math.toRadians(cameraB);
-    	cameraToCenterAngle = Math.toRadians(cameraToCenterAngle);
+    public AutoAlign() {
+        DoubleSupplier turnOne = () -> MathUtil.getTurnOne();
+    	DoubleSupplier distanceOne = () -> MathUtil.getDistanceOne();
+    	DoubleSupplier turnTwo = () -> MathUtil.getTurnTwo();
+    	DoubleSupplier distanceTwo = () -> MathUtil.getDistanceTwo();
     	
-    	double distanceX;
-    	double distanceY;
-    	
-    	if(robotOnLeft){
-    		distanceX = -cameraToLiftDistance*Math.cos(cameraA) + cameraToCenterDistance*Math.cos(cameraA - cameraB - cameraToCenterAngle);
-    		distanceY = -cameraToLiftDistance*Math.sin(cameraA) + cameraToCenterDistance*Math.sin(cameraA - cameraB - cameraToCenterAngle);
-    	}else{
-    		distanceX = cameraToLiftDistance*Math.cos(cameraA) + cameraToCenterDistance*Math.cos(cameraB - cameraA - cameraToCenterAngle);
-    		distanceY = -cameraToLiftDistance*Math.sin(cameraA) + cameraToCenterDistance*Math.sin(cameraB - cameraA - cameraToCenterAngle);
-    	}
-    	
-    	double centerToLiftDistance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
-    	double centerA = Math.toDegrees(((robotOnLeft)?Math.atan(distanceY/distanceX):Math.atan(-distanceY/distanceX)));
-    	double centerB = Math.toDegrees(Math.toRadians(centerA) - cameraA + cameraB);
-		
-    	System.out.println((robotOnLeft)?90+centerA-centerB:centerB-90-centerA);
-    	System.out.println(centerToLiftDistance*Math.cos(Math.toRadians(centerA)));
-    	System.out.println((robotOnLeft)?-90:90);
-    	System.out.println(centerToLiftDistance*Math.sin(Math.toRadians(centerA)));
-    	
-    	addSequential(new Turn((robotOnLeft)?90+centerA-centerB:centerB-90-centerA));
-    	addSequential(new DriveStraightForward(centerToLiftDistance*Math.cos(Math.toRadians(centerA))));
-    	addSequential(new Turn((robotOnLeft)?-90:90));
-    	addSequential(new DriveStraightForward(centerToLiftDistance*Math.sin(Math.toRadians(centerA))));
+    	addSequential(new Network());
+    	addSequential(new Turn(turnOne));
+    	addSequential(new DriveStraightForward(distanceOne));
+    	addSequential(new Turn(turnTwo));
+    	addSequential(new DriveStraightForward(distanceTwo));
     }
 }

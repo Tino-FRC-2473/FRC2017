@@ -12,6 +12,7 @@ import java.nio.channels.spi.SelectorProvider;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.regex.Matcher;
 
 import org.usfirst.frc.team2473.robot.Database.Value;
 
@@ -20,7 +21,6 @@ public class Networking extends Thread {
 	private final String HOST = "10.60.38.97";
 	private final int PORT = 5812;
 	private final String SEND = "CV()";
-	private char[] cbuf = new char[4096];
 	private SocketChannel socketChannel = new SocketChannel(SelectorProvider.provider());;
 	private Socket s = null;
 	private BufferedReader stdIn = null;
@@ -89,6 +89,11 @@ public class Networking extends Thread {
 		try {
 			stdOut.write(SEND);
 			String st = stdIn.readLine();
+            Matcher matcher = Pattern.compile("\\d*(\\.\\d*)").matcher(st);
+            for(Value v : values){
+            		matcher.find();
+            		d.setValue(v, Double.parseDouble(matcher.group()));
+            }
 		} catch (Exception e) {
 			d.setValue(Value.CV_PI_CONNECTED, 1);
 		}

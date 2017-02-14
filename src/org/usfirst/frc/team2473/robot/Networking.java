@@ -36,9 +36,8 @@ public class Networking extends Thread {
 
     public void start() {
         int i = 0;
-        System.out.println("Good morning!");
         try {
-            s.connect(new InetSocketAddress(HOST, PORT), 100);
+            s.connect(new InetSocketAddress(HOST, PORT), 10);
             s.setKeepAlive(true);
             d.setValue(Database.Value.CV_PI_CONNECTED, 0);
         } catch (Exception e1) {
@@ -46,15 +45,15 @@ public class Networking extends Thread {
         }
         boolean b = false;
         try{
-            b  = s.getLocalAddress().isReachable(100);
+            b  = s.getLocalAddress().isReachable(10);
         }catch (IOException exception){
         }
         while (!b && i < TIME_OUT) {
             try {
-                s.connect(new InetSocketAddress(HOST, PORT), 100);
+                s.connect(new InetSocketAddress(HOST, PORT), 10);
                 s.setKeepAlive(true);
                 d.setValue(Database.Value.CV_PI_CONNECTED, 0);
-                sleep(1000);
+                sleep(100);
             } catch (Exception e) {
                 d.setValue(Database.Value.CV_PI_CONNECTED, 1);
             }
@@ -81,15 +80,15 @@ public class Networking extends Thread {
             int i = 0;
             boolean b = false;
             try{
-                b  = s.getLocalAddress().isReachable(100);
+                b  = s.getLocalAddress().isReachable(10);
             }catch (IOException exception){
             }
             while (!b && i < TIME_OUT) {
                 try {
-                    s.connect(new InetSocketAddress(HOST, PORT), 100);
+                    s.connect(new InetSocketAddress(HOST, PORT), 10);
                     s.setKeepAlive(true);
                     d.setValue(Database.Value.CV_PI_CONNECTED, 0);
-                    wait(1000);
+                    wait(100);
                 } catch (Exception e) {
                     d.setValue(Database.Value.CV_PI_CONNECTED, 1);
                 } finally {

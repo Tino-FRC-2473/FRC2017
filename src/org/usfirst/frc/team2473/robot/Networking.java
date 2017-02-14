@@ -4,8 +4,11 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.channels.SocketChannel;
+import java.nio.channels.spi.SelectorProvider;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -13,17 +16,19 @@ import java.util.LinkedList;
 import org.usfirst.frc.team2473.robot.Database.Value;
 
 public class Networking extends Thread {
-	//MUST CHANGE ON COMPETITION DAY
+	// MUST CHANGE ON COMPETITION DAY
 	private final String HOST = "10.60.38.97";
 	private final int PORT = 5812;
 	private final String SEND = "CV()";
 	private char[] cbuf = new char[4096];
+	private SocketChannel socketChannel = new SocketChannel(SelectorProvider.provider());;
 	private Socket s = null;
 	private BufferedReader stdIn = null;
 	private BufferedWriter stdOut = null;
 	private Database d = Database.getInstance();
-	Value[] values = {Value.CV_DISTANCE, Value.CV_ANGLE_A, Value.CV_BEARING, Value.CV_L_OR_R, Value.CV_TIME_STAMP};
-	
+	private final static TIME_OUT = 500;
+	Value[] values = { Value.CV_DISTANCE, Value.CV_ANGLE_A, Value.CV_BEARING, Value.CV_L_OR_R, Value.CV_TIME_STAMP };
+
 	static Networking instance;
 	static {
 		instance = new Networking();
@@ -34,11 +39,21 @@ public class Networking extends Thread {
 	}
 
 	public void start() {
+		int i = 0;
+		while (!socketChannel.isConnected() && i < TIME_OUT) {
+			try {
+				socketChannel.connect(new InetSocketAddress(HOST, PORT));
+				d.setValue(Value.CV_PI_CONNECTED, 0);
+			} catch (Exception e) {s
+				d.setValue(Value.CV_PI_CONNECTED, 1);
+			}
+			i++;
+		}
 		try {
-			s = new Socket(HOST, PORT);
+			s = socketChannel.socket();
 			stdIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			stdOut = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
-		}catch(IOException e){
+		} catch (IOException e) {
 			System.exit(0);
 		}
 		super.start();
@@ -53,6 +68,19 @@ public class Networking extends Thread {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			int i = 0;
+			while (!socketChannel.isConnected() && i < TIME_OUT) {
+				try {
+					socketChannel.connect(new InetSocketAddress(HOST, PORT));
+					d.setValue(Value.CV_PI_CONNECTED, 0);
+				} catch (Exception e) {
+					d.setValue(Value.CV_PI_CONNECTED, 1);
+				}finally{
+					i++;
+				}
+				if(socketChannel.isConnected()){
+					s = socketChannel.socket();
+				}			}
 			update();
 		}
 	}
@@ -61,19 +89,8 @@ public class Networking extends Thread {
 		try {
 			stdOut.write(SEND);
 			String st = stdIn.readLine();
-			HashMap<String, Double> h = new HashMap<>();
-			names.stream().forEach((s) -> {
-				double d = Double.parseDouble(
-						st.substring(st.indexOf(s) + s.length()+2, (st.indexOf(',', st.indexOf(s)) >= 0)
-								? st.indexOf(',', st.indexOf(s)) : st.indexOf('}')));
-				h.put(s.substring(1, s.lastIndexOf('\"')), d);
-			});
-			for (Value v : values.keySet()) {
-				d.setValue(v, h.get(values.get(v)));
-			}
-			System.out.println(h);
 		} catch (Exception e) {
-			e.printStackTrace(System.out);
+			d.setValue(Value.CV_PI_CONNECTED, 1);
 		}
 	}
 }

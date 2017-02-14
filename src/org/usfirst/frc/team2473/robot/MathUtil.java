@@ -1,14 +1,16 @@
 package org.usfirst.frc.team2473.robot;
 
+import org.usfirst.frc.team2473.robot.Database.Value;
+
 public class MathUtil {
 	
 	private MathUtil(){}
 	
 	public static double getTurnOne(){
-		boolean robotOnLeft = ;
-		double cameraBearing = ;
-		double cameraA = ;
-		double cameraToLiftDistance = ;
+		boolean robotOnLeft = Database.getInstance().getValue(Value.CV_L_OR_R) == 0;
+		double cameraBearing = Database.getInstance().getValue(Value.CV_BEARING);
+		double cameraA = Database.getInstance().getValue(Value.CV_ANGLE_A);
+		double cameraToLiftDistance = Database.getInstance().getValue(Value.CV_DISTANCE);
 		double cameraToCenterAngle = ;
 		double cameraToCenterDistance = ;
 		double cameraB = (robotOnLeft)?90 - cameraBearing: 90 + cameraBearing;
@@ -35,16 +37,16 @@ public class MathUtil {
 	}
 	
 	public static double getTurnTwo(){
-		boolean robotOnLeft = ;
+		boolean robotOnLeft = Database.getInstance().getValue(Value.CV_L_OR_R) == 0;
 		
 		return (robotOnLeft)?-90:90;
 	}
 	
 	public static double getDistanceOne(){
-		boolean robotOnLeft = ;
-		double cameraBearing = ;
-		double cameraA = ;
-		double cameraToLiftDistance = ;
+		boolean robotOnLeft = Database.getInstance().getValue(Value.CV_L_OR_R) == 0;
+		double cameraBearing = Database.getInstance().getValue(Value.CV_BEARING);
+		double cameraA = Database.getInstance().getValue(Value.CV_ANGLE_A);
+		double cameraToLiftDistance = Database.getInstance().getValue(Value.CV_DISTANCE);
 		double cameraToCenterAngle = ;
 		double cameraToCenterDistance = ;
 		double cameraB = (robotOnLeft)?90 - cameraBearing: 90 + cameraBearing;
@@ -71,10 +73,10 @@ public class MathUtil {
 	}
 	
 	public static double getDistanceTwo(){
-		boolean robotOnLeft = ;
-		double cameraBearing = ;
-		double cameraA = ;
-		double cameraToLiftDistance = ;
+		boolean robotOnLeft = Database.getInstance().getValue(Value.CV_L_OR_R) == 0;
+		double cameraBearing = Database.getInstance().getValue(Value.CV_BEARING);
+		double cameraA = Database.getInstance().getValue(Value.CV_ANGLE_A);
+		double cameraToLiftDistance = Database.getInstance().getValue(Value.CV_DISTANCE);
 		double cameraToCenterAngle = ;
 		double cameraToCenterDistance = ;
 		double cameraB = (robotOnLeft)?90 - cameraBearing: 90 + cameraBearing;

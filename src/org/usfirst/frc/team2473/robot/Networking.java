@@ -22,12 +22,13 @@ import org.usfirst.frc.team2473.robot.Database.Value;
 public class Networking extends Thread {
 	// MUST CHANGE ON COMPETITION DAY
 	private final String HOST = "10.60.38.97";
-	private final int PORT = 5812;
-	private final String SEND = "CV()";
+	private final int PORT = 5811;
+	private final byte[] SEND = "CV()".getBytes(Charset.defaultCharset());
+	private char[] cbuf = new char[4096];
 	private SocketChannel socketChannel = null;
 	private Socket s = null;
 	private BufferedReader stdIn = null;
-	private BufferedWriter stdOut = null;
+	private OutputStream stdOut = null;
 	private Database d = Database.getInstance();
 	private final static int TIME_OUT = 500;
 	Value[] values = { Value.CV_DISTANCE, Value.CV_ANGLE_A, Value.CV_BEARING, Value.CV_L_OR_R, Value.CV_TIME_STAMP };
@@ -48,6 +49,8 @@ public class Networking extends Thread {
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		}catch (ConnectionException e){
+			
 		}
 		while (!socketChannel.isConnected() && i < TIME_OUT) {
 			try {
@@ -55,13 +58,15 @@ public class Networking extends Thread {
 				d.setValue(Value.CV_PI_CONNECTED, 0);
 			} catch (Exception e) {
 				d.setValue(Value.CV_PI_CONNECTED, 1);
+			} catch (ConnectionException e){
+				d.setValue(Value.CV_PI_CONNECTED, 1);
 			}
 			i++;
 		}
 		try {
 			s = socketChannel.socket();
 			stdIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
-			stdOut = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
+			stdOut = s.getOutputStream();
 		} catch (IOException e) {
 			System.exit(0);
 		}
@@ -84,7 +89,11 @@ public class Networking extends Thread {
 					d.setValue(Value.CV_PI_CONNECTED, 0);
 				} catch (Exception e) {
 					d.setValue(Value.CV_PI_CONNECTED, 1);
+				} catch (ConnectException e){
+					d.setValue(Value.CV_PI_CONNECTED, 1);
+
 				}finally{
+				
 					i++;
 				}
 				if(socketChannel.isConnected()){
@@ -97,8 +106,9 @@ public class Networking extends Thread {
 	public void update() {
 		try {
 			stdOut.write(SEND);
-			String st = stdIn.readLine();
-            Matcher matcher = Pattern.compile("\\d*(\\.\\d*)").matcher(st);
+			stdIn.read(cbuf);
+			String st = String.copyValueOf(cbuf);
+			Matcher matcher = Pattern.compile("\\d*(\\.\\d*)").matcher(st);
             for(Value v : values){
             		matcher.find();
             		d.setValue(v, Double.parseDouble(matcher.group()));

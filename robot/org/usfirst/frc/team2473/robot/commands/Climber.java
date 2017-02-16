@@ -11,6 +11,7 @@ public class Climber extends Command {
 
 	private boolean climbingRope;
 	private boolean finished;
+	private boolean lastPress;
 	
 	private double slowSpeed;
 	private double fastSpeed;
@@ -36,6 +37,7 @@ public class Climber extends Command {
 		
 		climbingRope = false;
 		finished = false;
+		lastPress = false;
 		
 		slowSpeed = 0.3;
 		fastSpeed = 0.60;
@@ -69,7 +71,7 @@ public class Climber extends Command {
 		Robot.climbSystem.log(logMessage);
 		System.out.println(logMessage);
 		
-		if(getCurrentAverage() > 5.5){
+		if(getCurrentAverage() > 6.8) {
 			System.out.println("Hitting top");
 			finished = true;
 		}else if(getCurrentAverage() > 2){
@@ -90,9 +92,11 @@ public class Climber extends Command {
 		}
 
 		//TODO Make sure there is a delay for switching speeds
-		if (Database.getInstance().getButton(Database.ButtonName.CLIMBER_SPEED_TOGGLE).get()) {
+		boolean currPressed = Database.getInstance().getButton(Database.ButtonName.CLIMBER_SPEED_TOGGLE).get();
+		if (currPressed && !lastPress) {
 			climbingRope = !climbingRope;
 		}
+		lastPress = currPressed;
 		if (!climbingRope) {
 			// System.out.println("Slow");
 			Robot.climbSystem.climb(slowSpeed);

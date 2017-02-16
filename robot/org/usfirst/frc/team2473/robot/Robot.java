@@ -61,7 +61,7 @@ public class Robot extends IterativeRobot{
 		
 		CameraServer server = CameraServer.getInstance();
 		server.startAutomaticCapture("router side", 0);
-		server.startAutomaticCapture("other side", 1);
+		server.startAutomaticCapture("climber side", 1);
 	}
 
 	/**

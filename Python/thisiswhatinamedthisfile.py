@@ -86,7 +86,7 @@ def angleOfAttack(firstHeight, secondHeight, rectX, image, width1, width2, toggl
 		try:
 			angleOpposite = math.acos((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))
 			closeAngle = math.asin((4.0 * math.sin(angleOpposite))/y) * (180/math.pi)
-		except:
+		except ValueError:
 			print("arcsin or arccos error")
 			return None
 		angleOpposite = angleOpposite * (180/math.pi)
@@ -119,10 +119,10 @@ def bearing(image, centerX):
 	r = abs(middle/(math.sin(bisAngle)))
 	print (r)
 	#print (x)
-	func = 0 
+	func = 0
 	try:
 		func = lambda x: math.sqrt(1+ x**2/(r**2 - x**2))
-	except: 
+	except ValueError:
 		print("DomainError integration")
 		return None
 
@@ -318,7 +318,6 @@ while (1):
 	results = eval(returned)
 	print(results)
 	if results != None:
-<<<<<<< HEAD
 		sending = results[0], " ", results[2], " ", results[1], " ", results[3], " ", float(time.time()), "\n"
 		sending = str(sending)
 		conn.send(sending)
@@ -332,12 +331,10 @@ while (1):
 	'''results = CV()'''
 	if results != None:
 		print(results)
-=======
-		
+
 		conn.send(results[0] + ' ' + results[2] + ' ' + results[1] + ' ' + results[3] + ' ' + float(time.time()) + '\n')
 	else:
 		conn.send('0.0 0.0 0.0 0.0 0.0 \n')
->>>>>>> 743e0298485682a0a6c9f603bc838d2d38e9788c
-	
+
 
 cv2.destroyAllWindows()

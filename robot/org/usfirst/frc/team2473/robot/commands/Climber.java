@@ -65,13 +65,18 @@ public class Climber extends Command {
 	protected void execute() {
 		super.execute();
 		
-		String logMessage = String.format("C: %f.6, Avg: %f.6, Enc: %f.6", Robot.climbSystem.getCurrent(), getCurrentAverage(), Robot.climbSystem.getEncValue());
+		String logMessage = String.format("Cur: %.3f, Avg: %.3f, Enc: %.3f  |||  ", Robot.climbSystem.getCurrent(), getCurrentAverage(), Robot.climbSystem.getEncValue());
 		Robot.climbSystem.log(logMessage);
 		System.out.println(logMessage);
 		
-//		if(getCurrentAverage() > 1.35){
-//			finished = true;
-//		}
+		if(getCurrentAverage() > 5.5){
+			System.out.println("Hitting top");
+			finished = true;
+		}else if(getCurrentAverage() > 2){
+			System.out.println("Climbing rope.");
+		}else{
+			System.out.println("Not climbing");
+		}
 		
 		currentList.add(Robot.climbSystem.getCurrent());
 		
@@ -88,7 +93,6 @@ public class Climber extends Command {
 		if (Database.getInstance().getButton(Database.ButtonName.CLIMBER_SPEED_TOGGLE).get()) {
 			climbingRope = !climbingRope;
 		}
-
 		if (!climbingRope) {
 			// System.out.println("Slow");
 			Robot.climbSystem.climb(slowSpeed);
@@ -109,26 +113,13 @@ public class Climber extends Command {
 		
 		
 		
-		 //	Code to test if the two motors run in same direction.
+		//	WIP Code to a state machine
 		
 		/*
-		if(Database.getInstance().getButton(Database.ButtonName.START_CLIMBER).get()){
-			System.out.println("Running motor 1");
-			Robot.climbSystem.climb(0.3);
-			Robot.climbSystem.climb2(0);
-		}
-		
-		if(Database.getInstance().getButton(Database.ButtonName.CLIMBER_SPEED_TOGGLE).get()){
-			System.out.println("Stopping");
-			Robot.climbSystem.climb(0);
-			Robot.climbSystem.climb2(0);
-		}
-		
-		if(Database.getInstance().getButton(Database.ButtonName.STOP_CLIMBER).get()){
-			System.out.println("Running motor 2");
-			Robot.climbSystem.climb(0);
-			Robot.climbSystem.climb2(0.3);
-		}
+		 * switch(state):
+		 * 
+		 * case LOOKING_FOR_ROPE:
+		 * 		if(first threshold) -> state = CLIMBING ROPE
 		*/
 	}
 

@@ -18,16 +18,13 @@ public class RobotMap {
 
 	public static final int leftFrontMotor = 2;
 	public static final int leftBackMotor = 3;
-	public static final int rightFrontMotor = 8;	//was 4
+	public static final int rightFrontMotor = 4;
 	public static final int rightBackMotor = 5;
 
-	public static final int ropeClimbMotor_1 = 4;
+	public static final int ropeClimbMotor_1 = 6;
 	public static final int ropeClimbMotor_2 = 7;
 	
 	public static final int gyro = 0;
-	
-	public static final int climberLS = 1;
-
 
 	
 }

@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2473.robot;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -57,6 +58,9 @@ public class Robot extends IterativeRobot{
 		sensorThread.start();
 		robotControlLoop = new Timer(false);
 		timerRunning = false;
+		
+		CameraServer server = CameraServer.getInstance();
+		server.startAutomaticCapture("cam0", 0);
 		}
 
 	/**

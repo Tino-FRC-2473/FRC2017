@@ -11,14 +11,12 @@ import org.usfirst.frc.team2473.robot.RobotMap;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class ClimberSystem extends Subsystem{
 
 	private CANTalon ropeCAN_1;
 	private CANTalon ropeCAN_2;
-	private DigitalInput climberLS;
 	
 	private PrintWriter writer;
 	
@@ -27,7 +25,6 @@ public class ClimberSystem extends Subsystem{
 		
 		ropeCAN_1 = new CANTalon(RobotMap.ropeClimbMotor_1);
 		ropeCAN_2 = new CANTalon(RobotMap.ropeClimbMotor_2);
-		climberLS = new DigitalInput(RobotMap.climberLS);
 		try{
 		    writer = new PrintWriter(new FileWriter(new File("Value_Log.txt"), true));
 		    writer.println(LocalDateTime.now());
@@ -59,16 +56,12 @@ public class ClimberSystem extends Subsystem{
 		return ropeCAN_1.getOutputCurrent();
 	}
 	
-	public boolean getLimitSwitch(){
-		return climberLS.get();
-	}
-	
 	public void log(String message){
 		writer.println(message);
 	}
 	
 	public void close(){
 		writer.println();
-		writer.close();
+		//writer.close();
 	}
 }

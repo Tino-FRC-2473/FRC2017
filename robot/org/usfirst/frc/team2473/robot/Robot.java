@@ -60,8 +60,9 @@ public class Robot extends IterativeRobot{
 		timerRunning = false;
 		
 		CameraServer server = CameraServer.getInstance();
-		server.startAutomaticCapture("cam0", 0);
-		}
+		server.startAutomaticCapture("router side", 0);
+		server.startAutomaticCapture("other side", 1);
+	}
 
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select

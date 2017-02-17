@@ -7,25 +7,27 @@ import org.usfirst.frc.team2473.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
+//Code to start the climber is in Robot.java, teleopPeriodic(), using Database button name START_CLIMBER.
+//All button values can be found in OI.java.
+
 public class Climber extends Command {
 
-	private boolean climbingRope;
-	private boolean finished;
-	private boolean lastPress;
+	private boolean climbingRope;		//speed toggle boolean, when true, run at fast speed, else, slow speed
+	private boolean finished;			//when to stop the command
+	private boolean lastPress;			//boolean tracking last speed toggle button press
 	
-	private double slowSpeed;
-	private double fastSpeed;
-	private double encoderValue;
+	private double slowSpeed;			//default/starting speed (percent)
+	private double fastSpeed;			//fast/toggled speed (percent)
+	private double encoderValue;		//UNUSED
 	
 	private int numValues;		//number of current values to record
-	private int timeLimit;
-	private int encoderTicks;	// Number of encoder ticks to keep running the
-								// motor after hitting the touch pad (ms)
+	private int timeLimit;		//UNUSED
+	private int encoderTicks;	//UNUSED; Number of encoder ticks to keep running the motor after hitting the touch pad (ms)
 	
-	private long prevTime;
-	private long time;
+	private long prevTime;		//UNUSED
+	private long time;			//UNUSED
 	
-	private ArrayList<Double> currentList;
+	private ArrayList<Double> currentList;		//list of current values to average
 
 	public Climber() {
 		requires(Robot.climbSystem);
@@ -39,7 +41,7 @@ public class Climber extends Command {
 		finished = false;
 		lastPress = false;
 		
-		slowSpeed = 0.3;
+		slowSpeed = 0.30;
 		fastSpeed = 0.60;
 		encoderValue = Double.MAX_VALUE;
 		
@@ -53,24 +55,15 @@ public class Climber extends Command {
 		currentList = new ArrayList<Double>();
 	}
 
-	/**
-	 * This method will start the climbing process according to the procedure
-	 * below:
-	 * 
-	 * 1. Turn climber motor slowly to catch rope; when Driver manually hits
-	 * button __, speed up motor to climb up the rope 2. When touch sensor is
-	 * pressed, run motor for __ encoder ticks to ensure button press. 3. Stop
-	 * motor.
-	 * 
-	 */
 	@Override
 	protected void execute() {
 		super.execute();
 		
+		//Prints out current, average current, and encoder value
 		String logMessage = String.format("Cur: %.3f, Avg: %.3f, Enc: %.3f  |||  ", Robot.climbSystem.getCurrent(), getCurrentAverage(), Robot.climbSystem.getEncValue());
-		Robot.climbSystem.log(logMessage);
 		System.out.println(logMessage);
 		
+		//Checking current and if hit threshold.
 		if(getCurrentAverage() > 6.8) {
 			System.out.println("Hitting top");
 			finished = true;
@@ -86,45 +79,33 @@ public class Climber extends Command {
 			currentList.remove(0);
 		}
 		
-		
+		//UNUSED, WIP
 		if (Database.getInstance().getButton(Database.ButtonName.CLIMBER_1_SEC).get()) {
 			time = System.currentTimeMillis();
 		}
 
-		//TODO Make sure there is a delay for switching speeds
+		//Toggle speed code
 		boolean currPressed = Database.getInstance().getButton(Database.ButtonName.CLIMBER_SPEED_TOGGLE).get();
 		if (currPressed && !lastPress) {
 			climbingRope = !climbingRope;
 		}
 		lastPress = currPressed;
+		
 		if (!climbingRope) {
-			// System.out.println("Slow");
 			Robot.climbSystem.climb(slowSpeed);
 		} else {
-			// System.out.println("Fast");
 			Robot.climbSystem.climb(fastSpeed);
 		}
 
+		//UNUSED, WIP
 		if (System.currentTimeMillis() - time >= 1000) {
 			finished = true;
 		}
-		//System.out.println("Enc: " + Robot.climbSystem.getEncValue());
-
+		
+		//"Emergency" Stop button, immediately stops the climber.
 		if (Database.getInstance().getButton(Database.ButtonName.STOP_CLIMBER).get()) {
-			// System.out.println("Stopping");
 			finished = true;
 		}
-		
-		
-		
-		//	WIP Code to a state machine
-		
-		/*
-		 * switch(state):
-		 * 
-		 * case LOOKING_FOR_ROPE:
-		 * 		if(first threshold) -> state = CLIMBING ROPE
-		*/
 	}
 
 	@Override
@@ -139,14 +120,12 @@ public class Climber extends Command {
 		// (reachedEncoderCount || reachedTimeLimit)));
 		//return (finished || (reachedEncoderCount || reachedTimeLimit));
 		return finished;
-		// return finished;
 	}
 
 	@Override
 	protected void end() {
 		super.end();
 		Robot.climbSystem.climb(0);
-		Robot.climbSystem.close();
 		finished = false;
 	}
 

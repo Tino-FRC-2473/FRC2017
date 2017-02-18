@@ -114,7 +114,7 @@ public class Networking extends Thread {
 			stdOut.write(SEND);
 			stdIn.read(cbuf);
 			String st = String.copyValueOf(cbuf);
-			Matcher matcher = Pattern.compile("\\d*(\\.\\d*)").matcher(st);
+			Matcher matcher = Pattern.compile("-?\\d*(\\.\\d*)").matcher(st);
 			for (Database.Value v : values) {
 				matcher.find();
 				d.setValue(v, Double.parseDouble(matcher.group()));

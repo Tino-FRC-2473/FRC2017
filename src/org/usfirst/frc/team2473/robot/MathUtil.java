@@ -11,6 +11,8 @@ public class MathUtil {
 		double cameraBearing = Database.getInstance().getValue(Value.CV_BEARING);
 		double cameraA = Database.getInstance().getValue(Value.CV_ANGLE_A);
 		double cameraToLiftDistance = Database.getInstance().getValue(Value.CV_DISTANCE);
+		double cameraToCenterAngle = 68.12;
+		double cameraToCenterDistance = 14.22;
 		double cameraB = (robotOnLeft)?90 - cameraBearing: 90 + cameraBearing;
     	cameraA = Math.toRadians(cameraA);
     	cameraB = Math.toRadians(cameraB);
@@ -45,6 +47,8 @@ public class MathUtil {
 		double cameraBearing = Database.getInstance().getValue(Value.CV_BEARING);
 		double cameraA = Database.getInstance().getValue(Value.CV_ANGLE_A);
 		double cameraToLiftDistance = Database.getInstance().getValue(Value.CV_DISTANCE);
+		double cameraToCenterAngle = 68.12;
+		double cameraToCenterDistance = 14.22;
 		double cameraB = (robotOnLeft)?90 - cameraBearing: 90 + cameraBearing;
     	cameraA = Math.toRadians(cameraA);
     	cameraB = Math.toRadians(cameraB);
@@ -73,6 +77,8 @@ public class MathUtil {
 		double cameraBearing = Database.getInstance().getValue(Value.CV_BEARING);
 		double cameraA = Database.getInstance().getValue(Value.CV_ANGLE_A);
 		double cameraToLiftDistance = Database.getInstance().getValue(Value.CV_DISTANCE);
+		double cameraToCenterAngle = 68.12;
+		double cameraToCenterDistance = 14.22;
 		double cameraB = (robotOnLeft)?90 - cameraBearing: 90 + cameraBearing;
     	cameraA = Math.toRadians(cameraA);
     	cameraB = Math.toRadians(cameraB);

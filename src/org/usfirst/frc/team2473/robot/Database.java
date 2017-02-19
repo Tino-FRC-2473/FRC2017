@@ -35,7 +35,7 @@ public class Database{
 	 */
 	public enum Value {
 
-		GYRO_POSITION, GYRO_VELOCITY, LEFT_ENCODER, RIGHT_ENCODER, BREAK_BEAM, WHEEL_TWIST, THROTTLE_VALUE, CV_DISTANCE, CV_ANGLE_A, CV_BEARING, CV_L_OR_R, CV_TIME_STAMP, CV_PI_CONNECTED;// add
+		GYRO_POSITION, GYRO_VELOCITY, LEFT_ENCODER_POSITION, RIGHT_ENCODER_POSITION, LEFT_ENCODER_VELOCITY, BREAK_BEAM, WHEEL_TWIST, THROTTLE_VALUE, CV_DISTANCE, CV_ANGLE_A, CV_BEARING, CV_L_OR_R, CV_TIME_STAMP, CV_PI_CONNECTED;// add
 																																	// button
 	}
 
@@ -137,9 +137,11 @@ public class Database{
 	 */
 	public void log() {
 		SmartDashboard.putNumber("Left Distance",
-				Database.getInstance().getValue(Value.LEFT_ENCODER));
+				Database.getInstance().getValue(Value.LEFT_ENCODER_POSITION));
 		SmartDashboard.putNumber("Right Distance",
-				Database.getInstance().getValue(Value.RIGHT_ENCODER));
+				Database.getInstance().getValue(Value.RIGHT_ENCODER_POSITION));
+		SmartDashboard.putNumber("Left Velocity",
+				Database.getInstance().getValue(Value.LEFT_ENCODER_VELOCITY));
 		SmartDashboard.putNumber("Gyro Angle",
 				Database.getInstance().getValue(Value.GYRO_POSITION));
 		SmartDashboard.putNumber("Gyro Velocity",
@@ -150,6 +152,8 @@ public class Database{
 				Database.getInstance().getValue(Value.THROTTLE_VALUE));
 		SmartDashboard.putNumber("Break beam",
 				Database.getInstance().getValue(Value.BREAK_BEAM));
+		SmartDashboard.putNumber("PI Connection",
+				Database.getInstance().getValue(Value.CV_PI_CONNECTED));
 
 	}
 

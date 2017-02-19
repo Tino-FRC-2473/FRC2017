@@ -6,9 +6,13 @@ import java.util.TimerTask;
 import org.usfirst.frc.team2473.robot.Database.Value;
 import org.usfirst.frc.team2473.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2473.robot.commands.AutoAlign;
+import org.usfirst.frc.team2473.robot.commands.DriveStraightForward;
 import org.usfirst.frc.team2473.robot.commands.Network;
+import org.usfirst.frc.team2473.robot.commands.Turn;
+
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,6 +33,7 @@ public class Robot extends IterativeRobot{
 	public static Command auto;
 	public static OI oi;
 	public static AnalogGyro gyro;
+	public static Relay led;
 	public static SensorThread sensorThread;
 	Timer robotControlLoop;
 	public Database d;
@@ -43,6 +48,7 @@ public class Robot extends IterativeRobot{
 	public void robotInit() {
 		driveTrain = new DriveTrain();
 		gyro = new AnalogGyro(RobotMap.gyro);
+		led = new Relay(0);
 		oi = new OI();
 		
 		sensorThread = new SensorThread(5);
@@ -70,9 +76,9 @@ public class Robot extends IterativeRobot{
 	 */
 	public void autonomousInit() {
 		
-		//autonomousCommand = new DriveStraightForward(Double.parseDouble(SmartDashboard.getString("Auto Selector",
+		//autonomousCommand = new Turn(Double.parseDouble(SmartDashboard.getString("Auto Selector",
 		//		 "10")));
-		
+		led.set(Relay.Value.kForward);
 		autonomousCommand = new AutoAlign();
 		
 		/*

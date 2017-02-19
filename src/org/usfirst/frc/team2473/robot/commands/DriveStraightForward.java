@@ -7,6 +7,7 @@ import org.usfirst.frc.team2473.robot.Database.Value;
 import org.usfirst.frc.team2473.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /*public class DriveStraightForward extends Command{
 	private double distance;
@@ -206,9 +207,6 @@ public class DriveStraightForward extends Command{
 	private double integralForward;
 	private double lastProportionForward;
 	
-	private double lastEncoderValue;
-	private double lastTime;
-	
 	public DriveStraightForward(double distance){
 		requires(Robot.driveTrain);
 		
@@ -235,9 +233,6 @@ public class DriveStraightForward extends Command{
     	
     	integralForward = 0;
     	lastProportionForward = 0;
-    	
-    	lastEncoderValue = 0;
-    	lastTime = System.currentTimeMillis();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -247,13 +242,10 @@ public class DriveStraightForward extends Command{
     	double derivativeRotate = proportionRotate - lastProportionRotate;
     	double rotate = KPRotate * proportionRotate + KIRotate*integralRotate + KDRotate*derivativeRotate;
     	
-    	double proportionForward = (distance - Database.getInstance().getValue(Value.LEFT_ENCODER))/distance;
+    	double proportionForward = (distance - Database.getInstance().getValue(Value.LEFT_ENCODER_POSITION))/Math.abs(distance);
     	integralForward += proportionForward;
     	double derivativeForward = proportionForward - lastProportionForward;
     	double speed = KPForward * proportionForward + KIForward*integralForward + KDForward*derivativeForward;
-    	
-    	lastEncoderValue = Database.getInstance().getValue(Value.LEFT_ENCODER) - lastEncoderValue;
-    	lastTime = System.currentTimeMillis() - lastTime;
     	
     	if(Math.abs(rotate) > .70){
     		rotate = Math.signum(rotate) * .7;
@@ -270,11 +262,10 @@ public class DriveStraightForward extends Command{
     	lastProportionRotate = proportionRotate;
     	lastProportionForward = proportionForward;
     	
-	
     }
 
 	protected boolean isFinished() {
-		return Math.abs(Database.getInstance().getValue(Value.LEFT_ENCODER) - distance) < 1 && Math.abs(lastEncoderValue/lastTime) < 10;
+		return Math.abs(Database.getInstance().getValue(Value.LEFT_ENCODER_POSITION) - distance) < 1 && Math.abs(Database.getInstance().getValue(Value.LEFT_ENCODER_VELOCITY)) < .5;
 	}
 	
 	protected void end() {

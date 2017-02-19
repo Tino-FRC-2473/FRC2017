@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2473.robot.commands;
 
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.TimedCommand;
 import java.util.function.DoubleSupplier;
@@ -19,8 +20,11 @@ public class AutoAlign extends CommandGroup {
     	
     	addSequential(new Network());
     	addSequential(new Turn(turnOne));
+    	addSequential(new TimedCommand(1));
     	addSequential(new DriveStraightForward(distanceOne));
+    	addSequential(new TimedCommand(1));
     	addSequential(new Turn(turnTwo));
+    	addSequential(new TimedCommand(1));
     	addSequential(new DriveStraightForward(distanceTwo));
     }
 }

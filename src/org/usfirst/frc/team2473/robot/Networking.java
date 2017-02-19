@@ -12,11 +12,11 @@ import java.util.regex.Pattern;
 
 public class Networking extends Thread {
 	// MUST CHANGE ON COMPETITION DAY
-	private final String HOST = "10.19.92.233";
-	private final int PORT = 4444;
+	private final String HOST = "10.24.73.36";
+	private final int PORT = 5818;
 	private final byte[] SEND = "CV()".getBytes(Charset.defaultCharset());
 	private char[] cbuf = new char[4096];
-	private Socket s = new Socket();
+	private Socket s = null;
 	private BufferedReader stdIn = null;
 	private OutputStream stdOut = null;
 	private Database d = Database.getInstance();
@@ -36,39 +36,24 @@ public class Networking extends Thread {
 
 	public void start() {
 		int i = 0;
-		try {
-			s.connect(new InetSocketAddress(HOST, PORT), 10);
-			s.setKeepAlive(true);
-			d.setValue(Database.Value.CV_PI_CONNECTED, 0);
-		} catch (Exception e1) {
-			d.setValue(Database.Value.CV_PI_CONNECTED, 1);
-		}
-		boolean b = false;
-		try {
-			b = s.getLocalAddress().isReachable(10);
-		} catch (IOException exception) {
-		}
-		while (!b && i < TIME_OUT) {
-			try {
-				s.connect(new InetSocketAddress(HOST, PORT), 10);
-				s.setKeepAlive(true);
-				d.setValue(Database.Value.CV_PI_CONNECTED, 0);
-				sleep(100);
-			} catch (Exception e) {
-				d.setValue(Database.Value.CV_PI_CONNECTED, 1);
-			} finally {
-				try {
-					b = s.getLocalAddress().isReachable(10);
-				} catch (IOException exception) {
-				}
-
+		boolean b = true;
+		System.out.println("Before first");
+		while(b && i < TIME_OUT){
+			try{
+				s = new Socket(HOST, PORT);
+				b = false;
+			}catch(Exception e){
+				b = true;
+			}finally{
+				i++;
 			}
-			i++;
 		}
+		System.out.println("After first");
 		try {
 			stdIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			stdOut = s.getOutputStream();
 		} catch (IOException e) {
+			System.out.println("STDIN FAILED");
 			d.setValue(Database.Value.CV_PI_CONNECTED, 1);
 		}
 		super.start();
@@ -82,28 +67,6 @@ public class Networking extends Thread {
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			}
-			int i = 0;
-			boolean b = false;
-			try {
-				b = s.getLocalAddress().isReachable(10);
-			} catch (IOException exception) {
-			}
-			while (!b && i < TIME_OUT) {
-				try {
-					s.connect(new InetSocketAddress(HOST, PORT), 10);
-					s.setKeepAlive(true);
-					d.setValue(Database.Value.CV_PI_CONNECTED, 0);
-					wait(100);
-				} catch (Exception e) {
-					d.setValue(Database.Value.CV_PI_CONNECTED, 1);
-				} finally {
-					try {
-						b = s.getLocalAddress().isReachable(10);
-					} catch (IOException exception) {
-					}
-					i++;
-				}
 			}
 			update();
 		}
@@ -120,7 +83,7 @@ public class Networking extends Thread {
 				d.setValue(v, Double.parseDouble(matcher.group()));
 			}
 		} catch (Exception e) {
-			d.setValue(Database.Value.CV_PI_CONNECTED, 1);
+			
 		}
 	}
 }

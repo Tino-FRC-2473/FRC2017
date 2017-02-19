@@ -53,8 +53,9 @@ public class SensorThread extends Thread{
 		//add the sensor name in the Values enum and the method of the sensor that returns the sensor value.
 		callMap.put(Value.GYRO_POSITION, () -> gyro.getAngle());
 		callMap.put(Value.GYRO_VELOCITY, () -> gyro.getRate());
-		callMap.put(Value.RIGHT_ENCODER, () -> (rightEncoder.getEncPosition() - rightEncoderZero )* Database.RIGHT_ENC_CONSTANT);
-		callMap.put(Value.LEFT_ENCODER, () -> -(leftEncoder.getEncPosition() - leftEncoderZero )* Database.LEFT_ENC_CONSTANT);
+		callMap.put(Value.RIGHT_ENCODER_POSITION, () -> (rightEncoder.getEncPosition() - rightEncoderZero )* Database.RIGHT_ENC_CONSTANT);
+		callMap.put(Value.LEFT_ENCODER_POSITION, () -> -(leftEncoder.getEncPosition() - leftEncoderZero )* Database.LEFT_ENC_CONSTANT);
+		callMap.put(Value.LEFT_ENCODER_VELOCITY, () -> -(leftEncoder.getEncVelocity())* Database.LEFT_ENC_CONSTANT);
 		callMap.put(Value.BREAK_BEAM, () -> breakBeam.get()?1:0);
 		
 		

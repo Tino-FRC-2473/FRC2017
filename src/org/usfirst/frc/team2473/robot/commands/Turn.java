@@ -54,7 +54,7 @@ public class Turn extends Command{
     	double rotate = KP * proportion + KI*integral + KD*derivative;
     	
     	
-    	rotate = Math.signum(rotate)*(Math.abs(rotate) + .58);
+    	rotate = Math.signum(rotate)*(Math.abs(rotate) + .57);
     	
     	if(Math.abs(rotate) > .90){
     		rotate = Math.signum(rotate) * .9;

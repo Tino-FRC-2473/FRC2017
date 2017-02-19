@@ -27,6 +27,11 @@ public class Network extends Command {
 	}
 	@Override
 	protected void end() {
+		System.out.println("CV Values acquired");
+		System.out.println("A = "+ Database.getInstance().getValue(Value.CV_ANGLE_A));
+		System.out.println("Bearing = "+Database.getInstance().getValue(Value.CV_BEARING));
+		System.out.println("Distance = " +Database.getInstance().getValue(Value.CV_DISTANCE));
+		System.out.println("L&R = " + Database.getInstance().getValue(Value.CV_L_OR_R));
 	}
 	
 	@Override
@@ -36,7 +41,6 @@ public class Network extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		System.out.println(Database.getInstance().getValue(Value.CV_TIME_STAMP));
 		return times != Database.getInstance().getValue(Value.CV_TIME_STAMP);
 	}
 	

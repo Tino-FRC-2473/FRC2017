@@ -1,4 +1,3 @@
-
 package org.usfirst.frc.team2473.robot;
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -21,6 +20,9 @@ public class RobotMap {
 	public static final int leftBackMotor = 3;
 	public static final int rightFrontMotor = 4;
 	public static final int rightBackMotor = 5;
+	
+	public static final int ropeClimbMotor_1 = 6;
+	public static final int ropeClimbMotor_2 = 7;
 
 	public static final int gyro = 0;
 	public static final int breakBeam = 0;

@@ -57,8 +57,7 @@ public class SensorThread extends Thread{
 		callMap.put(Value.LEFT_ENCODER_POSITION, () -> -(leftEncoder.getEncPosition() - leftEncoderZero )* Database.LEFT_ENC_CONSTANT);
 		callMap.put(Value.LEFT_ENCODER_VELOCITY, () -> -(leftEncoder.getEncVelocity())* Database.LEFT_ENC_CONSTANT);
 		callMap.put(Value.BREAK_BEAM, () -> breakBeam.get()?1:0);
-		
-		
+			
 		callMap = Collections.unmodifiableMap(callMap);
 		super.setDaemon(true);
 	}

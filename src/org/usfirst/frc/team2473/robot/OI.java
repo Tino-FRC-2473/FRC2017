@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 
 import org.usfirst.frc.team2473.robot.Database.ButtonName;
 import org.usfirst.frc.team2473.robot.Database.Value;
+import org.usfirst.frc.team2473.robot.commands.Climb;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -68,6 +69,10 @@ public class OI {
 		buttonCallMap = new HashMap<>();
 
 		// add the button calls here
+		buttonCallMap.put(Database.ButtonName.CLIMBER_SPEED_TOGGLE, () -> getThrottle().getRawButton(6));		//3 is a placeholder value for the Climber Speed Toggle Button
+		buttonCallMap.put(Database.ButtonName.START_CLIMBER, () -> getThrottle().getRawButton(5));
+		buttonCallMap.put(Database.ButtonName.STOP_CLIMBER, () -> getThrottle().getRawButton(7));
+		buttonCallMap.put(Database.ButtonName.CLIMBER_1_SEC, () -> getThrottle().getRawButton(2));
 		
 		//EXAMPLE:
 		//buttonCallMap.put(ButtonName.SAMPLE, () -> getThrottle().getRawButton(0));
@@ -84,6 +89,8 @@ public class OI {
 
 		// Database.getInstance().getButton(ButtonName.TRIGGER).whenActive(new
 		// ButtonTest());
+		
+		Database.getInstance().getButton(ButtonName.START_CLIMBER).whenPressed(new Climb());
 	}
 
 	public Joystick getThrottle() {

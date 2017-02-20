@@ -20,7 +20,7 @@ public class Networking extends Thread {
 	private BufferedReader stdIn = null;
 	private OutputStream stdOut = null;
 	private Database d = Database.getInstance();
-	private final static int TIME_OUT = 500;
+	private final static int TIME_OUT = 5;
 	Database.Value[] values = { Database.Value.CV_DISTANCE, Database.Value.CV_ANGLE_A, Database.Value.CV_BEARING,
 			Database.Value.CV_L_OR_R, Database.Value.CV_TIME_STAMP };
 

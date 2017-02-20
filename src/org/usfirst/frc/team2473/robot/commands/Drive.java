@@ -13,11 +13,10 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class Drive extends Command {
 
-	public static final double SPEED_TURNING_MULTIPLICATION_CONSTANT = 0.35; //0.3
-	public static final double THRUST_CONSTANT = 1.1;
-	public static final double SPEED_TURNING_ADDING_CONSTANT = 0.70; //0.7
+	public static final double SPEED_TURNING_MULTIPLICATION_CONSTANT = 0.5; //0.3
+	public static final double SPEED_TURNING_ADDING_CONSTANT = 0.50; //0.7
 	public static final double DEADZONE_AREA = 0.04;
-	public static final double MAX_TURN = 0.8;
+	public static final double MAX_TURN = 1;
 	public static final double KP = .075;//.075;
 	public static final double KI = .003;//.003
 	public static final double KD = .05;//.00
@@ -42,7 +41,7 @@ public class Drive extends Command {
     	
     	double throttleZ = Database.getInstance().getValue(Value.THROTTLE_VALUE);
     	double wheelX = Database.getInstance().getValue(Value.WHEEL_TWIST);
-    	double thrust = -sqrtWithSign(throttleZ*.75);
+    	double thrust = -sqrtWithSign(throttleZ);
     	
     	if(Math.abs(wheelX) < DEADZONE_AREA && Math.abs(thrust) > .05)
     	{
@@ -57,9 +56,8 @@ public class Drive extends Command {
     	else
     	{
     		drivingStraight = false;
-    		Robot.driveTrain.driveArcade(thrust*THRUST_CONSTANT, shapeWheel(-wheelX,throttleZ));
+    		Robot.driveTrain.driveArcade(thrust, shapeWheel(-wheelX,throttleZ));
     	}
-    	System.out.println(Database.getInstance().getValue(Value.GYRO_POSITION));
     	
     }
 
@@ -111,11 +109,10 @@ public class Drive extends Command {
     {
     	double sign = Math.signum(rawIn);
     	double result = rawIn;
-    	rawIn *= .8;
     	
     	if(Math.abs(rawIn) < DEADZONE_AREA) return 0;
     	
-    	result =  (SPEED_TURNING_ADDING_CONSTANT + SPEED_TURNING_MULTIPLICATION_CONSTANT * Math.abs(speed)/2) * Math.abs(sqrtWithSign(rawIn)) + (1 - Math.abs(speed)/2) * SPEED_TURNING_MULTIPLICATION_CONSTANT;
+    	result =  (SPEED_TURNING_ADDING_CONSTANT + SPEED_TURNING_MULTIPLICATION_CONSTANT * Math.abs(speed)/2) * Math.abs(sqrtWithSign(rawIn)) + ((1 - Math.abs(speed)/2)) * SPEED_TURNING_MULTIPLICATION_CONSTANT;
     	
     	
     	if(result > MAX_TURN) result = MAX_TURN;

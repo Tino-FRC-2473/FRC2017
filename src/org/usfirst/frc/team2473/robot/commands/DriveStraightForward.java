@@ -247,7 +247,7 @@ public class DriveStraightForward extends Command{
     	double derivativeRotate = proportionRotate - lastProportionRotate;
     	double rotate = KPRotate * proportionRotate + KIRotate*integralRotate + KDRotate*derivativeRotate;
     	
-    	double proportionForward = (distance - Database.getInstance().getValue(Value.LEFT_ENCODER))/distance;
+    	double proportionForward = (distance - Database.getInstance().getValue(Value.LEFT_ENCODER))/Math.abs(distance);
     	integralForward += proportionForward;
     	double derivativeForward = proportionForward - lastProportionForward;
     	double speed = KPForward * proportionForward + KIForward*integralForward + KDForward*derivativeForward;

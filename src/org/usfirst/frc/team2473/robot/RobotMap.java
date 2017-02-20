@@ -25,6 +25,8 @@ public class RobotMap {
 	public static final int gyro = 0;
 	public static final int breakBeam = 0;
 
+	public static final int firstSwitch = 1;
+	
 
 	
 }

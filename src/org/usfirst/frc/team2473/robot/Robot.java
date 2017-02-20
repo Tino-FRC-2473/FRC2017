@@ -3,10 +3,9 @@ package org.usfirst.frc.team2473.robot;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.usfirst.frc.team2473.robot.Database.Value;
+import org.usfirst.frc.team2473.robot.commands.BackupAuto;
 import org.usfirst.frc.team2473.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team2473.robot.commands.AutoAlign;
-import org.usfirst.frc.team2473.robot.commands.Network;
+
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -73,7 +72,7 @@ public class Robot extends IterativeRobot{
 		//autonomousCommand = new DriveStraightForward(Double.parseDouble(SmartDashboard.getString("Auto Selector",
 		//		 "10")));
 		
-		autonomousCommand = new AutoAlign();
+		autonomousCommand = new BackupAuto();
 		
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -171,6 +170,9 @@ public class Robot extends IterativeRobot{
 	public void finalize() {
 		try {
 			super.finalize();
+			sensorThread.kill();
+			robotControlLoop.cancel();
+			robotControlLoop.purge();
 		} catch (Throwable e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

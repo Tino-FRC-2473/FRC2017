@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class Climb extends Command {
 
+	public static boolean ratchetCorrect;
+	
 	private boolean climbingRope;		//speed toggle boolean, when true, run at fast speed, else, slow speed
 	private boolean finished;			//when to stop the command
 	private boolean lastPress;			//boolean tracking last speed toggle button press

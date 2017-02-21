@@ -192,7 +192,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveStraightForward extends Command{
 	private double distance;
 	private DoubleSupplier distanceSupplier;
-	private static final double KPRotate = .2;
+	private static final double KPRotate = .18;
 	private static final double KIRotate = .005;
 	private static final double KDRotate = 0;
 	

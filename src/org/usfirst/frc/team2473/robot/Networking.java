@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,6 +21,7 @@ public class Networking extends Thread {
 	private BufferedReader stdIn = null;
 	private OutputStream stdOut = null;
 	private Database d = Database.getInstance();
+	public boolean ended = false;
 	private final static int TIME_OUT = 5;
 	Database.Value[] values = { Database.Value.CV_DISTANCE, Database.Value.CV_ANGLE_A, Database.Value.CV_BEARING,
 			Database.Value.CV_L_OR_R, Database.Value.CV_TIME_STAMP };
@@ -84,6 +86,26 @@ public class Networking extends Thread {
 			}
 		} catch (Exception e) {
 			
+		}
+	}
+	public void connect(){
+		if(ended){
+			try {
+				s = new Socket(HOST, PORT);
+			}catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		ended = false;
+	}
+	public void end(){
+		ended = true;
+		try {
+			s.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

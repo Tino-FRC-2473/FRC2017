@@ -9,6 +9,7 @@ import org.usfirst.frc.team2473.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2473.robot.commands.AutoAlign;
 import org.usfirst.frc.team2473.robot.commands.DriveStraightForward;
 import org.usfirst.frc.team2473.robot.commands.Network;
+import org.usfirst.frc.team2473.robot.commands.RightAuto;
 import org.usfirst.frc.team2473.robot.commands.Turn;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
@@ -57,15 +58,15 @@ public class Robot extends IterativeRobot{
 		
 		sensorThread = new SensorThread(5);
 		sensorThread.start();
-		//networking = Networking.getInstance();
-		//networking.start();
+		networking = Networking.getInstance();
+		networking.start();
 		d = Database.getInstance();
 		robotControlLoop = new Timer(false);
 		timerRunning = false;
 		
 		CameraServer server = CameraServer.getInstance();
-		server.startAutomaticCapture("router side", 0);
-		server.startAutomaticCapture("climber side", 1);
+		server.startAutomaticCapture("Gear Side", 0);
+		server.startAutomaticCapture("Climber Side", 1);
 		
 		SmartDashboard.putData(driveTrain);
 		SmartDashboard.putData(climbSystem);
@@ -87,8 +88,10 @@ public class Robot extends IterativeRobot{
 		//autonomousCommand = new Turn(Double.parseDouble(SmartDashboard.getString("Auto Selector",
 		//		 "10")));
 		led.set(Relay.Value.kForward);
+	//	synchronized(networking){
+		//	networking.connect();
+	//	}
 		autonomousCommand = new AutoAlign();
-		
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
 		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -100,6 +103,7 @@ public class Robot extends IterativeRobot{
 		if (autonomousCommand != null){
 			autonomousCommand.start();
 		}
+		
 	}
 
 	/**
@@ -164,6 +168,9 @@ public class Robot extends IterativeRobot{
 	public void disabledInit(){
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
+//		synchronized(networking){
+	//		networking.end();
+		//}
 	}
 	
 	@Override

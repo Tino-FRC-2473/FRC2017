@@ -20,11 +20,11 @@ public class AutoAlign extends CommandGroup {
     	
     	addSequential(new Network());
     	addSequential(new Turn(turnOne));
-    	addSequential(new TimedCommand(1));
+    	addSequential(new TimedCommand(.2));
     	addSequential(new DriveStraightForward(distanceOne));
-    	addSequential(new TimedCommand(1));
+    	addSequential(new TimedCommand(.2));
     	addSequential(new Turn(turnTwo));
-    	addSequential(new TimedCommand(1));
+    	addSequential(new TimedCommand(.2));
     	addSequential(new DriveStraightForward(distanceTwo));
     }
 }

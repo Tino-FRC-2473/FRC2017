@@ -60,7 +60,11 @@ public class Climb extends Command {
 	@Override
 	protected void execute() {
 		super.execute();
-		
+		if(!ratchetCorrect){
+			finished = true;
+			System.out.println("ERROR: Ratchet not correct, stopping...");
+			return;
+		}
 		//Prints out current, average current, and encoder value
 		//String logMessage = String.format("Cur: %.3f, Avg: %.3f, Enc: %.3f  |||  ", Robot.climbSystem.getCurrent(), getCurrentAverage(), Robot.climbSystem.getEncValue());
 		//System.out.println(logMessage);
@@ -80,11 +84,6 @@ public class Climb extends Command {
 		
 		if(currentList.size() > numValues){
 			currentList.remove(0);
-		}
-		
-		//UNUSED, WIP
-		if (Database.getInstance().getButton(Database.ButtonName.CLIMBER_1_SEC).get()) {
-			time = System.currentTimeMillis();
 		}
 
 		//Toggle speed code

@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 import org.usfirst.frc.team2473.robot.Database;
 import org.usfirst.frc.team2473.robot.Robot;
+import org.usfirst.frc.team2473.robot.commands.Climb;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class Climb2 extends Command {
+public class ClimbPreCheck extends Command {
 
 	private int numValues;
 	
@@ -16,7 +17,7 @@ public class Climb2 extends Command {
 	private ArrayList<Double> currentList;
 	
     public ClimbPreCheck() {
-       requires(Robot.climbSystem)
+       requires(Robot.climbSystem);
     }
 
     // Called just before this Command runs the first time
@@ -32,7 +33,7 @@ public class Climb2 extends Command {
     protected void execute() {
     	currentList.add(Robot.climbSystem.getCurrent());
     	
-    	if(currentList.size() == numValues){
+    	if(currentList.size() >= numValues){
     		double sum = 0;
     		for(int i=0; i<numValues; i++){
     			sum += currentList.get(i);
@@ -54,6 +55,7 @@ public class Climb2 extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	Robot.climbSystem.climb(0);
+    	System.out.println("Ratchet Correct: " + Climb.ratchetCorrect);
     }
 
     // Called when another command which requires one or more of the same

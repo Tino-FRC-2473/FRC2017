@@ -23,11 +23,14 @@ public class RobotMap {
 	
 	public static final int ropeClimbMotor_1 = 6;
 	public static final int ropeClimbMotor_2 = 7;
+	
+	public static final int activeGearMotor = 8;
 
 	public static final int gyro = 0;
 	public static final int breakBeam = 0;
-
-
+	public static final int AGFrontLS = 1;
+	public static final int AGBackLS = 2;
+	public static final int AGHallEffect = 3;
 	
 }
 

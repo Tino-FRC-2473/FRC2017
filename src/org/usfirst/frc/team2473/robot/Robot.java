@@ -4,9 +4,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.usfirst.frc.team2473.robot.Database.Value;
+import org.usfirst.frc.team2473.robot.subsystems.ActiveGearSystem;
 import org.usfirst.frc.team2473.robot.subsystems.ClimberSystem;
 import org.usfirst.frc.team2473.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2473.robot.commands.AutoAlign;
+import org.usfirst.frc.team2473.robot.commands.ClimbPreCheck;
 import org.usfirst.frc.team2473.robot.commands.DriveStraightForward;
 import org.usfirst.frc.team2473.robot.commands.Network;
 import org.usfirst.frc.team2473.robot.commands.RightAuto;
@@ -34,6 +36,7 @@ public class Robot extends IterativeRobot{
 
 	public static DriveTrain driveTrain;
 	public static ClimberSystem climbSystem;
+	public static ActiveGearSystem AGSystem;
 	public static Command auto;
 	public static OI oi;
 	public static AnalogGyro gyro;
@@ -52,6 +55,7 @@ public class Robot extends IterativeRobot{
 	public void robotInit() {
 		driveTrain = new DriveTrain();
 		climbSystem = new ClimberSystem();
+		AGSystem = new ActiveGearSystem();
 		gyro = new AnalogGyro(RobotMap.gyro);
 		led = new Relay(0);
 		oi = new OI();
@@ -128,6 +132,7 @@ public class Robot extends IterativeRobot{
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
+		new ClimbPreCheck();
 	}
 
 	/**

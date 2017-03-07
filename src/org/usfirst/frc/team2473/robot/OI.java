@@ -72,7 +72,10 @@ public class OI {
 		buttonCallMap.put(Database.ButtonName.CLIMBER_SPEED_TOGGLE, () -> getThrottle().getRawButton(6));		//3 is a placeholder value for the Climber Speed Toggle Button
 		buttonCallMap.put(Database.ButtonName.START_CLIMBER, () -> getThrottle().getRawButton(5));
 		buttonCallMap.put(Database.ButtonName.STOP_CLIMBER, () -> getThrottle().getRawButton(7));
-		buttonCallMap.put(Database.ButtonName.CLIMBER_1_SEC, () -> getThrottle().getRawButton(2));
+		
+		buttonCallMap.put(Database.ButtonName.AGForward, () -> getThrottle().getRawButton(11));
+		buttonCallMap.put(Database.ButtonName.AGBackward, () -> getThrottle().getRawButton(10));
+		buttonCallMap.put(Database.ButtonName.AGHalfway, () -> getThrottle().getRawButton(9));
 		
 		//EXAMPLE:
 		//buttonCallMap.put(ButtonName.SAMPLE, () -> getThrottle().getRawButton(0));

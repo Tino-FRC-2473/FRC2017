@@ -11,8 +11,13 @@ public class RightAuto extends CommandGroup {
 
     public RightAuto() {
     	
-    	addSequential(new DriveStraightForward(78));
-    	addSequential(new Turn(-70));
+    	addSequential(new DriveStraightForward(50));
+    	addSequential(new Turn(-60));
+    	addSequential(new DriveStraightForward(-10));
     	addSequential(new AutoAlign());
+    	addSequential(new WaitForBreak());
+    	addSequential(new DriveStraightForward(-60));
+    	addSequential(new Turn(40));
+    	addSequential(new DriveStraightForward(50));
     }
 }

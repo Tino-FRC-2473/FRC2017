@@ -9,7 +9,7 @@ public class MathUtil {
 	public static double getTurnOne(){
 		boolean cameraOnLeft = Database.getInstance().getValue(Value.CV_L_OR_R) == 1;
 		double cameraBearing = Database.getInstance().getValue(Value.CV_BEARING);
-		double cameraA = 90-Database.getInstance().getValue(Value.CV_ANGLE_A);
+		double cameraA = Database.getInstance().getValue(Value.CV_ANGLE_A);
 		double cameraToLiftDistance = Database.getInstance().getValue(Value.CV_DISTANCE);
 		double cameraToCenterAngle = 68.12;
 		double cameraToCenterDistance = 14.22;
@@ -35,13 +35,13 @@ public class MathUtil {
     	double centerB = Math.toDegrees(Math.toRadians(centerA) - cameraA + cameraB);
     	
     	return (robotOnLeft)?90+centerA-centerB:centerB-90-centerA;
-    	//return ((robotOnLeft)?90+centerA-centerB:centerB-90-centerA)/2;
+    	
 	}
 	
 	public static double getTurnTwo(){
 		boolean cameraOnLeft = Database.getInstance().getValue(Value.CV_L_OR_R) == 1;
 		double cameraBearing = Database.getInstance().getValue(Value.CV_BEARING);
-		double cameraA = 90-Database.getInstance().getValue(Value.CV_ANGLE_A);
+		double cameraA = Database.getInstance().getValue(Value.CV_ANGLE_A);
 		double cameraToLiftDistance = Database.getInstance().getValue(Value.CV_DISTANCE);
 		double cameraToCenterAngle = 68.12;
 		double cameraToCenterDistance = 14.22;
@@ -68,14 +68,46 @@ public class MathUtil {
     	
 		
 		return (robotOnLeft)?-90:90;
-		//return (robotOnLeft)?-90-((robotOnLeft)?90+centerA-centerB:centerB-90-centerA)/2:90+((robotOnLeft)?90+centerA-centerB:centerB-90-centerA)/2;
+		
+	}
+	
+	public static double getTurnThree(){
+		boolean cameraOnLeft = Database.getInstance().getValue(Value.CV_L_OR_R) == 1;
+		double cameraBearing = Database.getInstance().getValue(Value.CV_BEARING);
+		double cameraA = Database.getInstance().getValue(Value.CV_ANGLE_A);
+		double cameraToLiftDistance = Database.getInstance().getValue(Value.CV_DISTANCE);
+		double cameraToCenterAngle = 68.12;
+		double cameraToCenterDistance = 14.22;
+		double cameraB = (cameraOnLeft)?90 - cameraBearing: 90 + cameraBearing;
+    	cameraA = Math.toRadians(cameraA);
+    	cameraB = Math.toRadians(cameraB);
+    	cameraToCenterAngle = Math.toRadians(cameraToCenterAngle);
+    	
+    	double distanceX;
+    	double distanceY;
+    	
+    	if(cameraOnLeft){
+    		distanceX = -cameraToLiftDistance*Math.cos(cameraA) + cameraToCenterDistance*Math.cos(cameraA - cameraB - cameraToCenterAngle);
+    		distanceY = -cameraToLiftDistance*Math.sin(cameraA) + cameraToCenterDistance*Math.sin(cameraA - cameraB - cameraToCenterAngle);
+    	}else{
+    		distanceX = cameraToLiftDistance*Math.cos(cameraA) + cameraToCenterDistance*Math.cos(cameraB - cameraA - cameraToCenterAngle);
+    		distanceY = -cameraToLiftDistance*Math.sin(cameraA) + cameraToCenterDistance*Math.sin(cameraB - cameraA - cameraToCenterAngle);
+    	}
+    	
+    	boolean robotOnLeft = distanceX < 0;
+    	double centerToLiftDistance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
+    	double centerA = Math.toDegrees(Math.abs(Math.atan(distanceY/distanceX)));
+    	double centerB = Math.toDegrees(Math.toRadians(centerA) - cameraA + cameraB);
+    	
+		
+		return (robotOnLeft)?90 - centerB:centerB - 90;
 		
 	}
 	
 	public static double getDistanceOne(){
 		boolean cameraOnLeft = Database.getInstance().getValue(Value.CV_L_OR_R) == 1;
 		double cameraBearing = Database.getInstance().getValue(Value.CV_BEARING);
-		double cameraA = 90-Database.getInstance().getValue(Value.CV_ANGLE_A);
+		double cameraA = Database.getInstance().getValue(Value.CV_ANGLE_A);
 		double cameraToLiftDistance = Database.getInstance().getValue(Value.CV_DISTANCE);
 		double cameraToCenterAngle = 68.12;
 		double cameraToCenterDistance = 14.22;
@@ -100,14 +132,13 @@ public class MathUtil {
     	double centerA = Math.toDegrees(Math.abs(Math.atan(distanceY/distanceX)));
     	double centerB = Math.toDegrees(Math.toRadians(centerA) - cameraA + cameraB);
     	
-    	return centerToLiftDistance*Math.cos(Math.toRadians(centerA));
-    	//return centerToLiftDistance*Math.cos(Math.toRadians(centerA))/Math.cos(Math.toRadians(((robotOnLeft)?90+centerA-centerB:centerB-90-centerA)/2));
+    	return centerToLiftDistance*Math.cos(Math.toRadians(centerA));//return centerToLiftDistance*Math.cos(Math.toRadians(centerA))/Math.cos(Math.toRadians(((robotOnLeft)?90+centerA-centerB:centerB-90-centerA)/2));
 	}
 	
 	public static double getDistanceTwo(){
 		boolean cameraOnLeft = Database.getInstance().getValue(Value.CV_L_OR_R) == 1;
 		double cameraBearing = Database.getInstance().getValue(Value.CV_BEARING);
-		double cameraA = 90-Database.getInstance().getValue(Value.CV_ANGLE_A);
+		double cameraA = Database.getInstance().getValue(Value.CV_ANGLE_A);
 		double cameraToLiftDistance = Database.getInstance().getValue(Value.CV_DISTANCE);
 		double cameraToCenterAngle = 68.12;
 		double cameraToCenterDistance = 14.22;
@@ -132,8 +163,7 @@ public class MathUtil {
     	double centerA = Math.toDegrees(Math.abs(Math.atan(distanceY/distanceX)));
     	double centerB = Math.toDegrees(Math.toRadians(centerA) - cameraA + cameraB);
     	
-    	return centerToLiftDistance*Math.sin(Math.toRadians(centerA)) - 12;
-    	//return (centerToLiftDistance*Math.sin(Math.toRadians(centerA)) - 12)-centerToLiftDistance*Math.cos(Math.toRadians(centerA))*Math.tan(Math.toRadians(((robotOnLeft)?90+centerA-centerB:centerB-90-centerA)/2));
+    	return centerToLiftDistance*Math.sin(Math.toRadians(centerA));
     	
 	}
 	

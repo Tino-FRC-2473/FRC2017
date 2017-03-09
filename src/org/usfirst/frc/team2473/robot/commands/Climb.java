@@ -3,6 +3,7 @@ package org.usfirst.frc.team2473.robot.commands;
 import java.util.ArrayList;
 
 import org.usfirst.frc.team2473.robot.Database;
+import org.usfirst.frc.team2473.robot.Database.Value;
 import org.usfirst.frc.team2473.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -17,6 +18,7 @@ public class Climb extends Command {
 	private boolean climbingRope;		//speed toggle boolean, when true, run at fast speed, else, slow speed
 	private boolean finished;			//when to stop the command
 	private boolean lastPress;			//boolean tracking last speed toggle button press
+	private boolean ratchetCorrect;
 	
 	private double slowSpeed;			//default/starting speed (percent)
 	private double fastSpeed;			//fast/toggled speed (percent)
@@ -39,12 +41,20 @@ public class Climb extends Command {
 	protected void initialize() {
 		super.initialize();
 		
+//		Robot.climbSystem.climb(0.3);
+//		if(Robot.climbSystem.getCurrent() > 6){
+//			ratchetCorrect = false;
+//		}else{
+//			Robot.climbSystem.climb(0);
+//			ratchetCorrect = true;
+//		}
+		
 		climbingRope = false;
 		finished = false;
 		lastPress = false;
 		
-		slowSpeed = 0.40;
-		fastSpeed = 1.0;
+		slowSpeed = 0.30;
+		fastSpeed = .8;
 		encoderValue = Double.MAX_VALUE;
 		
 		numValues = 20;
@@ -62,12 +72,13 @@ public class Climb extends Command {
 		super.execute();
 		
 		//Prints out current, average current, and encoder value
-		//String logMessage = String.format("Cur: %.3f, Avg: %.3f, Enc: %.3f  |||  ", Robot.climbSystem.getCurrent(), getCurrentAverage(), Robot.climbSystem.getEncValue());
+		String logMessage = String.format("%.3f, %.3f, %.3f", Robot.climbSystem.getCurrent(), getCurrentAverage(), Robot.climbSystem.getEncValue());
 		//System.out.println(logMessage);
+		Robot.climbSystem.log(logMessage);
 		
 		System.out.println(Robot.climbSystem.getCurrent());
 		//Checking current and if hit threshold.
-		if(getCurrentAverage() > 19) {
+		if(getCurrentAverage() > 40) {
 			System.out.println("Hitting top");
 			finished = true;
 		}else if(getCurrentAverage() > 2){
@@ -126,9 +137,10 @@ public class Climb extends Command {
 	}
 
 	@Override
-	protected void end() {
+	protected void end(){ 
 		super.end();
 		Robot.climbSystem.climb(0);
+		Robot.climbSystem.close();
 		finished = false;
 	}
 

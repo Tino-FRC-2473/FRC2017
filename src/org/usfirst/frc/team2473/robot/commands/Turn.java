@@ -12,7 +12,7 @@ public class Turn extends Command{
 	private double bearing;
 	private DoubleSupplier bearingSupplier;
 	
-	private static final double KP = .30;
+	private static final double KP = .35;
 	private static final double KI = 0;//.002;
 	private static final double KD = 0;
 	
@@ -48,12 +48,12 @@ public class Turn extends Command{
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	double proportion = ((Database.getInstance().getValue(Value.GYRO_POSITION) - startingGyroValue) - bearing)/Math.abs(bearing);
+    	double proportion = ((Database.getInstance().getValue(Value.GYRO_POSITION) - startingGyroValue) - bearing)/(Math.abs(bearing)+8);
     	integral += proportion;
     	double derivative = proportion - lastProportion;
     	double rotate = KP * proportion + KI*integral + KD*derivative;
     	
-    	
+    	//Base speed of turning
     	rotate = Math.signum(rotate)*(Math.abs(rotate) + .57);
     	
     	if(Math.abs(rotate) > .90){
@@ -66,7 +66,7 @@ public class Turn extends Command{
     }
 
 	protected boolean isFinished() {
-		return Math.abs(Database.getInstance().getValue(Value.GYRO_POSITION) - startingGyroValue - bearing) < 3 && Math.abs(Database.getInstance().getValue(Value.GYRO_VELOCITY)) < 40;
+		return Math.abs(Database.getInstance().getValue(Value.GYRO_POSITION) - startingGyroValue - bearing) < 2 && Math.abs(Database.getInstance().getValue(Value.GYRO_VELOCITY)) < 40;
 	}
 	
 	protected void end() {

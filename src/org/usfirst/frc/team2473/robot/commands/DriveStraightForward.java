@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2473.robot.commands;
 
+import java.util.ArrayList;
 import java.util.function.DoubleSupplier;
 
 import org.usfirst.frc.team2473.robot.Database;
@@ -192,11 +193,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveStraightForward extends Command{
 	private double distance;
 	private DoubleSupplier distanceSupplier;
-	private static final double KPRotate = .18;
+	private static final double KPRotate = .20;
 	private static final double KIRotate = .005;
 	private static final double KDRotate = 0;
 	
-	private static final double KPForward = .3;
+	private static final double KPForward = .38;
 	private static final double KIForward = .0;
 	private static final double KDForward = 0;
 	
@@ -206,6 +207,8 @@ public class DriveStraightForward extends Command{
 	
 	private double integralForward;
 	private double lastProportionForward;
+	
+	private ArrayList<Double> pastEncoderVelocities;
 	
 	public DriveStraightForward(double distance){
 		requires(Robot.driveTrain);
@@ -233,6 +236,12 @@ public class DriveStraightForward extends Command{
     	
     	integralForward = 0;
     	lastProportionForward = 0;
+    	
+    	pastEncoderVelocities = new ArrayList<>();
+    	
+    	for(int i = 0; i < 50; i++){
+    		pastEncoderVelocities.add(5.0);
+    	}
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -242,7 +251,7 @@ public class DriveStraightForward extends Command{
     	double derivativeRotate = proportionRotate - lastProportionRotate;
     	double rotate = KPRotate * proportionRotate + KIRotate*integralRotate + KDRotate*derivativeRotate;
     	
-    	double proportionForward = (distance - Database.getInstance().getValue(Value.LEFT_ENCODER_POSITION))/Math.abs(distance);
+    	double proportionForward = (distance - Database.getInstance().getValue(Value.LEFT_ENCODER_POSITION))/(Math.abs(distance)+5);
     	integralForward += proportionForward;
     	double derivativeForward = proportionForward - lastProportionForward;
     	double speed = KPForward * proportionForward + KIForward*integralForward + KDForward*derivativeForward;
@@ -251,10 +260,11 @@ public class DriveStraightForward extends Command{
     		rotate = Math.signum(rotate) * .7;
     	}
     	
-    	speed = Math.signum(speed)*(Math.abs(speed) + .4);
+    	//base speed
+    	speed = Math.signum(speed)*(Math.abs(speed) + .43);
     	
-    	if(Math.abs(speed) > .70){
-    		speed = Math.signum(speed) * .7;
+    	if(Math.abs(speed) > .80){
+    		speed = Math.signum(speed) * .8;
     	}
     	
     	Robot.driveTrain.driveArcade(speed,rotate);
@@ -262,10 +272,13 @@ public class DriveStraightForward extends Command{
     	lastProportionRotate = proportionRotate;
     	lastProportionForward = proportionForward;
     	
+    	pastEncoderVelocities.remove(0);
+    	pastEncoderVelocities.add(Math.abs(Database.getInstance().getValue(Value.LEFT_ENCODER_VELOCITY)));
     }
 
 	protected boolean isFinished() {
-		return Math.abs(Database.getInstance().getValue(Value.LEFT_ENCODER_POSITION) - distance) < 1 && Math.abs(Database.getInstance().getValue(Value.LEFT_ENCODER_VELOCITY)) < .5;
+		return (Math.abs(Database.getInstance().getValue(Value.LEFT_ENCODER_POSITION) - distance) < 1 && Math.abs(Database.getInstance().getValue(Value.LEFT_ENCODER_VELOCITY)) < .4)
+				|| averageEncoderVelocity() < 0.01;
 	}
 	
 	protected void end() {
@@ -276,5 +289,13 @@ public class DriveStraightForward extends Command{
     // subsystems is scheduled to run
     protected void interrupted() {
     	end();
+    }
+    
+    private double averageEncoderVelocity(){
+    	double sum = 0;
+    	for(int i = 0; i < 50; i++){
+    		sum += pastEncoderVelocities.get(i);
+    	}
+    	return sum/50;
     }
 }

@@ -16,15 +16,21 @@ public class AutoAlign extends CommandGroup {
         DoubleSupplier turnOne = () -> MathUtil.getTurnOne();
     	DoubleSupplier distanceOne = () -> MathUtil.getDistanceOne();
     	DoubleSupplier turnTwo = () -> MathUtil.getTurnTwo();
+    	DoubleSupplier turnThree = () -> MathUtil.getTurnThree();
     	DoubleSupplier distanceTwo = () -> MathUtil.getDistanceTwo();
     	
+//    	addSequential(new Network());
+//    	addSequential(new Turn(turnOne));
+//    	addSequential(new TimedCommand(.1));
+//    	addSequential(new DriveStraightForward(distanceOne));
+//    	addSequential(new TimedCommand(.1));
+//    	addSequential(new Turn(turnTwo));
+//    	addSequential(new TimedCommand(.1));
+//    	addSequential(new DriveStraightForward(-12));
     	addSequential(new Network());
-    	addSequential(new Turn(turnOne));
-    	addSequential(new TimedCommand(.2));
-    	addSequential(new DriveStraightForward(distanceOne));
-    	addSequential(new TimedCommand(.2));
-    	addSequential(new Turn(turnTwo));
-    	addSequential(new TimedCommand(.2));
+    	
+    	addSequential(new Turn(turnThree));
+    	addSequential(new TimedCommand(.1));
     	addSequential(new DriveStraightForward(distanceTwo));
     }
 }

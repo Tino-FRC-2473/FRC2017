@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class Drive extends Command {
 
-	public static final double SPEED_TURNING_MULTIPLICATION_CONSTANT = 0.5; //0.3
-	public static final double SPEED_TURNING_ADDING_CONSTANT = 0.50; //0.7
+	public static final double SPEED_TURNING_MULTIPLICATION_CONSTANT = 0.45; //0.3
+	public static final double SPEED_TURNING_ADDING_CONSTANT = 0.55; //0.7
 	public static final double DEADZONE_AREA = 0.04;
 	public static final double MAX_TURN = 1;
 	public static final double KP = .075;//.075;
@@ -41,7 +41,7 @@ public class Drive extends Command {
     	
     	double throttleZ = Database.getInstance().getValue(Value.THROTTLE_VALUE);
     	double wheelX = Database.getInstance().getValue(Value.WHEEL_TWIST);
-    	double thrust = -sqrtWithSign(throttleZ);
+    	double thrust = -sqrtWithSign(throttleZ) * 1.1;
     	
     	if(Math.abs(wheelX) < DEADZONE_AREA && Math.abs(thrust) > .05)
     	{

@@ -1,5 +1,9 @@
 package org.usfirst.frc.team2473.robot.subsystems;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+
 import org.usfirst.frc.team2473.robot.RobotMap;
 
 import com.ctre.CANTalon;
@@ -13,6 +17,8 @@ public class ClimberSystem extends Subsystem {
 	private CANTalon ropeCAN_2;
 
 	private double initEncValue;		//Starting encoder value on climb motor 1
+	
+	private PrintWriter writer;
 
 	public ClimberSystem() {
 		super();
@@ -21,6 +27,12 @@ public class ClimberSystem extends Subsystem {
 		ropeCAN_2 = new CANTalon(RobotMap.ropeClimbMotor_2);
 
 		initEncValue = ropeCAN_1.getEncPosition();
+		
+		try{
+			writer = new PrintWriter(new FileWriter(new File("/home/lvuser/Output_Log.csv"), false));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -42,5 +54,14 @@ public class ClimberSystem extends Subsystem {
 
 	public double getCurrent() {
 		return ropeCAN_1.getOutputCurrent();
+	}
+	
+	public void log(String message){
+		writer.println(message);
+	}
+	
+	public void close(){
+		writer.println();
+		writer.close();
 	}
 }

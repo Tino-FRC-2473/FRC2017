@@ -84,6 +84,7 @@ public class OI {
 		// add joystick calls here
 		joyCallMap.put(Value.WHEEL_TWIST, () -> getWheel().getX());
 		joyCallMap.put(Value.THROTTLE_VALUE, () -> getThrottle().getZ());
+		joyCallMap.put(Value.JOYSTICK_VALUE, () -> getThrottle().getY());
 
 		joyCallMap = Collections.unmodifiableMap(joyCallMap);
 

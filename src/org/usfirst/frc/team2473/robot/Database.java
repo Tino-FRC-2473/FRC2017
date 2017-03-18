@@ -47,7 +47,7 @@ public class Database{
 	 *
 	 */
 	public enum ButtonName {
-		CLIMBER_SPEED_TOGGLE, START_CLIMBER, STOP_CLIMBER, AGForward, AGBackward, AGHalfway;
+		CLIMBER_SPEED_TOGGLE, START_CLIMBER, STOP_CLIMBER, AGForward, AGBackward;
 	}
 
 	/**

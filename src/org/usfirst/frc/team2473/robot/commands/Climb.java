@@ -12,22 +12,20 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class Climb extends Command {
 
-	public static boolean ratchetCorrect;
+	public static boolean ratchetCorrect = true;
 	
 	private boolean climbingRope;		//speed toggle boolean, when true, run at fast speed, else, slow speed
 	private boolean finished;			//when to stop the command
 	private boolean lastPress;			//boolean tracking last speed toggle button press
+	private boolean checkEncoder;		//determines whether or not to check encoder values
+	
 	
 	private double slowSpeed;			//default/starting speed (percent)
 	private double fastSpeed;			//fast/toggled speed (percent)
-	private double encoderValue;		//UNUSED
+	private double speed;
+	private double encoderValue;		//num of encoder ticks to climb up before slowing down
 	
 	private int numValues;		//number of current values to record
-	private int timeLimit;		//UNUSED
-	private int encoderTicks;	//UNUSED; Number of encoder ticks to keep running the motor after hitting the touch pad (ms)
-	
-	private long prevTime;		//UNUSED
-	private long time;			//UNUSED
 	
 	private ArrayList<Double> currentList;		//list of current values to average
 
@@ -42,17 +40,13 @@ public class Climb extends Command {
 		climbingRope = false;
 		finished = false;
 		lastPress = false;
+		checkEncoder = false;
 		
 		slowSpeed = 0.40;
-		fastSpeed = 1.0;
-		encoderValue = Double.MAX_VALUE;
+		fastSpeed = 0.80;
+		encoderValue = 8000;
 		
 		numValues = 20;
-		timeLimit = 250;
-		encoderTicks = 30;
-		
-		prevTime = Long.MAX_VALUE;
-		time = Long.MAX_VALUE;
 		
 		currentList = new ArrayList<Double>();
 	}
@@ -66,16 +60,24 @@ public class Climb extends Command {
 			return;
 		}
 		//Prints out current, average current, and encoder value
-		//String logMessage = String.format("Cur: %.3f, Avg: %.3f, Enc: %.3f  |||  ", Robot.climbSystem.getCurrent(), getCurrentAverage(), Robot.climbSystem.getEncValue());
+		String logMessage = String.format("Cur: %.3f, Avg: %.3f, Enc: %.3f", Robot.climbSystem.getCurrent(), getCurrentAverage(), Robot.climbSystem.getEncValue());
+		System.out.println(logMessage);
+		//Robot.climbSystem.log(logMessage);
 		//System.out.println(logMessage);
 		
-		System.out.println(Robot.climbSystem.getCurrent());
+		//System.out.println(Robot.climbSystem.getCurrent());
+		
 		//Checking current and if hit threshold.
-		if(getCurrentAverage() > 19) {
+		if(getCurrentAverage() > 27) {		//was 19
 			System.out.println("Hitting top");
 			finished = true;
-		}else if(getCurrentAverage() > 2){
+		}else if(getCurrentAverage() > 4){
 			//System.out.println("Climbing rope.");
+			if(!climbingRope){
+				Robot.climbSystem.resetEncoder();
+				checkEncoder = !checkEncoder;
+			}
+			climbingRope = true;
 		}else{
 			//System.out.println("Not climbing");
 		}
@@ -98,10 +100,18 @@ public class Climb extends Command {
 		} else {
 			Robot.climbSystem.climb(fastSpeed);
 		}
-
-		//UNUSED, WIP
-		if (System.currentTimeMillis() - time >= 1000) {
-			finished = true;
+		
+		//Use encoder values to slow down the climber code
+		if(checkEncoder){ 
+			//If robot has climbed *encoderValue* number of ticks
+			if(Robot.climbSystem.getEncValue() >= encoderValue){
+				speed -= .01;
+				if(speed < 0.55){
+					speed = 0.55;
+					checkEncoder = false;
+				}
+				Robot.climbSystem.climb(speed);
+			}
 		}
 		
 		//"Emergency" Stop button, immediately stops the climber.
@@ -112,21 +122,13 @@ public class Climb extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		//TODO Fix condition checking, doesn't work. Time Limit always true.
-		boolean reachedEncoderCount = Robot.climbSystem.getEncValue() - encoderValue >= encoderTicks;
-		boolean reachedTimeLimit = System.currentTimeMillis() - prevTime >= timeLimit;
-		//System.out.println("Time Limit: " + System.currentTimeMillis() + ", " + prevTime);
-		//System.out.println("Finished: " + finished);
-		//System.out.println("Fin: " + finished + ", Enc: " + reachedEncoderCount + ", Time: " + reachedTimeLimit);
-		// System.out.println("is finished: " + (LSPressed &&
-		// (reachedEncoderCount || reachedTimeLimit)));
-		//return (finished || (reachedEncoderCount || reachedTimeLimit));
 		return finished;
 	}
 
 	@Override
 	protected void end() {
 		super.end();
+	//	Robot.climbSystem.close();
 		Robot.climbSystem.climb(0);
 		finished = false;
 	}

@@ -11,6 +11,10 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class ActiveGear extends Command {
 	
+	private boolean prevFrontLSPressed;
+	private boolean prevBackLSPressed;
+	private boolean prevHESPressed;
+	
 	private boolean lookingForHallEffect;
 	
 	/*
@@ -19,6 +23,8 @@ public class ActiveGear extends Command {
 	 */
 	private boolean waitingForVishal;
 	
+	private boolean finished;
+	
 	private double powerMagnitude;
 	
 	/*
@@ -26,28 +32,52 @@ public class ActiveGear extends Command {
 	 * Negative represents moving from back to front limit switch.
 	 */
 	private double direction;
+	
 
     public ActiveGear() {
+    	System.out.println("Creating AG");
     	requires(Robot.AGSystem);
     	
+    	prevFrontLSPressed = false;
+    	prevBackLSPressed = false;
+    	prevHESPressed = false;
     	lookingForHallEffect = false;
     	waitingForVishal = true;
+    	finished = false;
     	
-    	powerMagnitude = 0.2;
-    	direction = 1;
+    	powerMagnitude = 0.1;
+    	direction = 0;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	
+    	System.out.println("Initializing.");
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	//System.out.println("Executing");
+    	//Robot.AGSystem.moveArm(-0.2);
+    	
+//    	if(Robot.AGSystem.getFrontLS()){
+//    		System.out.println("Front LS Pressed.");
+//    	}
+//    	
+//    	if(Robot.AGSystem.getBackLS()){
+//    		System.out.println("Back LS Pressed");
+//    	}
+//    	
+//    	if(Robot.AGSystem.getHallEffect()){
+//    		System.out.println("HES ON");
+//    	}
+    	
+    	
     	if(!Robot.AGSystem.getFrontLS() && Database.getInstance().getButton(Database.ButtonName.AGForward).get()){
     		direction = 1;
+    		System.out.println("Moving forward");
     	}else if(!Robot.AGSystem.getBackLS() && Database.getInstance().getButton(Database.ButtonName.AGBackward).get()){
     		direction = -1;
+    		System.out.println("Moving backward");
     	}else if(!Robot.AGSystem.getHallEffect() && Database.getInstance().getButton(Database.ButtonName.AGHalfway).get()){
     		
     		//If currently pressing front limit switch, move backwards
@@ -68,19 +98,33 @@ public class ActiveGear extends Command {
     		lookingForHallEffect = true;
     	}
     	
+    	if(!prevHESPressed && Robot.AGSystem.getHallEffect()){
+    		System.out.println("Switching vishal.");
+    		waitingForVishal = !waitingForVishal;
+    	}
+    	//System.out.println("Moving at " + direction*powerMagnitude);
     	Robot.AGSystem.moveArm(direction * powerMagnitude);
     	
-    	if(Robot.AGSystem.getFrontLS() || Robot.AGSystem.getBackLS()){
-    		Robot.AGSystem.moveArm(0);
+    	if(!prevFrontLSPressed && Robot.AGSystem.getFrontLS()){
+    		System.out.println("Front LS Pressed");
+    		direction = 0;
+    	}else if(!prevBackLSPressed && Robot.AGSystem.getBackLS()){
+    		System.out.println("Back LS Pressed");
+    		direction = 0;
     	}else if(lookingForHallEffect && Robot.AGSystem.getHallEffect()){
-    		Robot.AGSystem.moveArm(0);
+    		System.out.println("Found hall effect");
+    		direction = 0;
     		lookingForHallEffect = false;
     	}
+    	
+    	prevFrontLSPressed = Robot.AGSystem.getFrontLS();
+    	prevBackLSPressed = Robot.AGSystem.getBackLS();
+    	prevHESPressed = Robot.AGSystem.getHallEffect();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return finished;
     }
 
     // Called once after isFinished returns true

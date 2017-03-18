@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2473.robot.subsystems;
 
 import org.usfirst.frc.team2473.robot.RobotMap;
+import org.usfirst.frc.team2473.robot.commands.ActiveGear;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
@@ -30,7 +31,7 @@ public class ActiveGearSystem extends Subsystem {
 	
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        //setDefaultCommand(new MySpecialCommand());
+        setDefaultCommand(new ActiveGear());
     }
     
     public boolean getFrontLS(){
@@ -42,12 +43,12 @@ public class ActiveGearSystem extends Subsystem {
     }
     
     public boolean getHallEffect(){
-    	return hallEffect.get();
+    	return !hallEffect.get();
     }
     
     public void moveArm(double power){
     	if(Math.abs(power) <= 1.0){
-    		motor.set(power);
+    		motor.set(-power);
     	}else{
     		System.out.println("Warning, invalid input, setting power to 0.");
     		motor.set(0);

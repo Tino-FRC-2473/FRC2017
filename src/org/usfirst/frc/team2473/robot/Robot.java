@@ -3,19 +3,14 @@ package org.usfirst.frc.team2473.robot;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.usfirst.frc.team2473.robot.Database.Value;
+import org.usfirst.frc.team2473.robot.commands.ActiveGear;
+import org.usfirst.frc.team2473.robot.commands.AutoAlign;
+import org.usfirst.frc.team2473.robot.commands.ClimbPreCheck;
 import org.usfirst.frc.team2473.robot.subsystems.ActiveGearSystem;
 import org.usfirst.frc.team2473.robot.subsystems.ClimberSystem;
 import org.usfirst.frc.team2473.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team2473.robot.commands.AutoAlign;
-import org.usfirst.frc.team2473.robot.commands.ClimbPreCheck;
-import org.usfirst.frc.team2473.robot.commands.DriveStraightForward;
-import org.usfirst.frc.team2473.robot.commands.Network;
-import org.usfirst.frc.team2473.robot.commands.RightAuto;
-import org.usfirst.frc.team2473.robot.commands.Turn;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.command.Command;
@@ -63,14 +58,14 @@ public class Robot extends IterativeRobot{
 		sensorThread = new SensorThread(5);
 		sensorThread.start();
 		networking = Networking.getInstance();
-		networking.start();
+		//networking.start();
 		d = Database.getInstance();
 		robotControlLoop = new Timer(false);
 		timerRunning = false;
 		
-		CameraServer server = CameraServer.getInstance();
-		server.startAutomaticCapture("Gear Side", 0);
-		server.startAutomaticCapture("Climber Side", 1);
+//		CameraServer server = CameraServer.getInstance();
+//		server.startAutomaticCapture("Gear Side", 0);
+//		server.startAutomaticCapture("Climber Side", 1);
 		
 		SmartDashboard.putData(driveTrain);
 		SmartDashboard.putData(climbSystem);
@@ -133,13 +128,13 @@ public class Robot extends IterativeRobot{
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
 		new ClimbPreCheck();
+		//new ActiveGear();
 	}
 
 	/**
 	 * This function is called periodically during operator control
 	 */
 	public void teleopPeriodic() {
-
 		//System.out.println(System.currentTimeMillis() - lastTime);
 
 		if (!timerRunning) {

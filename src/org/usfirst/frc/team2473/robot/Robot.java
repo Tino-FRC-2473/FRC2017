@@ -9,6 +9,7 @@ import org.usfirst.frc.team2473.robot.subsystems.ClimberSystem;
 import org.usfirst.frc.team2473.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2473.robot.commands.AutoAlign;
 import org.usfirst.frc.team2473.robot.commands.DriveStraightForward;
+import org.usfirst.frc.team2473.robot.commands.LeftAuto;
 import org.usfirst.frc.team2473.robot.commands.Network;
 import org.usfirst.frc.team2473.robot.commands.RightAuto;
 import org.usfirst.frc.team2473.robot.commands.Turn;
@@ -59,8 +60,8 @@ public class Robot extends IterativeRobot{
 		
 		sensorThread = new SensorThread(5);
 		sensorThread.start();
-//		networking = Networking.getInstance();
-//		networking.start();
+		networking = Networking.getInstance();
+		networking.start();
 		d = Database.getInstance();
 		robotControlLoop = new Timer(false);
 		timerRunning = false;
@@ -89,8 +90,11 @@ public class Robot extends IterativeRobot{
 //		autonomousCommand = new Turn(Double.parseDouble(SmartDashboard.getString("Auto Selector",
 //				 "10")));
 		led.set(Relay.Value.kForward);
-
-		autonomousCommand = new RightAuto();
+		if(Database.getInstance().getValue(Value.SWITCH_ONE) == 1){
+			autonomousCommand = new LeftAuto();
+		}else if(Database.getInstance().getValue(Value.SWITCH_THREE) == 1){
+			autonomousCommand = new RightAuto();
+		}
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
 		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand

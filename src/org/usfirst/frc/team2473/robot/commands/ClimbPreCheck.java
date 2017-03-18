@@ -7,7 +7,7 @@ import org.usfirst.frc.team2473.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class Climb2 extends Command {
+public class ClimbPreCheck extends Command {
 
 	private int numValues;
 	
@@ -16,7 +16,7 @@ public class Climb2 extends Command {
 	private ArrayList<Double> currentList;
 	
     public ClimbPreCheck() {
-       requires(Robot.climbSystem)
+       requires(Robot.climbSystem);
     }
 
     // Called just before this Command runs the first time

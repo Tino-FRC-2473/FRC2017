@@ -9,7 +9,7 @@ public class WaitForBreak extends Command{
 
 	@Override
 	protected boolean isFinished() {
-		return Database.getInstance().getValue(Value.BREAK_BEAM) == 0;
+		return Database.getInstance().getValue(Value.BREAK_BEAM) == 1;
 	}
 
 }

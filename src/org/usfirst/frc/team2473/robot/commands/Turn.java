@@ -12,7 +12,7 @@ public class Turn extends Command{
 	private double bearing;
 	private DoubleSupplier bearingSupplier;
 	
-	private static final double KP = .35;
+	private static final double KP = .30;
 	private static final double KI = 0;//.002;
 	private static final double KD = 0;
 	
@@ -54,7 +54,7 @@ public class Turn extends Command{
     	double rotate = KP * proportion + KI*integral + KD*derivative;
     	
     	//Base speed of turning
-    	rotate = Math.signum(rotate)*(Math.abs(rotate) + .57);
+    	rotate = Math.signum(rotate)*(Math.abs(rotate) + .55);
     	
     	if(Math.abs(rotate) > .90){
     		rotate = Math.signum(rotate) * .9;

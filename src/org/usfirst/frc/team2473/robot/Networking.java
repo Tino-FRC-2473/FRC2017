@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 public class Networking extends Thread {
 	// MUST CHANGE ON COMPETITION DAY
 	private final String HOST = "10.60.38.36";
-	private final int PORT = 5825;
+	private final int PORT = 5817;
 	private final byte[] SEND = "CV()".getBytes(Charset.defaultCharset());
 	private final byte[] END = "end()".getBytes(Charset.defaultCharset());
 	private char[] cbuf = new char[4096];

@@ -18,7 +18,6 @@ public class Climb extends Command {
 	private boolean climbingRope;		//speed toggle boolean, when true, run at fast speed, else, slow speed
 	private boolean finished;			//when to stop the command
 	private boolean lastPress;			//boolean tracking last speed toggle button press
-	private boolean ratchetCorrect;
 	
 	private double slowSpeed;			//default/starting speed (percent)
 	private double fastSpeed;			//fast/toggled speed (percent)

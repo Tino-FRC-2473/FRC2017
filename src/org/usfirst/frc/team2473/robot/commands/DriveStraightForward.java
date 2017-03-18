@@ -193,11 +193,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveStraightForward extends Command{
 	private double distance;
 	private DoubleSupplier distanceSupplier;
-	private static final double KPRotate = .20;
+	private static final double KPRotate = .23;
 	private static final double KIRotate = .005;
 	private static final double KDRotate = 0;
 	
-	private static final double KPForward = .38;
+	private static final double KPForward = .42;
 	private static final double KIForward = .0;
 	private static final double KDForward = 0;
 	
@@ -261,7 +261,7 @@ public class DriveStraightForward extends Command{
     	}
     	
     	//base speed
-    	speed = Math.signum(speed)*(Math.abs(speed) + .43);
+    	speed = Math.signum(speed)*(Math.abs(speed) + .40);
     	
     	if(Math.abs(speed) > .80){
     		speed = Math.signum(speed) * .8;

@@ -35,7 +35,7 @@ public class Database{
 	 */
 	public enum Value {
 
-		GYRO_POSITION, GYRO_VELOCITY, LEFT_ENCODER_POSITION, RIGHT_ENCODER_POSITION, LEFT_ENCODER_VELOCITY, BREAK_BEAM, WHEEL_TWIST, THROTTLE_VALUE, JOYSTICK_VALUE, CV_DISTANCE, CV_ANGLE_A, CV_BEARING, CV_L_OR_R, CV_TIME_STAMP, CV_PI_CONNECTED;// add
+		GYRO_POSITION, GYRO_VELOCITY, LEFT_ENCODER_POSITION, RIGHT_ENCODER_POSITION, LEFT_ENCODER_VELOCITY, BREAK_BEAM, SWITCH_ONE,  SWITCH_TWO,  SWITCH_THREE,  SWITCH_FOUR, WHEEL_TWIST, THROTTLE_VALUE, JOYSTICK_VALUE, CV_DISTANCE, CV_ANGLE_A, CV_BEARING, CV_L_OR_R, CV_TIME_STAMP, CV_PI_CONNECTED;// add
 																																	// button
 	}
 
@@ -152,6 +152,14 @@ public class Database{
 				Database.getInstance().getValue(Value.THROTTLE_VALUE));
 		SmartDashboard.putNumber("Break beam",
 				Database.getInstance().getValue(Value.BREAK_BEAM));
+		SmartDashboard.putNumber("Switch One",
+				Database.getInstance().getValue(Value.SWITCH_ONE));
+		SmartDashboard.putNumber("Switch Two",
+				Database.getInstance().getValue(Value.SWITCH_TWO));
+		SmartDashboard.putNumber("Switch Three",
+				Database.getInstance().getValue(Value.SWITCH_THREE));
+		SmartDashboard.putNumber("Switch Four",
+				Database.getInstance().getValue(Value.SWITCH_FOUR));
 		SmartDashboard.putNumber("PI Connection",
 				Database.getInstance().getValue(Value.CV_PI_CONNECTED));
 

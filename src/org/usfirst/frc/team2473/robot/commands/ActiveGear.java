@@ -74,7 +74,7 @@ public class ActiveGear extends Command {
 		if (!Robot.AGSystem.getFrontLS() && Database.getInstance().getButton(Database.ButtonName.AGForward).get()) {
 			direction = 1;
 			System.out.println("Moving forward");
-		} else if (Robot.AGSystem.getFrontLS() && !Database.getInstance().getButton(Database.ButtonName.AGForward)) {
+		} else if (Robot.AGSystem.getFrontLS() && !Database.getInstance().getButton(Database.ButtonName.AGForward).get()) {
 			// If currently pressing front limit switch, move backwards
 			// Else if currently pressing back limit switch, move forwards
 			// Else, already moving.

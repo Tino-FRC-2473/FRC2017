@@ -13,16 +13,16 @@ import java.util.regex.Pattern;
 
 public class Networking extends Thread {
 	// MUST CHANGE ON COMPETITION DAY
-	private final String HOST = "10.24.73.36";
-	private final int PORT = 5818;
+	private final String HOST = "10.60.38.36";
+	private final int PORT = 5817;
 	private final byte[] SEND = "CV()".getBytes(Charset.defaultCharset());
+	private final byte[] END = "end()".getBytes(Charset.defaultCharset());
 	private char[] cbuf = new char[4096];
 	private Socket s = null;
 	private BufferedReader stdIn = null;
 	private OutputStream stdOut = null;
 	private Database d = Database.getInstance();
-	public boolean ended = false;
-	private final static int TIME_OUT = 5;
+	private final static int TIME_OUT = 3;
 	Database.Value[] values = { Database.Value.CV_DISTANCE, Database.Value.CV_ANGLE_A, Database.Value.CV_BEARING,
 			Database.Value.CV_L_OR_R, Database.Value.CV_TIME_STAMP };
 
@@ -40,13 +40,13 @@ public class Networking extends Thread {
 		int i = 0;
 		boolean b = true;
 		System.out.println("Before first");
-		while(b && i < TIME_OUT){
-			try{
+		while (b && i < TIME_OUT) {
+			try {
 				s = new Socket(HOST, PORT);
 				b = false;
-			}catch(Exception e){
+			} catch (Exception e) {
 				b = true;
-			}finally{
+			} finally {
 				i++;
 			}
 		}
@@ -85,23 +85,14 @@ public class Networking extends Thread {
 				d.setValue(v, Double.parseDouble(matcher.group()));
 			}
 		} catch (Exception e) {
-			
+
 		}
 	}
-	public void connect(){
-		if(ended){
-			try {
-				s = new Socket(HOST, PORT);
-			}catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		ended = false;
-	}
-	public void end(){
-		ended = true;
+
+
+	public void end() {
 		try {
+			stdOut.write(END);
 			s.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

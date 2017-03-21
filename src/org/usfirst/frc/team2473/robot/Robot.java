@@ -1,16 +1,22 @@
 package org.usfirst.frc.team2473.robot;
 
+import java.net.Socket;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.usfirst.frc.team2473.robot.commands.ActiveGear;
-import org.usfirst.frc.team2473.robot.commands.AutoAlign;
-import org.usfirst.frc.team2473.robot.commands.ClimbPreCheck;
+import org.usfirst.frc.team2473.robot.Database.Value;
 import org.usfirst.frc.team2473.robot.subsystems.ActiveGearSystem;
 import org.usfirst.frc.team2473.robot.subsystems.ClimberSystem;
 import org.usfirst.frc.team2473.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team2473.robot.commands.AutoAlign;
+import org.usfirst.frc.team2473.robot.commands.DriveStraightForward;
+import org.usfirst.frc.team2473.robot.commands.LeftAuto;
+import org.usfirst.frc.team2473.robot.commands.Network;
+import org.usfirst.frc.team2473.robot.commands.RightAuto;
+import org.usfirst.frc.team2473.robot.commands.Turn;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.command.Command;
@@ -58,14 +64,14 @@ public class Robot extends IterativeRobot{
 		sensorThread = new SensorThread(5);
 		sensorThread.start();
 		networking = Networking.getInstance();
-		//networking.start();
+		networking.start();
 		d = Database.getInstance();
 		robotControlLoop = new Timer(false);
 		timerRunning = false;
 		
-//		CameraServer server = CameraServer.getInstance();
-//		server.startAutomaticCapture("Gear Side", 0);
-//		server.startAutomaticCapture("Climber Side", 1);
+		CameraServer server = CameraServer.getInstance();
+		server.startAutomaticCapture("Gear Side", 0);
+		server.startAutomaticCapture("Climber Side", 1);
 		
 		SmartDashboard.putData(driveTrain);
 		SmartDashboard.putData(climbSystem);
@@ -84,13 +90,14 @@ public class Robot extends IterativeRobot{
 	 */
 	public void autonomousInit() {
 		
-		//autonomousCommand = new Turn(Double.parseDouble(SmartDashboard.getString("Auto Selector",
-		//		 "10")));
+//		autonomousCommand = new Turn(Double.parseDouble(SmartDashboard.getString("Auto Selector",
+//				 "10")));
 		led.set(Relay.Value.kForward);
-	//	synchronized(networking){
-		//	networking.connect();
-	//	}
-		autonomousCommand = new AutoAlign();
+		if(Database.getInstance().getValue(Value.SWITCH_ONE) == 1){
+			autonomousCommand = new LeftAuto();
+		}else if(Database.getInstance().getValue(Value.SWITCH_THREE) == 1){
+			autonomousCommand = new RightAuto();
+		}
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
 		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -127,14 +134,15 @@ public class Robot extends IterativeRobot{
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		new ClimbPreCheck();
-		//new ActiveGear();
+		led.set(Relay.Value.kForward);
+		
 	}
 
 	/**
 	 * This function is called periodically during operator control
 	 */
 	public void teleopPeriodic() {
+
 		//System.out.println(System.currentTimeMillis() - lastTime);
 
 		if (!timerRunning) {
@@ -161,16 +169,20 @@ public class Robot extends IterativeRobot{
 	/**
 	 * This function is called periodically during test mode
 	 */
-	public void testPeriodic() {
+	@Override
+	public void testInit() {
+		led.set(Relay.Value.kForward);
 	}
 	
 	@Override
 	public void disabledInit(){
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
+		
+		led.set(Relay.Value.kOff);
 //		synchronized(networking){
-	//		networking.end();
-		//}
+//			networking.end();
+//		}
 	}
 	
 	@Override
@@ -192,6 +204,7 @@ public class Robot extends IterativeRobot{
 	public void finalize() {
 		try {
 			super.finalize();
+			networking.end();
 		} catch (Throwable e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

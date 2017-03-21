@@ -1,5 +1,9 @@
 package org.usfirst.frc.team2473.robot.subsystems;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+
 import org.usfirst.frc.team2473.robot.RobotMap;
 
 import com.ctre.CANTalon;
@@ -87,5 +91,4 @@ public class ClimberSystem extends Subsystem {
 		}
 	}
 	*/
-	
 }

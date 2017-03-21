@@ -60,8 +60,8 @@ public class Robot extends IterativeRobot{
 		
 		sensorThread = new SensorThread(5);
 		sensorThread.start();
-		networking = Networking.getInstance();
-		networking.start();
+//		networking = Networking.getInstance();
+//		networking.start();
 		d = Database.getInstance();
 		robotControlLoop = new Timer(false);
 		timerRunning = false;
@@ -131,7 +131,7 @@ public class Robot extends IterativeRobot{
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		led.set(Relay.Value.kForward);
+		//led.set(Relay.Value.kForward);
 		
 	}
 

@@ -11,15 +11,19 @@ public class LeftAuto extends CommandGroup {
 
     public LeftAuto() {
     	
-    	addSequential(new DriveStraightForward(37));
-    	addSequential(new Turn(52));
-    	addSequential(new AutoAlign());
-    	addSequential(new WaitForBreak());
-    	addSequential(new TimedCommand(1));
-    	addSequential(new DriveForwardWithoutPid(-55));
+    	addSequential(new DriveStraightForward(97));
     	addSequential(new TimedCommand(.2));
-    	addSequential(new Turn(-40));
+    	addSequential(new Turn(60));
     	addSequential(new TimedCommand(.2));
-    	addSequential(new DriveForwardWithoutPid(85));
+    	addSequential(new DriveStraightForward(-4));
+    	addSequential(new AutoAlignCenter());
+//    	addSequential(new WaitForBreak());
+//    	addSequential(new TimedCommand(1.5));
+//    	addSequential(new DriveForwardWithoutPid(-55));
+//    	addSequential(new TimedCommand(.2));
+//    	addSequential(new Turn(-40));
+//    	addSequential(new TimedCommand(.2));
+//    	addSequential(new DriveForwardWithoutPid(85));
     }
+    
 }

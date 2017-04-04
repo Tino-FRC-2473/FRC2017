@@ -53,7 +53,7 @@ public class Climb extends Command {
 		lastPress = false;
 		
 		slowSpeed = 0.30;
-		fastSpeed = .8;
+		fastSpeed = .85;
 		encoderValue = Double.MAX_VALUE;
 		
 		numValues = 20;
@@ -77,7 +77,7 @@ public class Climb extends Command {
 		
 		System.out.println(Robot.climbSystem.getCurrent());
 		//Checking current and if hit threshold.
-		if(getCurrentAverage() > 40) {
+		if(getCurrentAverage() > 42) {
 			System.out.println("Hitting top");
 			finished = true;
 		}else if(getCurrentAverage() > 2){

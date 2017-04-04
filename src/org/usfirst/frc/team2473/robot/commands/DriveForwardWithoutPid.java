@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveForwardWithoutPid extends Command{
 	private double distance;
-	private static final double KPRotate = .23;
-	private static final double KIRotate = .005;
+	private static final double KPRotate = .07;
+	private static final double KIRotate = .003;
 	private static final double KDRotate = 0;
 	
 	private double startingGyroValue;

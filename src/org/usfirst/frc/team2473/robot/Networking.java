@@ -13,8 +13,8 @@ import java.util.regex.Pattern;
 
 public class Networking extends Thread {
 	// MUST CHANGE ON COMPETITION DAY
-	private final String HOST = "10.60.38.36";
-	private final int PORT = 5817;
+	private final String HOST = "10.24.73.10";
+	private final int PORT = 5807;
 	private final byte[] SEND = "CV()".getBytes(Charset.defaultCharset());
 	private final byte[] END = "end()".getBytes(Charset.defaultCharset());
 	private char[] cbuf = new char[4096];
@@ -22,9 +22,9 @@ public class Networking extends Thread {
 	private BufferedReader stdIn = null;
 	private OutputStream stdOut = null;
 	private Database d = Database.getInstance();
-	private final static int TIME_OUT = 3;
+	private final static int TIME_OUT = 200;
 	Database.Value[] values = { Database.Value.CV_DISTANCE, Database.Value.CV_ANGLE_A, Database.Value.CV_BEARING,
-			Database.Value.CV_L_OR_R, Database.Value.CV_TIME_STAMP };
+			Database.Value.CV_L_OR_R, Database.Value.CV_TIME_STAMP};
 
 	static Networking instance;
 
@@ -45,6 +45,7 @@ public class Networking extends Thread {
 				s = new Socket(HOST, PORT);
 				b = false;
 			} catch (Exception e) {
+				System.out.println(i);
 				b = true;
 			} finally {
 				i++;
@@ -55,6 +56,9 @@ public class Networking extends Thread {
 			stdIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			stdOut = s.getOutputStream();
 		} catch (IOException e) {
+			System.out.println("STDIN FAILED");
+			d.setValue(Database.Value.CV_PI_CONNECTED, 1);
+		} catch (NullPointerException e) {
 			System.out.println("STDIN FAILED");
 			d.setValue(Database.Value.CV_PI_CONNECTED, 1);
 		}

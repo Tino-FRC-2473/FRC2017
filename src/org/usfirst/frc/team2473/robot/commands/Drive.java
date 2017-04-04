@@ -13,11 +13,11 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class Drive extends Command {
 
-	public static final double SPEED_TURNING_MULTIPLICATION_CONSTANT = 0.45; //0.3
-	public static final double SPEED_TURNING_ADDING_CONSTANT = 0.55; //0.7
+	public static final double SPEED_TURNING_MULTIPLICATION_CONSTANT = 0.35; //0.3
+	public static final double SPEED_TURNING_ADDING_CONSTANT = 0.65; //0.7
 	public static final double DEADZONE_AREA = 0.04;
 	public static final double MAX_TURN = 1;
-	public static final double KP = .075;//.075;
+	public static final double KP = .1;//.075;
 	public static final double KI = .003;//.003
 	public static final double KD = .05;//.00
 	

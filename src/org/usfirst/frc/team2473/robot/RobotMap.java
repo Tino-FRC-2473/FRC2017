@@ -25,11 +25,13 @@ public class RobotMap {
 	public static final int ropeClimbMotor_2 = 7;
 
 	public static final int gyro = 0;
-	public static final int switchOne = 0;
-	public static final int switchTwo = 1;
-	public static final int switchThree = 2;
-	public static final int switchFour = 3;
-	public static final int breakBeam = 4; //0 for og robot
+	public static final int breakBeam = 0; //0 for og robot
+	public static final int switchOne = 1;
+	public static final int switchTwo = 2;
+	public static final int switchThree = 3;
+	public static final int switchFour = 4;
+	
+	public static final int relay = 0;
 
 
 	

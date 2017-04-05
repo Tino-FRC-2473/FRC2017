@@ -21,7 +21,7 @@ os.system("v4l2-ctl --set-ctrl=exposure_absolute=3")
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 host = ''
-port = 5816
+port = 5806
 x = 1
 s.bind((host, port))
 print ('Listening')
@@ -503,10 +503,12 @@ def CV(): #general function that runs through frame, thresholds it, and extracts
 	frame = None
 	frame = cap()
 	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+	'''cv2.imwrite('hsvorig', hsv)'''
 	lower_tape = np.array([40, 100, 90], dtype=np.uint8)
 	upper_tape = np.array([100, 250, 225], dtype=np.uint8)
 	mask = cv2.inRange(hsv, lower_tape, upper_tape)
-	cv2.imshow('mask', mask)
+	'''cv2.imshow('mask', mask)'''
+	'''cv2.imwrite('maskwrite.jpg', mask)'''
 	res = cv2.bitwise_and(frame, frame, mask= mask)
 	(res, cnts, _) = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 	recNumber = 1
@@ -620,8 +622,8 @@ def CV(): #general function that runs through frame, thresholds it, and extracts
 			recStorage.update({recNumber: recMiniData})
 			recNumber += 1
 
-	cv2.imshow('frame',frame)
-
+	'''cv2.imshow('frame',frame)'''
+	'''cv2.imwrite('frame.jpg', frame)'''
 	k = cv2.waitKey(5) & 0xFF
 	if len(recStorage) > 0:
 		#passes info to analyze

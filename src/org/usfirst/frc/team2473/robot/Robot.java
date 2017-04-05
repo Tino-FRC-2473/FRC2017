@@ -9,6 +9,7 @@ import org.usfirst.frc.team2473.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2473.robot.commands.Network;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
@@ -32,6 +33,7 @@ public class Robot extends IterativeRobot{
 	Timer robotControlLoop;
 	public Database d;
 	public static Networking networking;
+	public static Relay lightRelay;
 	
 	double lastTime;
 
@@ -51,6 +53,7 @@ public class Robot extends IterativeRobot{
 		d = Database.getInstance();
 		robotControlLoop = new Timer(false);
 		timerRunning = false;
+		lightRelay = new Relay(0);
 		}
 
 	/**
@@ -90,6 +93,9 @@ public class Robot extends IterativeRobot{
 		if (autonomousCommand != null){
 			autonomousCommand.start();
 		}
+		
+		//turn on the Relay
+		lightRelay.set(Relay.Value.kOn);
 	}
 
 	/**

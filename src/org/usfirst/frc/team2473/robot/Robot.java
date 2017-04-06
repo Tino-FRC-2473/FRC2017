@@ -8,6 +8,8 @@ import org.opencv.core.Mat;
 import org.usfirst.frc.team2473.robot.Database.Value;
 import org.usfirst.frc.team2473.robot.subsystems.ClimberSystem;
 import org.usfirst.frc.team2473.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team2473.robot.subsystems.DriveTrainDiagnostic;
+import org.usfirst.frc.team2473.robot.subsystems.GyroDiagnosticSystem;
 import org.usfirst.frc.team2473.robot.commands.AutoAlign;
 import org.usfirst.frc.team2473.robot.commands.AutoAlignCenter;
 import org.usfirst.frc.team2473.robot.commands.CenterAuto;
@@ -41,7 +43,9 @@ public class Robot extends IterativeRobot {
 	boolean timerRunning;
 
 	public static DriveTrain driveTrain;
+	public static DriveTrainDiagnostic diagnosticTrain;
 	public static ClimberSystem climbSystem;
+	public static GyroDiagnosticSystem gyroDiagnostic;
 	public static Command auto;
 	public static OI oi;
 	public static AnalogGyro gyro;
@@ -59,10 +63,12 @@ public class Robot extends IterativeRobot {
 	 */
 	public void robotInit() {
 		driveTrain = new DriveTrain();
+		diagnosticTrain = new DriveTrainDiagnostic();
 		climbSystem = new ClimberSystem();
 		gyro = new AnalogGyro(RobotMap.gyro);
 		led = new Relay(RobotMap.relay);
 		oi = new OI();
+		gyroDiagnostic = new GyroDiagnosticSystem();
 
 		sensorThread = new SensorThread(5);
 		sensorThread.start();

@@ -10,7 +10,14 @@ import socket
 #from json import JSONEncoder
 #from json import JSONDecoder
 import atexit
-import logging 
+import logging
+import datetime 
+
+#logger initialization
+ts = time.time()
+st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+name = st+'.log'
+logging.basicConfig(filename=name,level=logging.DEBUG)
 
 #set the camera exposure
 os.system("v4l2-ctl --set-ctrl=exposure_auto_priority=1")
@@ -25,15 +32,18 @@ host = ''
 port = 5807
 x = 1
 s.bind((host, port))
+logging.info('Listening')
 print ('Listening on Comp')
 s.listen(1)
 conn, addr = s.accept()
+logging.info("Connected by:", addr)
 print 'Connected by:', addr
 st = ""
 
 def exit_handler(): #closes socket when exiting
 	s.shutdown(socket.SHUT_RDWR)
 	s.close()
+	logging.info("socket closed")
 	print "socket closed"
 
 atexit.register(exit_handler) #registers exit
@@ -132,7 +142,6 @@ def angleOfAttack(firstHeight, secondHeight, rectX, image, width1, width2, toggl
 	if AoA > 90.0:
 		AoA = 180.0 - AoA
 	return AoA
-	return AoA
 
 	'''if(((math.pow(z,2)-math.pow(y,2)-64)/(-16*y))>1):
 		return -1
@@ -211,6 +220,7 @@ def end():
 def analyze(recSt, image): #general analysis function
 	calHWThreshold = 9/10
 	if len(recSt) == 3: #sorts through 3 rectangle case, figures out which rectangle goes where
+		logging.info("3 rectangles detected")
 		#print("3rd")
 		toggleVar = 1
 		maxHeight = 0
@@ -326,6 +336,7 @@ def analyze(recSt, image): #general analysis function
 
 
 	if len(recSt) == 2: #same as three rectangle case, except with 2 rectangles
+		logging.info("2 rectangles detected")
 		toggleVar = 0
 		firstRecData = recSt[1]
 		secondRecData = recSt[2]
@@ -400,6 +411,7 @@ def analyze(recSt, image): #general analysis function
 
 		return [distance, bearingAngle, angleAttack, LR, 2]
 	if len(recSt) == 1: #desperation if there is only one rectangle, however we don't return because we assume we can see 2
+		logging.debug("1 rectangle detected")
 		firstRecData = recSt[1]
 		center = firstRecData['xCoord']
 		bearingAngle = bearing(image, center)
@@ -506,6 +518,7 @@ def cap(): #captures frame, but need to fix buffer issue
 def CV(): #general function that runs through frame, thresholds it, and extracts basic info from the rectangles to be passed into analyze
 	frame = None
 	frame = cap()
+	logging.info("frame received")
 	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 	'''cv2.imwrite('hsvorig', hsv)'''
 	'''cv2.imwrite("frame.jpg", frame)'''
@@ -634,6 +647,7 @@ def CV(): #general function that runs through frame, thresholds it, and extracts
 	
 	k = cv2.waitKey(5) & 0xFF
 	if len(recStorage) > 0:
+		logging.info("rectangle(s) detected")
 		#passes info to analyze
 		results = analyze(recStorage, frame)
 		return results
@@ -644,27 +658,23 @@ def CV(): #general function that runs through frame, thresholds it, and extracts
 
 while (1):
 	#scans for CV order
-	print("scanning")
+	logging.info("scanning")
 	returned = conn.recv(1024)
 	print(returned)
 	results = None
-	meme = 1
+	goodData = 1
 	if "CV()" in returned:
 		results = eval("CV()")
 		if results == None:
-			meme = 0
-				
-        
-        ts = time.time()
-        st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-        name = st+'.log'
-        logging.basicConfig(filename=name,level=logging.DEBUG)
-        logging.debug('Distance:'+results[0])
-        logging.debug('Bearing:'+results[1])
+			goodData = 0
+			logging.debug("failure for unknown reason")				
+        if goodData==1:
+                logging.info("detection success")
+        logging.info(str(float(meme) + " " + float(results[0])) + " " + str(float(results[2])) + " " + str(float((results[1]))) + " " + str(float(results[3])) + " " + str(float(time.time())) + "\n")
 	print(results)
 	#Sends results to RoboRIO
-	if (results != None) and (len(results) >= 5):
-		sending = str(float(meme) + " " + float(results[0])) + " " + str(float(results[2])) + " " + str(float((results[1]))) + " " + str(float(results[3])) + " " + str(float(time.time())) + "\n"
+	if (results != None) and (len(results) >= 4):
+		sending = str(float(goodData) + " " + float(results[0])) + " " + str(float(results[2])) + " " + str(float((results[1]))) + " " + str(float(results[3])) + " " + str(float(time.time())) + "\n"
 		sending = str(sending)
 		conn.send(sending)
 		'''conn.send(JSONEncoder().encode({"Distance": results[0],
@@ -672,9 +682,12 @@ while (1):
 		"Bearing": results[1],
 		"Left or Right": results[3],
 		"Time Stamp": float(time.time())}))'''
+		logging.info("successfully sent data")
 		print("something sent")
 		print(sending)
-
+	else:
+                sending = str('0 0 0 0 0 0')
+		logging.debug("meme data sent")
 	'''results = CV()'''
 
 

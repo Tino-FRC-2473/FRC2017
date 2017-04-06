@@ -13,12 +13,9 @@ import org.usfirst.frc.team2473.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2473.robot.subsystems.DriveTrainDiagnostic;
 import org.usfirst.frc.team2473.robot.subsystems.GyroDiagnosticSystem;
 import org.usfirst.frc.team2473.robot.commands.AutoAlign;
-<<<<<<< HEAD
 import org.usfirst.frc.team2473.robot.commands.ClimberDiagnosticCommand;
-=======
 import org.usfirst.frc.team2473.robot.commands.AutoAlignCenter;
 import org.usfirst.frc.team2473.robot.commands.CenterAuto;
->>>>>>> 42cdccb72555ca82df23754898507f1372a1f0d8
 import org.usfirst.frc.team2473.robot.commands.DriveStraightForward;
 import org.usfirst.frc.team2473.robot.commands.LeftAuto;
 import org.usfirst.frc.team2473.robot.commands.Network;

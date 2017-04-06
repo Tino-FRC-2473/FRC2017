@@ -190,14 +190,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     }
 }*/
 
-public class DriveStraightForward extends Command{
+public class DriveStraightForwardSlowly extends Command{
 	private double distance;
 	private DoubleSupplier distanceSupplier;
-	private static final double KPRotate = .08;
+	private static final double KPRotate = .09;
 	private static final double KIRotate = .003;
 	private static final double KDRotate = 0;
 	
-	private static final double KPForward = .53;
+	private static final double KPForward = .30;
 	private static final double KIForward = .0;
 	private static final double KDForward = 0;
 	
@@ -210,13 +210,13 @@ public class DriveStraightForward extends Command{
 	
 	private ArrayList<Double> pastEncoderVelocities;
 	
-	public DriveStraightForward(double distance){
+	public DriveStraightForwardSlowly(double distance){
 		requires(Robot.driveTrain);
 		
 		this.distance = distance;
     }
 	
-	public DriveStraightForward(DoubleSupplier distanceSupplier){
+	public DriveStraightForwardSlowly(DoubleSupplier distanceSupplier){
 		requires(Robot.driveTrain);
 		
 		this.distanceSupplier = distanceSupplier;
@@ -261,7 +261,7 @@ public class DriveStraightForward extends Command{
     	}
     	
     	//base speed
-    	speed = Math.signum(speed)*(Math.abs(speed) + .40);
+    	speed = Math.signum(speed)*(Math.abs(speed) + .38);
     	
     	if(Math.abs(speed) > .80){
     		speed = Math.signum(speed) * .8;

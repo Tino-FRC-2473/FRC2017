@@ -5,9 +5,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.usfirst.frc.team2473.robot.Database.Value;
+import org.usfirst.frc.team2473.robot.subsystems.BreakbeamDiagnosticSubsystem;
+import org.usfirst.frc.team2473.robot.subsystems.ClimberDiagnosticSubsystem;
 import org.usfirst.frc.team2473.robot.subsystems.ClimberSystem;
 import org.usfirst.frc.team2473.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2473.robot.commands.AutoAlign;
+import org.usfirst.frc.team2473.robot.commands.ClimberDiagnosticCommand;
 import org.usfirst.frc.team2473.robot.commands.DriveStraightForward;
 import org.usfirst.frc.team2473.robot.commands.LeftAuto;
 import org.usfirst.frc.team2473.robot.commands.Network;
@@ -44,6 +47,10 @@ public class Robot extends IterativeRobot{
 	Timer robotControlLoop;
 	public Database d;
 	public static Networking networking;
+	public static ClimberDiagnosticSubsystem climbDiagnostic;
+	public static BreakbeamDiagnosticSubsystem breakbeamDiagnostic;	
+	public ClimberDiagnosticCommand climber_test1, climber_test2;
+	
 	
 	double lastTime;
 
@@ -54,6 +61,8 @@ public class Robot extends IterativeRobot{
 	public void robotInit() {
 		driveTrain = new DriveTrain();
 		climbSystem = new ClimberSystem();
+		climbDiagnostic = new ClimberDiagnosticSubsystem();
+		breakbeamDiagnostic = new BreakbeamDiagnosticSubsystem();
 		gyro = new AnalogGyro(RobotMap.gyro);
 		led = new Relay(0);
 		oi = new OI();
@@ -65,6 +74,9 @@ public class Robot extends IterativeRobot{
 		d = Database.getInstance();
 		robotControlLoop = new Timer(false);
 		timerRunning = false;
+		
+		climber_test1 = new ClimberDiagnosticCommand(this,1);
+		climber_test2 = new ClimberDiagnosticCommand(this,2);
 		
 		CameraServer server = CameraServer.getInstance();
 		server.startAutomaticCapture("Gear Side", 0);

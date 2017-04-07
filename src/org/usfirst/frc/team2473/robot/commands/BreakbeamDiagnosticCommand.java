@@ -36,6 +36,7 @@ public class BreakbeamDiagnosticCommand extends Command {
 
 	// Called once after isFinished returns true
 	protected void end() {
+		Robot.diagnosticMode++;
 		System.out.println("Breakbeam system operational."); //prints status once test is complete
 	}
 

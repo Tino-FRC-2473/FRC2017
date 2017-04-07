@@ -63,6 +63,7 @@ public class ClimberDiagnosticCommand extends Command{
 		power = 0;
 		System.out.println("Not Working/Disabled");
 		Robot.climbDiagnostic.runIndividual(motor,0);
+		Robot.diagnosticMode++;
 	}
 
 	// Called when another command which requires one or more of the same

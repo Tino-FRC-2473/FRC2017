@@ -15,9 +15,12 @@ import org.usfirst.frc.team2473.robot.subsystems.GyroDiagnosticSystem;
 import org.usfirst.frc.team2473.robot.commands.AutoAlign;
 import org.usfirst.frc.team2473.robot.commands.ClimberDiagnosticCommand;
 import org.usfirst.frc.team2473.robot.commands.AutoAlignCenter;
+import org.usfirst.frc.team2473.robot.commands.BreakbeamDiagnosticCommand;
 import org.usfirst.frc.team2473.robot.commands.CenterAuto;
 import org.usfirst.frc.team2473.robot.commands.DriveStraightForward;
+import org.usfirst.frc.team2473.robot.commands.GyroDiagnosticTest;
 import org.usfirst.frc.team2473.robot.commands.LeftAuto;
+import org.usfirst.frc.team2473.robot.commands.MotorDiagnosticTest;
 import org.usfirst.frc.team2473.robot.commands.Network;
 import org.usfirst.frc.team2473.robot.commands.RightAuto;
 import org.usfirst.frc.team2473.robot.commands.Turn;
@@ -45,6 +48,12 @@ public class Robot extends IterativeRobot {
 	Command autonomousCommand;
 	boolean timerRunning;
 
+	public static BreakbeamDiagnosticCommand beamTest;
+	public static GyroDiagnosticTest gyroTest;
+	public static MotorDiagnosticTest motorTest;
+	public ClimberDiagnosticCommand climber_test1, climber_test2;
+	public static int diagnosticMode;
+	
 	public static DriveTrain driveTrain;
 	public static DriveTrainDiagnostic diagnosticTrain;
 	public static ClimberSystem climbSystem;
@@ -59,9 +68,9 @@ public class Robot extends IterativeRobot {
 	public static Networking networking;
 	public static ClimberDiagnosticSubsystem climbDiagnostic;
 	public static BreakbeamDiagnosticSubsystem breakbeamDiagnostic;	
-	public ClimberDiagnosticCommand climber_test1, climber_test2;
 	public static boolean ran = false;
 	double lastTime;
+	
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -84,8 +93,12 @@ public class Robot extends IterativeRobot {
 		robotControlLoop = new Timer(false);
 		timerRunning = false;
 		
+		beamTest = new BreakbeamDiagnosticCommand();
+		gyroTest = new GyroDiagnosticTest();
+		motorTest = new MotorDiagnosticTest();
 		climber_test1 = new ClimberDiagnosticCommand(this,1);
 		climber_test2 = new ClimberDiagnosticCommand(this,2);
+		diagnosticMode = 0;
 
 		// UsbCamera cam0 = CameraServer.getInstance().startAutomaticCapture(0);
 		// cam0.setResolution(640, 480);
@@ -228,8 +241,30 @@ public class Robot extends IterativeRobot {
 		try {
 			networking.end();
 		} catch (Throwable e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void testPeriodic() {
+		switch (diagnosticMode) {
+		case 0:
+			motorTest.start();
+			break;
+		case 1:
+			beamTest.start();
+			break;
+		case 2:
+			gyroTest.start();
+			break;
+		case 3:
+			climber_test1.start();
+			break;
+		case 4:
+			climber_test2.start();
+			break;
+		default:
+			break;
 		}
 	}
 

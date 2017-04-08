@@ -19,7 +19,6 @@ public class MotorDiagnosticTest extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.diagnosticTrain.runMotors(0.2);
     }
 
     // Called repeatedly when this Command is scheduled to run

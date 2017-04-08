@@ -30,6 +30,13 @@ public class AutoAlignCenter extends CommandGroup {
 //    	addSequential(new DriveStraightForward(-12));
     	addSequential(new Network());
     	
+    	addSequential(new SweepCommand(false, 10));
+    	addSequential(new Network());
+    	
+    	addSequential(new SweepCommand(true, 20));
+    	addSequential(new Network());
+    	
+    	
     	addSequential(new Turn(turnThree));
     	addSequential(new TimedCommand(.2));
     	addSequential(new DriveStraightForwardSlowly(distanceThree));

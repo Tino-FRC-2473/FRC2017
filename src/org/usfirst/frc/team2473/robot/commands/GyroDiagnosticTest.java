@@ -1,7 +1,5 @@
 package org.usfirst.frc.team2473.robot.commands;
 
-import java.util.Scanner;
-
 import org.usfirst.frc.team2473.robot.Database;
 import org.usfirst.frc.team2473.robot.Robot;
 
@@ -11,10 +9,10 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class GyroDiagnosticTest extends Command {
-	private Scanner scan;
+	private long time;
 	
     public GyroDiagnosticTest() {
-        scan = new Scanner(System.in);
+        time = System.currentTimeMillis();         
         requires(Robot.gyroDiagnostic);
     }
 
@@ -29,7 +27,7 @@ public class GyroDiagnosticTest extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return scan.nextLine().equals("\n");
+        return time == 10000;
     }
 
     // Called once after isFinished returns true

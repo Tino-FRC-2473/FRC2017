@@ -43,7 +43,6 @@ public class ClimberDiagnosticCommand extends Command{
 			if (avg > 9) {
 				power = 0;
 				notWorking = true;
-				System.out.println("Not working");
 				end();
 			}
 			else {

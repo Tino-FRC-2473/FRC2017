@@ -23,7 +23,7 @@ public class BreakbeamDiagnosticSubsystem extends Subsystem {
 		if(breakBeam.get()) { //returns 1 if the breakbeam is true
 			return 1;
 		} else {
-			return 0; //retusn 2 if the breakbeam is false
+			return 2; //retusn 2 if the breakbeam is false
 		}
 	}
 }

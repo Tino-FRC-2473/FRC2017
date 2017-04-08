@@ -2,7 +2,6 @@ package org.usfirst.frc.team2473.robot.commands;
 
 import java.util.Scanner;
 
-import org.usfirst.frc.team2473.robot.Database;
 import org.usfirst.frc.team2473.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -12,35 +11,36 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class GyroDiagnosticTest extends Command {
 	private Scanner scan;
-	
-    public GyroDiagnosticTest() {
-        scan = new Scanner(System.in);
-        requires(Robot.gyroDiagnostic);
-    }
 
-    // Called just before this Command runs the first time
-    protected void initialize() {
-    }
+	public GyroDiagnosticTest() {
+		scan = new Scanner(System.in);
+		requires(Robot.gyroDiagnostic);
+	}
 
-    // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
-    	System.out.println("Current gyro value: " + Database.getInstance().getValue(Database.Value.GYRO_POSITION));
-    }
+	// Called just before this Command runs the first time
+	protected void initialize() {
+		Robot.gyroDiagnostic.reset();
+	}
 
-    // Make this return true when this Command no longer needs to run execute()
-    protected boolean isFinished() {
-        return scan.nextLine().equals("\n");
-    }
+	// Called repeatedly when this Command is scheduled to run
+	protected void execute() {
+		System.out.println("Current gyro value: " + Robot.gyroDiagnostic.getValue());
+	}
 
-    // Called once after isFinished returns true
-    protected void end() {
-    	Robot.diagnosticMode++;
-    	end();
-    }
+	// Make this return true when this Command no longer needs to run execute()
+	protected boolean isFinished() {
+		return scan.nextLine().equals("\n");
+	}
 
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
-    protected void interrupted() {
-    	end();
-    }
+	// Called once after isFinished returns true
+	protected void end() {
+		Robot.diagnosticMode++;
+		end();
+	}
+
+	// Called when another command which requires one or more of the same
+	// subsystems is scheduled to run
+	protected void interrupted() {
+		end();
+	}
 }

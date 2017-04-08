@@ -53,6 +53,7 @@ public class Robot extends IterativeRobot {
 	public static MotorDiagnosticTest motorTest;
 	public ClimberDiagnosticCommand climber_test1, climber_test2;
 	public static int diagnosticMode;
+	public static Command testCommand = null;
 	
 	public static DriveTrain driveTrain;
 	public static DriveTrainDiagnostic diagnosticTrain;
@@ -125,9 +126,9 @@ public class Robot extends IterativeRobot {
 		//
 		// }).start();
 
-		CameraServer server = CameraServer.getInstance();
-		server.startAutomaticCapture("Gear Side", 0);
-		server.startAutomaticCapture("Climber Side", 1);
+//		CameraServer server = CameraServer.getInstance();
+//		server.startAutomaticCapture("Gear Side", 0);
+//		server.startAutomaticCapture("Climber Side", 1);
 
 		SmartDashboard.putData(driveTrain);
 		SmartDashboard.putData(climbSystem);
@@ -205,6 +206,8 @@ public class Robot extends IterativeRobot {
 		// this line or comment it out.
 		// led.set(Relay.Value.kForward);
 
+		System.out.println(testCommand == null ? "null" : testCommand.isRunning());
+		
 	}
 
 	/**
@@ -212,8 +215,11 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopPeriodic() {
 
+		
+		System.out.println(driveTrain.getCurrentCommand());
 		// System.out.println(System.currentTimeMillis() - lastTime);
 
+		
 		if (!timerRunning) {
 			robotControlLoop.scheduleAtFixedRate(new TimerTask() {
 
@@ -238,41 +244,63 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testInit() {
-		try {
-			networking.end();
-		} catch (Throwable e) {
-			e.printStackTrace();
+		testCommand = null;
+		switch (diagnosticMode) {
+		case 0:
+			testCommand = new MotorDiagnosticTest();
+			break;
+		case 1:
+			testCommand = new BreakbeamDiagnosticCommand();
+			break;
+		case 2:
+			testCommand = new GyroDiagnosticTest();
+			break;
+		case 3:
+			testCommand = new ClimberDiagnosticCommand(this, 1);
+			break;
+		case 4:
+			testCommand = new ClimberDiagnosticCommand(this, 2);
+			break;
+		default:
+			break;
+		}
+		System.out.println(testCommand);
+		if(testCommand != null) {	
+			testCommand.start();
 		}
 	}
 	
 	@Override
 	public void testPeriodic() {
-		switch (diagnosticMode) {
-		case 0:
-			motorTest.start();
-			break;
-		case 1:
-			beamTest.start();
-			break;
-		case 2:
-			gyroTest.start();
-			break;
-		case 3:
-			climber_test1.start();
-			break;
-		case 4:
-			climber_test2.start();
-			break;
-		default:
-			break;
+		if (!timerRunning) {
+			robotControlLoop.scheduleAtFixedRate(new TimerTask() {
+
+				@Override
+				public void run() {
+					Scheduler.getInstance().run();
+				}
+			}, 0, 20);
+			timerRunning = true;
 		}
 	}
 
 	@Override
 	public void disabledInit() {
 		if (autonomousCommand != null)
+		{
 			autonomousCommand.cancel();
+			autonomousCommand = null;
+		}
 
+		if (testCommand != null)
+		{
+			System.out.println("canceling the test command");
+			testCommand.cancel();
+			System.out.println(testCommand.isRunning());
+			System.out.println(diagnosticTrain.getCurrentCommand());
+			testCommand = null;
+		}
+		
 		led.set(Relay.Value.kOff);
 		// synchronized(networking){
 		// networking.end();

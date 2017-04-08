@@ -12,33 +12,20 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class DriveTrainDiagnostic extends Subsystem {
 	public CANTalon motor_fr, motor_fl, motor_br, motor_bl;
+	public int testNum;
 
 	public DriveTrainDiagnostic() {
 		motor_fr = new CANTalon(RobotMap.rightFrontMotor);
 		motor_fl = new CANTalon(RobotMap.leftFrontMotor);
 		motor_br = new CANTalon(RobotMap.rightBackMotor);
 		motor_bl = new CANTalon(RobotMap.leftBackMotor);
+		testNum = 0;
 	}
 
 	public void initDefaultCommand() {
 
 	}
-
-	public double getEncPosition(String motor) {
-		switch (motor) {
-		case "fr":
-			return motor_fr.getEncPosition();
-		case "fl":
-			return motor_fl.getEncPosition();
-		case "br":
-			return motor_br.getEncPosition();
-		case "bl":
-			return motor_bl.getEncPosition();
-		default:
-			return -1;
-		}
-	}
-
+	
 	public void runMotors(double pow) { //run all 4 motors
 		motor_fr.set(pow);
 		motor_fl.set(pow);
@@ -70,11 +57,13 @@ public class DriveTrainDiagnostic extends Subsystem {
 	public double diff() {
 		//add the encoder values to a list if they are > 0
 		ArrayList<Double> list = new ArrayList<>();
-		if(Database.getInstance().getValue(Database.Value.LEFT_ENCODER_POSITION) > 0) {
-			list.add(Database.getInstance().getValue(Database.Value.LEFT_ENCODER_POSITION));
+		if(Database.getInstance().getValue(Database.Value.LEFT_ENCODER_POSITION) != 0) {
+			System.out.println("Left: " + Database.getInstance().getValue(Database.Value.LEFT_ENCODER_POSITION));
+			list.add(Math.abs(Database.getInstance().getValue(Database.Value.LEFT_ENCODER_POSITION)));
 		}
-		if(Database.getInstance().getValue(Database.Value.RIGHT_ENCODER_POSITION) > 0) {
-			list.add(Database.getInstance().getValue(Database.Value.RIGHT_ENCODER_POSITION));
+		if(Database.getInstance().getValue(Database.Value.RIGHT_ENCODER_POSITION) != 0) {
+			System.out.println("Right: " + Database.getInstance().getValue(Database.Value.RIGHT_ENCODER_POSITION));
+			list.add(Math.abs(Database.getInstance().getValue(Database.Value.RIGHT_ENCODER_POSITION)));
 		}
 		System.out.println(list); //print list for testing purposes
 		Collections.sort(list); //sort the list

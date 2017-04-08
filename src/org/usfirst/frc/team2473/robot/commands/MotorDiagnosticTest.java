@@ -15,11 +15,13 @@ public class MotorDiagnosticTest extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	System.out.println("init");
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Robot.diagnosticTrain.runMotors(0.2);
+    	Robot.diagnosticTrain.testNum++;
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -28,6 +30,7 @@ public class MotorDiagnosticTest extends Command {
 	}
 
 	boolean testFinished() {
+		if (Robot.diagnosticTrain.testNum <= 8) return false;
 		boolean returner = false; //value to be returned is currently false
 		String status = "testing..."; //set status default value
 		if(System.currentTimeMillis() - mill > 5000) { //if the elapsed time is over 5 seconds

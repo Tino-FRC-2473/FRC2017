@@ -2,42 +2,41 @@ package org.usfirst.frc.team2473.robot.commands;
 
 
 
+import java.util.Scanner;
+
 import org.usfirst.frc.team2473.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 public class BreakbeamDiagnosticCommand extends Command {
+	Scanner scan;
 	public BreakbeamDiagnosticCommand() {
-		// Use requires() here to declare subsystem dependencies
-		// eg. requires(chassis);
 		requires(Robot.breakbeamDiagnostic);
+		scan = new Scanner(System.in);
 	}
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		System.out.println("Place an object in front of the breakbeam sensor."); //initial message to instruct user
 	}
-
-	// Called repeatedly when this Command is scheduled to run
+	
 	protected void execute() {
-		if(!isFinished()) { //if the command is not yet finished
-			System.out.println("Waiting..."); //print waiting
+		if (Robot.breakbeamDiagnostic.getBreakbeamValue() == 1) {
+			System.out.println("Activated");
+		}
+		else {
+			System.out.println("Not Activated");
 		}
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() { 
-		if(Robot.breakbeamDiagnostic.getBreakbeamValue() == 2) { //if the breakbeam sensor returns true
-			return true; //the command is complete
-		} else {
-			return false; //the command continues
-		}
+		return scan.nextLine().equals("\n");
 	}
 
 	// Called once after isFinished returns true
 	protected void end() {
 		Robot.diagnosticMode++;
-		System.out.println("Breakbeam system operational."); //prints status once test is complete
 	}
 
 	// Called when another command which requires one or more of the same

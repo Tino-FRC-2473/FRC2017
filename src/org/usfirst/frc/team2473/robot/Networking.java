@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -78,18 +76,31 @@ public class Networking extends Thread {
 		}
 	}
 
-	public void update() {
+	/**
+	 * 
+	 * @throws RuntimeException thrown when CV gives an error
+	 */
+	public void update() throws RuntimeException{
 		try {
 			stdOut.write(SEND);
 			stdIn.read(cbuf);
 			String st = String.copyValueOf(cbuf);
 			Matcher matcher = Pattern.compile("-?\\d*(\\.\\d*)").matcher(st);
+			matcher.find();
+			if(Double.parseDouble(matcher.group()) == 0)
+			{
+				d.setValue(Database.Value.CV_SUCCESS, 0);
+				return;
+			}
+			d.setValue(Database.Value.CV_SUCCESS, 1);
 			for (Database.Value v : values) {
 				matcher.find();
 				d.setValue(v, Double.parseDouble(matcher.group()));
 			}
-		} catch (Exception e) {
-
+		} 
+		catch(IOException | NumberFormatException e)
+		{
+			
 		}
 	}
 
